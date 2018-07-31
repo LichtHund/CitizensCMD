@@ -1,0 +1,52 @@
+# Citizens CMD Plugin by Mateus Moreira aka iPSYKO
+# @LichtHund
+
+main: me.mattmoreira.citizenscmd.CitizensCMD
+version: ${project.version}
+name: CitizensCMD
+author: Mateus Moreira
+softdepend: [Citizens, PlaceholderAPI, Vault]
+api-version: 1.13
+
+commands:
+  npcmd:
+    description: Performs all npcmd commands.
+  npcmd help:
+    description: Displays help
+  npcmd add:
+    description: Adds a new command to the NPC
+  npcmd cooldown:
+    description: Sets the cooldown for the NPC
+  npcmd price:
+    description: Sets the price for the NPC
+  npcmd list:
+    description: Gets the list of commands
+  npcmd reload:
+    description: Reloads config, saves and cooldown
+  npcmd remove:
+    description: Removes command
+  npcmd edit:
+    description: Edits a command or permission
+
+permissions:
+  citizenscmd.use:
+    description: Allows player to click NPC.
+    default: true
+  citizenscmd.help:
+    default: op
+  citizenscmd.add:
+    default: op
+  citizenscmd.list:
+    default: op
+  citizenscmd.cooldown:
+    default: op
+  citizenscmd.price:
+    default: op
+  citizenscmd.reload:
+    default: op
+  citizenscmd.remove:
+    default: op
+  citizenscmd.edit:
+    default: op
+  citizenscmd.bypass:
+    default: false

@@ -1,0 +1,62 @@
+# Citizens CMD Plugin by Mateus Moreira
+# @LichtHund
+# Весия ${project.version}
+#
+# Променете толкова, колкото смятате за нужно.
+# Внивавайте при премахването на Placeholder-и!
+# Някой Placeholder-и могат да не работят при премахване
+# Cooldown placeholder-а може да бъде премахнат, без последствия
+messages:
+  commands:
+    npc-add-command-added: "&aУспешно добавихте команда към NPC-то!"
+    npc-add-command-failed: "&cДобавянето на команда не бе успешно!"
+    npc-cooldown-set: "&aВремето за изчакване бе променено успешно!"
+    npc-cooldown-error: "&cПояви се грешка при променянето за времето за изчакване!"
+    npc-price-set: "&aЦената бе променена успешно!"
+    list-commnads-counter-right: "&c&o{count} &7&o- Команди с Десен Клик:"
+    list-commnads-counter-left: "&c&o{count} &7&o- Команди с Ляв Клик:"
+    list-cooldown: "&7Време за изчакване: &c"
+    list-price: "&7Цена: &c"
+    list-tooltip: "&7Кликни за да промениш!"
+    reload-command: "&aВсичко файлове бяха презаредени успешно!"
+    removed-command: "&aКомандата бе премахната успешно!"
+    edit-command: "&a{type} бе променен/а успешно!"
+  warnings:
+    no-npc-selected: "&cИзбери NPC първо!"
+    invalid-cooldown: "&cВремето за изчакване трябва да бъде число!"
+    invalid-price: "&cЦената трябва да бъде число!"
+    invalid-id: "&cМоля, задайте валидо ID на команда!"
+    invalid-click-type: "&cТрябва да избереш ляв или десен!"
+    no-commands: "&cНяма команди в това NPC!"
+    invalid-arguments: "&cТрябва да избереш CMD или PERM!"
+    invalid-permission: "&cНе трябва да има място между правата."
+    console-not-allowed: "&cТази команда може да бъде използвана само в игра!"
+    no-permission: "&cНямате право да използвате тази команда!"
+    wrong-usage: "&cГрешен начин на употреба! &7/npcmd &cза информация!"
+    new-version: "&7Нова версия: &cv"
+    download-at: "&7Свали от"
+  npc:
+    on-cooldown: "&7Моля изчакайте &c{time} &7преди да използвате това NPC отново!"
+    one-time-click: "&7Това NPC е за еднократна употреба!"
+    pay-confirm: "&7За да използвате това NPC трябва да платите &a{price}$&7!\n&a{shift}Десен бутон за потвърждение &7или &c{shift}Ляв бутон за отмяна\n&8Това действие ще бъде прекъснато след &c15 &8секундки!"
+    pay-canceled: "&cПлащането бе отменено!"
+    pay-no-money: "&cНямаш достатъчно пари, за да извършиш това действие!"
+    pay-completed: "&a{price}$ Бяха взети от твоята сметка!"
+  help:
+    version: "&7&oВерсия:"
+    info: "&7Задръжте върху команда за помощ и пример!"
+    example: "&8Пример:"
+    description-add: "&7За да добавите команда на NPC."
+    description-cooldown: "&7Задава времето за изчакване на ляв/десен клик."
+    description-price: "&7Задава цена за използване на NPC."
+    description-list: "&7Показва спъсък с командите на NPC."
+    description-edit: "&7Променя команда или права."
+    description-remove: "&7Премахва команда от NPC."
+    description-reload: "&7Презарежда всички файлове."
+# ВАЖНО!!
+# НЕ ПРОМЕНЯЙТЕ МОДЕЛА, ОСТАВЕТЕ СКОБИТЕ "[]," ПРОМЕНЕТЕ САМО ТЕКСТА В ТЯХ
+  time-format:
+    seconds: "[С], [Сек], [Секунди]"
+    minutes: "[М], [Мин], [Минути]"
+    hours: "[Ч], [Часа], [Часа]"
+    days: "[Д], [Дни], [Дена]"

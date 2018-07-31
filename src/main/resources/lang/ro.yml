@@ -1,0 +1,62 @@
+# Plugin-ul Citizens CMD creat de catre Mateus Moreira
+# @LichtHund
+# Versiune ${project.version}
+#
+# Schimbati cat aveti nevoie.
+# Indepartati placeholder-ele cu precautie!
+# Unele placeholdere pot fi indepartate, dar este posibil ca acestea sa nu functioneze corect
+# Placeholder-ul pentru cooldown poate fi indepartat
+messages:
+  commands:
+    npc-add-command-added: "&aAti adaugat cu succes o comanda acestui NPC!"
+    npc-add-command-failed: "&cAdaugarea comenzi acestui NPC a esuat!"
+    npc-cooldown-set: "&aAti setat cu succes cooldown-ul!"
+    npc-cooldown-error: "&cA aparut o eroare la setarea cooldown-ului!"
+    npc-price-set: "&aAti setat pretul cu succes!"
+    list-commnads-counter-right: "&c&o{count} &7&o- Comenzile cu click dreapta:"
+    list-commnads-counter-left: "&c&o{count} &7&o- Comenzile cu click stanga:"
+    list-cooldown: "&7Cooldown: &c"
+    list-price: "&7Pret: &c"
+    list-tooltip: "&7Click pentru a edita!"
+    reload-command: "&aToate fisierele au fost reincarcate cu succes!"
+    removed-command: "&aComanda a fost eliminata cu succes!"
+    edit-command: "&a{type} a fost editat cu succes!"
+  warnings:
+    no-npc-selected: "&cTrebuie sa ai un NPC selectat pentru a executa aceasta comanda!"
+    invalid-cooldown: "&cCooldown-ul trebuie sa fie un numar!"
+    invalid-price: "&cPretul trebuie sa fie un numar!"
+    invalid-id: "&cVa rugam introduceti un ID valid!"
+    invalid-click-type: "&cTrebuie sa selectatie fie stanga, fie dreapta!"
+    no-commands: "&cNu exista comenzi pentru NPC!"
+    invalid-arguments: "&cTrebuie sa selectati fie CMD, fie PERM!"
+    invalid-permission: "&cPermisiunile nu pot contine spatiu!"
+    console-not-allowed: "&cAceasta comanda nu poate fi executata din consola, doar din joc!"
+    no-permission: "&cNu aveti permisiunea de a executa aceasta comanda!"
+    wrong-usage: "&cUtilizare gresita a comenzi! &7/npcmd &cpentru ajutor!"
+    new-version: "&7Versiune noua valabila: &cv"
+    download-at: "&7Descarcati-o la"
+  npc:
+    on-cooldown: "&7Va rugam asteptati &c{time} &7inainte de a folosi acest NPC din nou!"
+    one-time-click: "&7This NPC only allows one use!"
+    pay-confirm: "&7Pentru a folosi acest NPC trebuie sa platiti &a{price}$&7!\n&a{shift}Click dreapta pentru a confirma &7sau &c{shift}Click stanga pentru a anula\n&8Aceasta operatiune va fi anulata in &c15 &8secunde!"
+    pay-canceled: "&cPlata anulata!"
+    pay-no-money: "&cNu aveti destui bani pentru a face asta!"
+    pay-completed: "&a{price}$ au fost adaugati in contul dvs!"
+  help:
+    version: "&7&oVersiune:"
+    info: "&7Plasati mouse-ul peste o comanda pentru mai multe informatii si exemple!"
+    example: "&8Exemplu:"
+    description-add: "&7Adaugati comenzi la un NPC."
+    description-cooldown: "&7Setati cooldown-ul pentru folosirea NPC-ului, in secunde."
+    description-price: "&7Setati pretul pentru folosirea NPC-ului."
+    description-list: "&7Afisati lista de comenzi a NPC-ului curent."
+    description-edit: "&7Editati o anumita comands sau permisiune."
+    description-remove: "&7Stergeti o comanda a NPC-ului."
+    description-reload: "&7Reincarcati toate fisierele."
+# IMPORTANT!!
+# NU MODIFICATI ACEST MODEL, PASTRATI "[]," SI MODIFICATI DOAR TEXTUL DIN INTERIOR
+  time-format:
+    seconds: "[s], [sec], [secunde]"
+    minutes: "[m], [min], [minute]"
+    hours: "[h], [ore], [ore]"
+    days: "[z], [zile], [zile]"

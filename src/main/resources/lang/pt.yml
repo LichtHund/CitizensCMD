@@ -1,0 +1,5 @@
+messages:
+  commands:
+    command1: ""
+  warnings:
+    no-npc-selected: "&ctenho que traduzir depois mas aborrece!"
