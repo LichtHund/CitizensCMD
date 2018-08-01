@@ -150,7 +150,8 @@ public class NPCListener implements Listener {
             });
         }
 
-        if (!player.hasPermission("citizenscmd.bypass"))
+
+        if (!player.hasPermission("citizenscmd.bypass") || CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) != 0)
             CitizensCMD.getPlugin().getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.nanoTime());
 
     }
@@ -251,7 +252,7 @@ public class NPCListener implements Listener {
             });
         }
 
-        if (!player.hasPermission("citizenscmd.bypass"))
+        if (!player.hasPermission("citizenscmd.bypass") || CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) != 0)
             CitizensCMD.getPlugin().getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.nanoTime());
     }
 

@@ -41,7 +41,7 @@ public class TimeUtil {
      * @param seconds The time in seconds to be converted
      * @return String with the time like "2d 2h 2m 2s"
      */
-    public static String getFormattedTime(int seconds, DisplayFormat format) {
+    public static String getFormattedTime(long seconds, DisplayFormat format) {
 
         String messagesString[] = new String[4];
         messagesString[0] = CitizensCMD.getPlugin().getLang().getMessage(Path.SECONDS);
@@ -90,8 +90,8 @@ public class TimeUtil {
             return seconds + secondFormat;
         }
 
-        int minutes = (int) TimeUnit.SECONDS.toMinutes(seconds);
-        int secondsLeft = seconds - (int) TimeUnit.MINUTES.toSeconds(minutes);
+        long minutes = TimeUnit.SECONDS.toMinutes(seconds);
+        long secondsLeft = seconds - TimeUnit.MINUTES.toSeconds(minutes);
 
         if (minutes < 60) {
             if (minutes == 1 && !format.equals(DisplayFormat.SHORT)) {
@@ -112,13 +112,13 @@ public class TimeUtil {
         }
 
         if (minutes < 1440) {
-            int hours = (int) TimeUnit.MINUTES.toHours(minutes);
+            long hours =  TimeUnit.MINUTES.toHours(minutes);
             String time;
             if (hours == 1 && !format.equals(DisplayFormat.SHORT))
                 time = hours + hourFormat.substring(0, hourFormat.length() - 1);
             else
                 time = hours + hourFormat;
-            int leftOver = minutes - (int) TimeUnit.HOURS.toMinutes(hours);
+            long leftOver = minutes - TimeUnit.HOURS.toMinutes(hours);
 
             if (leftOver >= 1) {
                 if (leftOver == 1 && !format.equals(DisplayFormat.SHORT))
@@ -136,13 +136,13 @@ public class TimeUtil {
             return time;
         }
 
-        int days = (int) TimeUnit.MINUTES.toDays(minutes);
+        long days = TimeUnit.MINUTES.toDays(minutes);
         String time;
         if (days == 1 && !format.equals(DisplayFormat.SHORT))
             time = days + dayFormat.substring(0, dayFormat.length() - 1);
         else
             time = days + dayFormat;
-        int leftOver = minutes - (int) TimeUnit.DAYS.toMinutes(days);
+        long leftOver = minutes - TimeUnit.DAYS.toMinutes(days);
 
         if (leftOver >= 1) {
             if (leftOver < 60) {
@@ -151,12 +151,12 @@ public class TimeUtil {
                 else
                     time += " " + leftOver + minuteFormat;
             } else {
-                int hours = (int) TimeUnit.MINUTES.toHours(leftOver);
+                long hours = TimeUnit.MINUTES.toHours(leftOver);
                 if (hours == 1 && !format.equals(DisplayFormat.SHORT))
                     time += " " + hours + hourFormat.substring(0, hourFormat.length() - 1);
                 else
                     time += " " + hours + hourFormat;
-                int minsLeft = leftOver - (int) TimeUnit.HOURS.toMinutes(hours);
+                long minsLeft = leftOver - TimeUnit.HOURS.toMinutes(hours);
                 if (minsLeft == 1 && !format.equals(DisplayFormat.SHORT))
                     time += " " + minsLeft + minuteFormat.substring(0, minuteFormat.length() - 1);
                 else

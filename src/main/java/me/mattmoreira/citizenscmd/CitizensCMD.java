@@ -138,8 +138,8 @@ public final class CitizensCMD extends JavaPlugin {
 
         waitingList = new HashMap<>();
 
-        if (getConfig().contains("cooldonw-time-display")) {
-            switch (getConfig().getString("cooldonw-time-display").toLowerCase()) {
+        if (getConfig().contains("cooldown-time-display")) {
+            switch (getConfig().getString("cooldown-time-display").toLowerCase()) {
                 case "short":
                     displayFormat = DisplayFormat.SHORT;
                     break;

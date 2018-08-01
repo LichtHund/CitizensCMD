@@ -135,7 +135,7 @@ public class CooldownHandler {
      * @param uuid The player uuid
      * @return returns in seconds the time left
      */
-    public int getTimeLeft(int npc, String uuid) {
+    public long getTimeLeft(int npc, String uuid) {
         return CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) - getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid));
     }
 
@@ -150,8 +150,11 @@ public class CooldownHandler {
         if (cooldownData.containsKey("cooldown-data.npc-" + npc + "." + uuid)) {
             if (CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) == -1)
                 return true;
-            else
+            else {
+                System.out.println("seconds left: " + getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid)));
+                System.out.println("CD: " +CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc));
                 return getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid)) < CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc);
+            }
         }
         return false;
     }

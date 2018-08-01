@@ -28,7 +28,7 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 public class CMDPrice extends CommandBase {
 
     public CMDPrice() {
-        super("price", "citizenscmd.price", false, new String[]{"cd"}, 1, 1);
+        super("price", "citizenscmd.price", false, new String[]{"p"}, 1, 1);
     }
 
     @Override

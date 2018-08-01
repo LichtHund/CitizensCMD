@@ -283,7 +283,7 @@ public class DataHandler {
      * @return Returns the NPC price
      */
     public double getPrice(int npc) {
-        return data.containsKey("npc-data.npc-" + npc + ".price") ? (double) data.get("npc-data.npc-" + npc + ".price") : 0.0;
+        return data.containsKey("npc-data.npc-" + npc + ".price") ? Double.parseDouble(data.get("npc-data.npc-" + npc + ".price").toString()) : 0.0;
     }
 
     /**

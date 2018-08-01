@@ -5,7 +5,7 @@
 # Enables Checking for update.
 check-updates: true
 #
-# Available languages EN, PT
+# Available languages EN, PT, BG, RO, NO
 lang: en
 #
 # The default npc cooldown in seconds
@@ -15,4 +15,4 @@ default-cooldown: 0
 shift-confirm: true
 #
 # Select cooldown display format, SHORT = 3m 3s | MEDIUM = 3 min 3 sec | FULL - 3 minutes 3 seconds
-cooldonw-time-display: MEDIUM
+cooldown-time-display: MEDIUM

@@ -164,8 +164,8 @@ public class Util {
      * @param storedTime the stored time to compare
      * @return returns the difference in seconds
      */
-    public static int getSecondsDifference(long storedTime) {
-        return (int) TimeUnit.SECONDS.convert((System.nanoTime() - storedTime), TimeUnit.NANOSECONDS);
+    public static long getSecondsDifference(long storedTime) {
+        return TimeUnit.SECONDS.convert((System.nanoTime() - storedTime), TimeUnit.NANOSECONDS);
     }
 
 }
