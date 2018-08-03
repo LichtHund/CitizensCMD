@@ -54,10 +54,9 @@ messages:
     description-remove: "&7Removes a command from the NPC."
     description-reload: "&7Reloads all the files."
 # IMPORTANT!!
-# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE
+# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE, O "()" contém os PLURALS
   time-format:
-    seconds: "[s], [secs], [seconds]"
-    minutes: "[m], [mins], [minutes]"
-    hours: "[h], [hours], [hours]"
-    days: "[d], [days], [days]"
-
+    seconds: "[s], [sec(s)], [second(s)]"
+    minutes: "[m], [min(s)], [minute(s)]"
+    hours: "[h], [hour(s)], [hour(s)]"
+    days: "[d], [day(s)], [day(s)]"

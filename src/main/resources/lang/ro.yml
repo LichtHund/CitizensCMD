@@ -57,6 +57,6 @@ messages:
 # NU MODIFICATI ACEST MODEL, PASTRATI "[]," SI MODIFICATI DOAR TEXTUL DIN INTERIOR
   time-format:
     seconds: "[s], [sec], [secunde]"
-    minutes: "[m], [min], [minute]"
+    minutes: "[m], [min], [minut(e)]"
     hours: "[h], [ore], [ore]"
-    days: "[z], [zile], [zile]"
+    days: "[z], [zi(le)], [zi(le)]"

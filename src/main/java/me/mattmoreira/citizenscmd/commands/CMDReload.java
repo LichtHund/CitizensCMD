@@ -37,11 +37,11 @@ public class CMDReload extends CommandBase {
     @Override
     public void execute(Player player, String[] args) {
         CitizensCMD.getPlugin().reloadConfig();
-        CitizensCMD.getPlugin().saveConfig();
+        CitizensCMD.getPlugin().saveDefaultConfig();
         CitizensCMD.getPlugin().setLang(CitizensCMD.getPlugin().getConfig().getString("lang"));
 
-        if (CitizensCMD.getPlugin().getConfig().contains("cooldonw-time-display")) {
-            switch (CitizensCMD.getPlugin().getConfig().getString("cooldonw-time-display").toLowerCase()) {
+        if (CitizensCMD.getPlugin().getConfig().contains("cooldown-time-display")) {
+            switch (CitizensCMD.getPlugin().getConfig().getString("cooldown-time-display").toLowerCase()) {
                 case "short":
                     CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.SHORT);
                     break;

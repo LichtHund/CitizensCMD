@@ -1,0 +1,62 @@
+# Citizens CMD Plugin by Mateus Moreira
+# @LichtHund
+# Version ${project.version}
+#
+# Change as much as you need.
+# Remove placeholders with caution!
+# Some placeholders can be removed but might not work correctly
+# Cooldown placeholder is safe to be deleted
+messages:
+  commands:
+    npc-add-command-added: "&aDu har lagt til kommandoen til NPCen!"
+    npc-add-command-failed: "&cKunne ikke legge til kommandoen!"
+    npc-cooldown-set: "&aEn nedtelling ble lagt til!"
+    npc-cooldown-error: "&cEn error ble oppdaget når du skulle legge til en nedtelling!"
+    npc-price-set: "&aDu har satt en pris!"
+    list-commnads-counter-right: "&c&o{count} &7&o- Høyre klikk:"
+    list-commnads-counter-left: "&c&o{count} &7&o- Venstre klikk"
+    list-cooldown: "&7Nedtelling: &c"
+    list-price: "&7Pris: &c"
+    list-tooltip: "&7Klikk for å endre!"
+    reload-command: "&aAlle fillene har blitt reloadet!"
+    removed-command: "&aKommandoen ble fjernet!"
+    edit-command: "&a{type} ble endret!"
+  warnings:
+    no-npc-selected: "&cDu må velge en NPC for å utføre denne kommandoen!"
+    invalid-cooldown: "&cNedtellingen må være et tall!"
+    invalid-price: "&cPrisen må være et tall!"
+    invalid-id: "&cBruk et gyldig ID"
+    invalid-click-type: "&cDu må enten velge left eller right"
+    no-commands: "&cDet er ingen flere kommandoer i denne NPCen"
+    invalid-arguments: "&cDu må velge enten CMD eller PERM!"
+    invalid-permission: "&cPermission kan ikke inneholde et mellomrom!"
+    console-not-allowed: "&cDenne kommandoen kan kun utføres ingame!"
+    no-permission: "&cDu har ikke tilgang til å bruke denne kommandoen!"
+    wrong-usage: "&cFeil bruk av kommandoen! &7/npcmd &cfor hjelp!"
+    new-version: "&7Ny versjon er tilgjengelig: &cv"
+    download-at: "&7Last ned her"
+  npc:
+    on-cooldown: "&7Vent &c{time} &7før du bruker denne igjen!"
+    one-time-click: "&7Denne NPCen kan kun brukes engang!"
+    pay-confirm: "&7For å bruke denne NPCen må du betale &a{price}$&7!\n&a{shift}Høyre klikk for å bekrefte &7or &c{shift}Venstre klikk for å avbryte\n&8Denne vil bli automatisk avslått om &c15 &8sekunder!"
+    pay-canceled: "&cBetaling avslått!"
+    pay-no-money: "&cDu har ikke nok penger til dette!"
+    pay-completed: "&a{price}$ har blitt tatt fra din konto!"
+  help:
+    version: "&7&oVersjon:"
+    info: "&7Hold musen over for å få infomarsjon!"
+    example: "&8Eksempel:"
+    description-add: "&7Legg til kommandoer."
+    description-cooldown: "&7Legge til en nedtelling i sekunder!"
+    description-price: "&7Sett en pris på NPCen"
+    description-list: "&7Se liste over kommandoen som er på NPCen"
+    description-edit: "&7Endre en kommando eller permission"
+    description-remove: "&7Fjerne en kommando fra NPCen"
+    description-reload: "&7reloade alle filene"
+# IMPORTANT!!
+# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE
+  time-format:
+    seconds: "[s], [sek], [sekund(er)]"
+    minutes: "[m], [min], [minutt(er)]"
+    hours: "[h], [time(r)], [time(r)]"
+    days: "[d], [dag(er)], [dag(er)]"

@@ -1,0 +1,62 @@
+# Citizens CMD Plugin by Mateus Moreira
+# @LichtHund
+# Version ${project.version}
+#
+# Change as much as you need.
+# Remove placeholders with caution!
+# Some placeholders can be removed but might not work correctly
+# Cooldown placeholder is safe to be deleted
+messages:
+  commands:
+    npc-add-command-added: "&a你已經成功新增指令到這個npc!"
+    npc-add-command-failed: "&c新增指令到這個npc失敗!"
+    npc-cooldown-set: "&a你已經成功設定冷卻時間!"
+    npc-cooldown-error: "&c設定冷卻時間時有錯誤!"
+    npc-price-set: "&a你已經成功設定價格!"
+    list-commnads-counter-right: "&c&o{count} &7&o- 右鍵指令:"
+    list-commnads-counter-left: "&c&o{count} &7&o- 左鍵指令:"
+    list-cooldown: "&7冷卻時間: &c"
+    list-price: "&7價格: &c"
+    list-tooltip: "&7按下來編輯!"
+    reload-command: "&a所有檔案已經被重新載入!"
+    removed-command: "&a這個指令已經被成功移除!"
+    edit-command: "&a {type} 已經被編輯!"
+  warnings:
+    no-npc-selected: "&c你一定要選擇NPC來執行那個指令!"
+    invalid-cooldown: "&c冷卻時間並不是數字!"
+    invalid-price: "&c價格並不是數字!"
+    invalid-id: "&c請用一個正確的指令ID!"
+    invalid-click-type: "&c你一定要選擇左邊或右邊!"
+    no-commands: "&c這個NPC已經沒有更多指令!"
+    invalid-arguments: "&c你一定要選擇 CMD 或 PERM!"
+    invalid-permission: "&c權限不能包括空格!"
+    console-not-allowed: "&c這指令只能在遊戲中執行!不能在console執行!"
+    no-permission: "&c你沒有權限去執行這個指令!"
+    wrong-usage: "&c錯誤用法! &7/npcmd &c來看指令用法!"
+    new-version: "&7有新的版本可供用: &cv"
+    download-at: "&7下載:"
+  npc:
+    on-cooldown: "&7請等 &c{time} 之後再用這個指令"
+    one-time-click: "&7這NPC只供一次性的使用!"
+    pay-confirm: "&7如果要用這個NPC,你要付費 &a{price}$&7!\n&a{shift}欲確定，按右鍵&7or &c{shift}欲取消，按左鍵\n&8這行動會自動在 &c15 &8秒內取消!"
+    pay-canceled: "&c付費被取消!"
+    pay-no-money: "&c你沒有足夠的金錢!"
+    pay-completed: "&a已經在你的帳戶扣去{price}$!"
+  help:
+    version: "&7&o版本:"
+    info: "&7欲要知道更多，把鼠標停留在一個指令上!"
+    example: "&8例子:"
+    description-add: "&7添加指令到NPC."
+    description-cooldown: "&7設定使用NPC冷卻時間，以秒作單位."
+    description-price: "&7設定要使用NPC的價格."
+    description-list: "&7顯示這個NPC的所有指令."
+    description-edit: "&7編輯特定的指令或權限."
+    description-remove: "&7從一個NPC移除一個指令."
+    description-reload: "&7重新載入所有檔案."
+# IMPORTANT!!
+# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE
+  time-format:
+    seconds: "[s], [秒], [秒]"
+    minutes: "[m], [分钟], [分钟]"
+    hours: "[h], [小时], [小时]"
+    days: "[d], [天], [天]"

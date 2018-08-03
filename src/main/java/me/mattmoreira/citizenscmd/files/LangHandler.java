@@ -59,6 +59,12 @@ public class LangHandler {
             case "bg":
                 info(color(TAG + "&7Използване на &aбългарски &7език!"));
                 break;
+            case "no":
+                info(color(TAG + "&aNorsk &7Oversettelse!"));
+                break;
+            case "ch":
+                info(color(TAG + "&7使用&a中文&7消息!"));
+                break;
         }
 
         messages = new HashMap<>();

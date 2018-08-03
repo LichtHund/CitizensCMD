@@ -150,11 +150,8 @@ public class CooldownHandler {
         if (cooldownData.containsKey("cooldown-data.npc-" + npc + "." + uuid)) {
             if (CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) == -1)
                 return true;
-            else {
-                System.out.println("seconds left: " + getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid)));
-                System.out.println("CD: " +CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc));
+            else
                 return getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid)) < CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc);
-            }
         }
         return false;
     }

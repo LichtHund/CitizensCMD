@@ -1,5 +1,63 @@
+# Citizens CMD Plugin by Mateus Moreira
+# @LichtHund
+# Versão ${project.version}
+#
+# Mude o tanto que for necessário.
+# Tome cuidado ao remover os placeholders!
+# Alguns placeholders podem ser removidos mas podem não funcionar corretamente.
+# Os placeholders do cooldown podem ser removidos com segurança.
 messages:
   commands:
-    command1: ""
+    npc-add-command-added: "&aVocê adicionou um comando ao NPC com sucesso!"
+    npc-add-command-failed: "&cFalha ao adicionar comando ao NPC!"
+    npc-cooldown-set: "&aVocê definiu com o cooldown sucesso!"
+    npc-cooldown-error: "&cOcorreu um erro ao definir o cooldown!"
+    npc-price-set: "&aVocê definiu o preço com sucesso!"
+    list-commnads-counter-right: "&c&o{count} &7&o- Comandos de clique direito:"
+    list-commnads-counter-left: "&c&o{count} &7&o- Comandos de clique esquerdo:"
+    list-cooldown: "&7Cooldown: &c"
+    list-price: "&7Preço: &c"
+    list-tooltip: "&7Clique para editar!"
+    reload-command: "&aTodos os arquivos foram recarregados com sucesso!"
+    removed-command: "&aO comando foi removido com sucesso!"
+    edit-command: "&aO {type} foi editado com sucesso!"
   warnings:
-    no-npc-selected: "&ctenho que traduzir depois mas aborrece!"
+    no-npc-selected: "&cVocê deve ter um NPC selecionado para executar esse comando!"
+    invalid-cooldown: "&cO cooldown deve ser um número!"
+    invalid-price: "&cO preço deve ser um número!"
+    invalid-id: "&cPor favor, introduza um ID de comando válido!"
+    invalid-click-type: "&cVocê deve selecionar esquerda ou direita!"
+    no-commands: "&cNão há mais comandos neste NPC!"
+    invalid-arguments: "&cVocê deve selecionar CMD ou PERM!"
+    invalid-permission: "&cPermissões não podem conter espaços!"
+    console-not-allowed: "&cEste comando não pode ser executado a partir do console, apenas no jogo!"
+    no-permission: "&cVocê não tem permissão para executar este comando!"
+    wrong-usage: "&cUso errado do comando! &7/npcmd &cpara ajuda!"
+    new-version: "&7Nova versão disponível: &cv"
+    download-at: "&7Faça download em"
+  npc:
+    on-cooldown: "&7Por favor, aguarde &c{time} &7antes de usar este NPC novamente!"
+    one-time-click: "&7Este NPC permite apenas um uso!"
+    pay-confirm: "&7Para usar este NPC você deve pagar &a{price}$&7!\n&a{shift}Clique com o botão direito para confirmar &7or &c{shift}Clique esquerdo para cancelar\n&8Esta operação será cancelada em &c15 &8segundos!"
+    pay-canceled: "&cPagamento cancelado!"
+    pay-no-money: "&cVocê não tem dinheiro suficiente para fazer isso!"
+    pay-completed: "&a{price}$ foi retirado da sua conta!"
+  help:
+    version: "&7&oVersão:"
+    info: "&7Passe o mouse sobre um comando para mais informações e exemplos!"
+    example: "&8Exemplos:"
+    description-add: "&7Adiciona comandos a um NPC."
+    description-cooldown: "&7Define o tempo de espera do clique do NPC, em segundos."
+    description-price: "&7Define o preço para usar o NPC."
+    description-list: "&7Exibe lista de comandos para o NPC atual."
+    description-edit: "&7Edita um comando ou permissão específica."
+    description-remove: "&7Remove um comando do NPC."
+    description-reload: "&7Recarrega todos os arquivos."
+# IMPORTANT!!
+# NÃO MUDE ESTE PADRÃO, MANTENHA O "[]," MUDE APENAS O TEXTO DENTRO
+  time-format:
+    seconds: "[s], [seg(s)], [secondo(s)]"
+    minutes: "[m], [min(s)], [minuto(s)]"
+    hours: "[h], [hora(s)], [hora(s)]"
+    days: "[d], [dia(s)], [dia(s)]"
+

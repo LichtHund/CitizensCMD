@@ -48,7 +48,7 @@ public final class CitizensCMD extends JavaPlugin {
     /**
      * Supported languages
      */
-    private final String[] REGISTERED_LANG_FILES = {"en", "pt", "ro", "bg"};
+    private final String[] REGISTERED_LANG_FILES = {"en", "pt", "ro", "bg", "no", "ch"};
 
     private static CitizensCMD plugin;
 
@@ -81,6 +81,8 @@ public final class CitizensCMD extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        checkOldConfig();
 
         new Metrics(this);
 
@@ -115,6 +117,12 @@ public final class CitizensCMD extends JavaPlugin {
                 case "bg":
                     info(color(TAG + "&7Използвайки &aPlaceholderAPI&7!"));
                     break;
+                case "no":
+                    info(color(TAG + "&7Bruk &aPlaceholderAPI&7!"));
+                    break;
+                case "ch":
+                    info(color(TAG + "&7运用 &aPlaceholderAPI&7!"));
+                    break;
             }
             papi = true;
         }
@@ -132,6 +140,12 @@ public final class CitizensCMD extends JavaPlugin {
                     break;
                 case "bg":
                     info(color(TAG + "&7Използвайки &aVult&7!"));
+                    break;
+                case "no":
+                    info(color(TAG + "&7Bruk &aVult&7!"));
+                    break;
+                case "ch":
+                    info(color(TAG + "&7运用 &aVult&7!"));
                     break;
             }
         }
@@ -174,6 +188,12 @@ public final class CitizensCMD extends JavaPlugin {
                             break;
                         case "bg":
                             info(color(TAG + "&cНалична е нова версия на CitizensCMD:"));
+                            break;
+                        case "no":
+                            info(color(TAG + "&cEn ny versjon av CitizensCMD er nå tilgjengelig:"));
+                            break;
+                        case "ch":
+                            info(color(TAG + "&cCitizensCMD的新版本现已推出:"));
                             break;
                     }
                     info(color(TAG + "&b&o" + updater.getResourceURL()));
@@ -300,6 +320,18 @@ public final class CitizensCMD extends JavaPlugin {
             case "bulg":
             case "bulgarian":
                 lang = new LangHandler("bg");
+                break;
+
+            case "no":
+            case "norw":
+            case "norwegian":
+                lang = new LangHandler("no");
+                break;
+
+            case "ch":
+            case "chi":
+            case "chinese":
+                lang = new LangHandler("ch");
                 break;
 
             default:

@@ -22,8 +22,13 @@ import me.mattmoreira.citizenscmd.CitizensCMD;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class Util {
@@ -168,4 +173,47 @@ public class Util {
         return TimeUnit.SECONDS.convert((System.nanoTime() - storedTime), TimeUnit.NANOSECONDS);
     }
 
+    /**
+     * Checks for old config and renames it
+     */
+    public static void checkOldConfig() {
+        File configFile;
+        File configFileNew;
+        FileConfiguration configConf;
+
+        boolean isNew = true;
+
+        boolean contains[] = new boolean[5];
+        for (int i = 0; i < contains.length; i++) {
+            contains[i] = false;
+        }
+
+        try {
+            configFile = new File(CitizensCMD.getPlugin().getDataFolder(), "config.yml");
+            configFileNew = new File(CitizensCMD.getPlugin().getDataFolder(), "config_old.yml");
+            configConf = new YamlConfiguration();
+
+            if (configFile.exists()) {
+                configConf.load(configFile);
+                if (configConf.contains("check-updates")) contains[0] = true;
+                if (configConf.contains("lang")) contains[1] = true;
+                if (configConf.contains("default-cooldown")) contains[2] = true;
+                if (configConf.contains("shift-confirm")) contains[3] = true;
+                if (configConf.contains("cooldown-time-display")) contains[4] = true;
+            }
+
+            for (boolean bool : contains) {
+                if (!bool) {
+                    isNew = false;
+                }
+            }
+
+            if (!isNew) {
+                configFile.renameTo(configFileNew);
+            }
+
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
 }

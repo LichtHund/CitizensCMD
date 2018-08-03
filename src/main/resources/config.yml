@@ -1,12 +1,16 @@
 # Citizens CMD Plugin by Mateus Moreira
 # @LichtHund
 # Version ${project.version}
+# Wiki: https://github.com/ipsk/CitizensCMD/wiki
+# GitHub: https://github.com/ipsk/CitizensCMD
+# Spigot: https://www.spigotmc.org/resources/citizens-cmd.30224/
+
 #
 # Enables Checking for update.
 check-updates: true
 #
-# Available languages EN, PT, BG, RO, NO
-lang: en
+# Available languages EN, PT, BG, RO, NO, CH
+lang: 'en'
 #
 # The default npc cooldown in seconds
 default-cooldown: 0

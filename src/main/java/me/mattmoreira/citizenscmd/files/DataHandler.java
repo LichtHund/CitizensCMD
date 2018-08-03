@@ -342,13 +342,13 @@ public class DataHandler {
                         String tempCommand = commandsData.get(commandID - 1);
                         tempCommand = tempCommand.replaceAll(" ([^]]*)", " " + newValue);
                         commandsData.set(commandID - 1, tempCommand);
-                        typeText = "command";
+                        typeText = "CMD";
                         break;
                     case PERM:
                         String tempPerm = commandsData.get(commandID - 1);
                         tempPerm = tempPerm.replaceAll("\\[([^]]*)]", "[" + newValue + "]");
                         commandsData.set(commandID - 1, tempPerm);
-                        typeText = "permission";
+                        typeText = "PERM";
                         break;
                 }
 
