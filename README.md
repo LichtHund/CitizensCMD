@@ -3,6 +3,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/ipsk/CitizensCMD.svg?longCache=true&style=flat-square)](https://github.com/ipsk/CitizensCMD/issues)
 ![GitHub issues](https://img.shields.io/github/last-commit/ipsk/CitizensCMD.svg?longCache=true&style=flat-square)
 [![GitHub issues](https://img.shields.io/badge/Guide-Wiki-blue.svg?longCache=true&style=flat-square)](https://github.com/ipsk/CitizensCMD/wiki)
+![GitHub](https://img.shields.io/github/license/ipsk/CitizensCMD.svg?style=flat-square)
+
 
 # CitizensCMD
 **CitizensCMD** is an addition to the plugin [Citizens](https://www.spigotmc.org/resources/citizens.13811/) that allows you to execute commands by clicking an NPC.
