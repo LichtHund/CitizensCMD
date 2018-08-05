@@ -30,6 +30,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.io.ByteArrayOutputStream;
@@ -48,7 +49,7 @@ public class NPCListener implements Listener {
         Bukkit.getMessenger().registerOutgoingPluginChannel(CitizensCMD.getPlugin(), "BungeeCord");
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onRightClick(NPCRightClickEvent event) {
         int npc = event.getNPC().getId();
         Player player = event.getClicker();
@@ -156,7 +157,7 @@ public class NPCListener implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onLeftClick(NPCLeftClickEvent event) {
         int npc = event.getNPC().getId();
         Player player = event.getClicker();
@@ -256,7 +257,7 @@ public class NPCListener implements Listener {
             CitizensCMD.getPlugin().getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.nanoTime());
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onRemoveNPC(NPCRemoveEvent event) {
         CitizensCMD.getPlugin().getDataHandler().removeNPCData(event.getNPC().getId());
     }
