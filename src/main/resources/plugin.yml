@@ -2,7 +2,7 @@
 # @LichtHund
 # Wiki: https://github.com/ipsk/CitizensCMD/wiki
 # GitHub: https://github.com/ipsk/CitizensCMD
-# Spigot: https://www.spigotmc.org/resources/citizenscmd.30224/
+# Spigot: https://www.spigotmc.org/resources/citizens-cmd.30224/
 
 main: me.mattmoreira.citizenscmd.CitizensCMD
 version: ${project.version}
