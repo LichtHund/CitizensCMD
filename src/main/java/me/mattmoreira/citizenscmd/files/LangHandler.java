@@ -19,6 +19,7 @@
 package me.mattmoreira.citizenscmd.files;
 
 import me.mattmoreira.citizenscmd.CitizensCMD;
+import me.mattmoreira.citizenscmd.utility.Path;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -86,6 +87,9 @@ public class LangHandler {
                 if (!langFile.exists()) CitizensCMD.getPlugin().saveResource("lang/" + lang + ".yml", false);
 
                 langConf.load(langFile);
+
+                if (!langConf.contains(Path.MESSAGE_DISPLAY))
+                    langConf.set(Path.MESSAGE_DISPLAY, "{name}:&r");
 
                 for (String parent : langConf.getConfigurationSection("messages").getKeys(false)) {
                     for (String child : langConf.getConfigurationSection("messages." + parent).getKeys(false))

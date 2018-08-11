@@ -42,6 +42,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static me.mattmoreira.citizenscmd.utility.TimeUtil.getFormattedTime;
+import static me.mattmoreira.citizenscmd.utility.Util.color;
 
 public class NPCListener implements Listener {
 
@@ -49,7 +50,7 @@ public class NPCListener implements Listener {
         Bukkit.getMessenger().registerOutgoingPluginChannel(CitizensCMD.getPlugin(), "BungeeCord");
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onRightClick(NPCRightClickEvent event) {
         int npc = event.getNPC().getId();
         Player player = event.getClicker();
@@ -127,28 +128,35 @@ public class NPCListener implements Listener {
         if (permissions.size() != commands.size()) return;
 
         for (int i = 0; i < permissions.size(); i++) {
-            final int loopFinalPosition = i;
-            Bukkit.getScheduler().runTask(CitizensCMD.getPlugin(), () -> {
-                switch (permissions.get(loopFinalPosition).toLowerCase()) {
+            switch (permissions.get(i).toLowerCase()) {
 
-                    case "console":
-                        CitizensCMD.getPlugin().getServer().dispatchCommand(CitizensCMD.getPlugin().getServer().getConsoleSender(), commands.get(loopFinalPosition));
-                        break;
+                case "console":
+                    CitizensCMD.getPlugin().getServer().dispatchCommand(CitizensCMD.getPlugin().getServer().getConsoleSender(), commands.get(i));
+                    break;
 
-                    case "none":
-                        player.chat("/" + commands.get(loopFinalPosition));
-                        break;
+                case "none":
+                    player.chat("/" + commands.get(i));
+                    break;
 
-                    case "server":
-                        changeServer(player, commands.get(loopFinalPosition));
-                        break;
+                case "server":
+                    changeServer(player, commands.get(i));
+                    break;
 
-                    default:
-                        CitizensCMD.getPlugin().getPermissionsManager().setPermission(player, permissions.get(loopFinalPosition));
-                        player.chat("/" + commands.get(loopFinalPosition));
-                        CitizensCMD.getPlugin().getPermissionsManager().unsetPermission(player, permissions.get(loopFinalPosition));
-                }
-            });
+                case "message":
+                    String finalMessage;
+                    if (commands.get(i).contains("{display}")) {
+                        String tmpStr = commands.get(i).replace("{display}", CitizensCMD.getPlugin().getLang().getMessage(Path.MESSAGE_DISPLAY));
+                        finalMessage = tmpStr.replace("{name}", event.getNPC().getFullName());
+                    } else
+                        finalMessage = commands.get(i);
+                    player.sendMessage(color(finalMessage));
+                    break;
+
+                default:
+                    CitizensCMD.getPlugin().getPermissionsManager().setPermission(player, permissions.get(i));
+                    player.chat("/" + commands.get(i));
+                    CitizensCMD.getPlugin().getPermissionsManager().unsetPermission(player, permissions.get(i));
+            }
         }
 
 
@@ -157,7 +165,7 @@ public class NPCListener implements Listener {
 
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onLeftClick(NPCLeftClickEvent event) {
         int npc = event.getNPC().getId();
         Player player = event.getClicker();
@@ -225,32 +233,39 @@ public class NPCListener implements Listener {
                     commands.add(command);
             }
         }
-        
+
         if (permissions.size() != commands.size()) return;
 
         for (int i = 0; i < permissions.size(); i++) {
-            final int loopFinalPosition = i;
-            Bukkit.getScheduler().runTask(CitizensCMD.getPlugin(), () -> {
-                switch (permissions.get(loopFinalPosition).toLowerCase()) {
+            switch (permissions.get(i).toLowerCase()) {
 
-                    case "console":
-                        CitizensCMD.getPlugin().getServer().dispatchCommand(CitizensCMD.getPlugin().getServer().getConsoleSender(), commands.get(loopFinalPosition));
-                        break;
+                case "console":
+                    CitizensCMD.getPlugin().getServer().dispatchCommand(CitizensCMD.getPlugin().getServer().getConsoleSender(), commands.get(i));
+                    break;
 
-                    case "none":
-                        player.chat("/" + commands.get(loopFinalPosition));
-                        break;
+                case "none":
+                    player.chat("/" + commands.get(i));
+                    break;
 
-                    case "server":
-                        changeServer(player, commands.get(loopFinalPosition));
-                        break;
+                case "server":
+                    changeServer(player, commands.get(i));
+                    break;
 
-                    default:
-                        CitizensCMD.getPlugin().getPermissionsManager().setPermission(player, permissions.get(loopFinalPosition));
-                        player.chat("/" + commands.get(loopFinalPosition));
-                        CitizensCMD.getPlugin().getPermissionsManager().unsetPermission(player, permissions.get(loopFinalPosition));
-                }
-            });
+                case "message":
+                    String finalMessage;
+                    if (commands.get(i).contains("{display}")) {
+                        String tmpStr = commands.get(i).replace("{display}", CitizensCMD.getPlugin().getLang().getMessage(Path.MESSAGE_DISPLAY));
+                        finalMessage = tmpStr.replace("{name}", event.getNPC().getFullName());
+                    } else
+                        finalMessage = commands.get(i);
+                    player.sendMessage(color(finalMessage));
+                    break;
+
+                default:
+                    CitizensCMD.getPlugin().getPermissionsManager().setPermission(player, permissions.get(i));
+                    player.chat("/" + commands.get(i));
+                    CitizensCMD.getPlugin().getPermissionsManager().unsetPermission(player, permissions.get(i));
+            }
         }
 
         if (!player.hasPermission("citizenscmd.bypass") || CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) != 0)

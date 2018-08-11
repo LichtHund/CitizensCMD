@@ -42,6 +42,7 @@ messages:
     pay-canceled: "&cBetaling avslått!"
     pay-no-money: "&cDu har ikke nok penger til dette!"
     pay-completed: "&a{price}$ har blitt tatt fra din konto!"
+    message-display: "{name}:&r"
   help:
     version: "&7&oVersjon:"
     info: "&7Hold musen over for å få infomarsjon!"

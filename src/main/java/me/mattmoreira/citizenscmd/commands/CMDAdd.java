@@ -46,12 +46,19 @@ public class CMDAdd extends CommandBase {
 
         String permission = args[0];
         boolean left = false;
+        boolean displayName = false;
 
         StringBuilder stringBuilder = new StringBuilder();
         String[] commandsArray = Arrays.copyOfRange(args, 1, args.length);
         commandsArray[0] = commandsArray[0].replace("/", "");
 
         for (int i = 0; i < commandsArray.length; i++) {
+
+            if (commandsArray[i].equalsIgnoreCase("-d")) {
+                displayName = true;
+                commandsArray[i] = "";
+            }
+
             if (commandsArray[i].equalsIgnoreCase("-l")) {
                 left = true;
                 break;
@@ -60,9 +67,16 @@ public class CMDAdd extends CommandBase {
             else stringBuilder.append(commandsArray[i]).append(" ");
         }
 
+        String finalString;
+
+        if (displayName)
+            finalString = "{display} " + stringBuilder.toString().trim();
+        else
+            finalString = stringBuilder.toString().trim();
+
         boolean finalLeft = left;
 
-        CitizensCMD.getPlugin().getDataHandler().addCommand(getSelectedNpcId(player), permission, stringBuilder.toString().trim(), player, finalLeft);
+        CitizensCMD.getPlugin().getDataHandler().addCommand(getSelectedNpcId(player), permission, finalString, player, finalLeft);
     }
 
 }

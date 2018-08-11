@@ -42,6 +42,7 @@ messages:
     pay-canceled: "&cPagamento cancelado!"
     pay-no-money: "&cVocê não tem dinheiro suficiente para fazer isso!"
     pay-completed: "&a{price}$ foi retirado da sua conta!"
+    message-display: "{name}:&r"
   help:
     version: "&7&oVersão:"
     info: "&7Passe o mouse sobre um comando para mais informações e exemplos!"

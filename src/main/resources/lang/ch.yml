@@ -42,6 +42,7 @@ messages:
     pay-canceled: "&c付費被取消!"
     pay-no-money: "&c你沒有足夠的金錢!"
     pay-completed: "&a已經在你的帳戶扣去{price}$!"
+    message-display: "{name}:&r"
   help:
     version: "&7&o版本:"
     info: "&7欲要知道更多，把鼠標停留在一個指令上!"

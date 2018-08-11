@@ -69,6 +69,7 @@ public class Path {
     public static final String PAY_CANCELED = MAIN_PATH_NPCS + "pay-canceled";
     public static final String PAY_NO_MONEY = MAIN_PATH_NPCS + "pay-no-money";
     public static final String PAY_COMPLETED = MAIN_PATH_NPCS + "pay-completed";
+    public static final String MESSAGE_DISPLAY = MAIN_PATH_NPCS + "message-display";
 
     /**
      * Help

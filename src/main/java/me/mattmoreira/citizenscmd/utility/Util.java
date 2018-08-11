@@ -146,7 +146,7 @@ public class Util {
 
         switch (subCMD.toLowerCase()) {
             case "add":
-                argComplete[0] = new String[]{"console", "none", "permission", "server"};
+                argComplete[0] = new String[]{"console", "none", "permission", "server", "message"};
                 break;
             case "remove":
                 argComplete[0] = new String[]{"left", "right"};
@@ -158,7 +158,7 @@ public class Util {
                 argComplete[1] = new String[]{"left", "right"};
                 argComplete[2] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
                 argComplete[3] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
-                argComplete[4] = new String[]{"console", "none", "permission", "server"};
+                argComplete[4] = new String[]{"console", "none", "permission", "server", "message"};
         }
         return argComplete;
     }

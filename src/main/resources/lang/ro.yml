@@ -42,6 +42,7 @@ messages:
     pay-canceled: "&cPlata anulata!"
     pay-no-money: "&cNu aveti destui bani pentru a face asta!"
     pay-completed: "&a{price}$ au fost adaugati in contul dvs!"
+    message-display: "{name}:&r"
   help:
     version: "&7&oVersiune:"
     info: "&7Plasati mouse-ul peste o comanda pentru mai multe informatii si exemple!"

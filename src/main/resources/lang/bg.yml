@@ -42,6 +42,7 @@ messages:
     pay-canceled: "&cПлащането бе отменено!"
     pay-no-money: "&cНямаш достатъчно пари, за да извършиш това действие!"
     pay-completed: "&a{price}$ Бяха взети от твоята сметка!"
+    message-display: "{name}:&r"
   help:
     version: "&7&oВерсия:"
     info: "&7Задръжте върху команда за помощ и пример!"
