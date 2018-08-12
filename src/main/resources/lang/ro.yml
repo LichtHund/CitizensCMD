@@ -21,6 +21,9 @@ messages:
     reload-command: "&aToate fisierele au fost reincarcate cu succes!"
     removed-command: "&aComanda a fost eliminata cu succes!"
     edit-command: "&a{type} a fost editat cu succes!"
+    invalid-sound: "&cIntroduceți un sunet valid!"
+    sound-added: "&aSunetul a fost adăugat cu succes!"
+    sound-removed: "&aSunetul a fost eliminat cu succes!"
   warnings:
     no-npc-selected: "&cTrebuie sa ai un NPC selectat pentru a executa aceasta comanda!"
     invalid-cooldown: "&cCooldown-ul trebuie sa fie un numar!"

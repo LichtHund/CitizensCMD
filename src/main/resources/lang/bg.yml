@@ -21,6 +21,9 @@ messages:
     reload-command: "&aВсичко файлове бяха презаредени успешно!"
     removed-command: "&aКомандата бе премахната успешно!"
     edit-command: "&a{type} бе променен/а успешно!"
+    invalid-sound: "&cМоля, въведете валиден звук!"
+    sound-added: "&aЗвукът е добавен успешно!"
+    sound-removed: "&aЗвукът е премахнат успешно!"
   warnings:
     no-npc-selected: "&cИзбери NPC първо!"
     invalid-cooldown: "&cВремето за изчакване трябва да бъде число!"

@@ -21,6 +21,9 @@ messages:
     reload-command: "&aAlle fillene har blitt reloadet!"
     removed-command: "&aKommandoen ble fjernet!"
     edit-command: "&a{type} ble endret!"
+    invalid-sound: "&cVennligst skriv inn en gyldig lyd!"
+    sound-added: "&aLyd lagt til!"
+    sound-removed: "&aLyden fjernet vellykket!"
   warnings:
     no-npc-selected: "&cDu må velge en NPC for å utføre denne kommandoen!"
     invalid-cooldown: "&cNedtellingen må være et tall!"

@@ -21,6 +21,9 @@ messages:
     reload-command: "&a所有檔案已經被重新載入!"
     removed-command: "&a這個指令已經被成功移除!"
     edit-command: "&a {type} 已經被編輯!"
+    invalid-sound: "&c请输入有效的声音!"
+    sound-added: "&a声音成功添加！"
+    sound-removed: "&a声音已成功删除！"
   warnings:
     no-npc-selected: "&c你一定要選擇NPC來執行那個指令!"
     invalid-cooldown: "&c冷卻時間並不是數字!"

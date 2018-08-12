@@ -180,6 +180,10 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                                 return getCommandNames(subCMD, args, 5, (Player) sender);
                         }
                         break;
+
+                    case "sound":
+                        if (args.length == 2) return getCommandNames(subCMD, args, 1, (Player) sender);
+                        break;
                 }
 
             }
@@ -203,7 +207,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
         if (!args[arg - 1].equals("")) {
             for (String commandName : argsComplete[arg - 1]) {
                 if (arg + 1 > args.length) break;
-                if (!commandName.startsWith(args[arg].toLowerCase())) continue;
+                if (!commandName.toLowerCase().startsWith(args[arg].toLowerCase())) continue;
                 commandNames.add(commandName);
             }
         } else {

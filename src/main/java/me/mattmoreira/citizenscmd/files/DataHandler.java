@@ -21,6 +21,7 @@ package me.mattmoreira.citizenscmd.files;
 import me.mattmoreira.citizenscmd.CitizensCMD;
 import me.mattmoreira.citizenscmd.utility.EnumTypes;
 import me.mattmoreira.citizenscmd.utility.Path;
+import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -91,6 +92,7 @@ public class DataHandler {
                                 data.put("npc-data." + parent + "." + child, dataConfigurator.getInt("npc-data." + parent + "." + child));
                                 break;
 
+                            case "sound":
                             case "right-click-commands":
                             case "left-click-commands":
                                 data.put("npc-data." + parent + "." + child, dataConfigurator.getStringList("npc-data." + parent + "." + child));
@@ -161,6 +163,11 @@ public class DataHandler {
                     dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
                 }
 
+                if (!data.containsKey("npc-data.npc-" + npc + ".sound")) {
+                    data.put("npc-data.npc-" + npc + ".sound", new ArrayList<>());
+                    dataConfigurator.set("npc-data.npc-" + npc + ".sound", new ArrayList<>());
+                }
+
                 player.sendMessage(color(HEADER));
                 player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NPC_ADDED));
 
@@ -228,6 +235,44 @@ public class DataHandler {
     }
 
     /**
+     * Sets the sound of the NPC command
+     *
+     * @param npc    The NPC id
+     * @param sound  The sound to play
+     * @param volume the volume
+     * @param pitch  the pitch
+     * @param player The player who run the command
+     */
+    public void setSound(int npc, Sound sound, float volume, float pitch, Player player) {
+        new Thread(() -> {
+            try {
+                createBasics();
+                dataConfigurator.load(savesFile);
+
+                List<String> soundProperties = new ArrayList<>();
+
+                soundProperties.add(sound.name());
+                soundProperties.add(String.valueOf(volume));
+                soundProperties.add(String.valueOf(pitch));
+
+                dataConfigurator.set("npc-data.npc-" + npc + ".sound", soundProperties);
+
+                if (data.containsKey("npc-data.npc-" + npc + ".sound"))
+                    data.replace("npc-data.npc-" + npc + ".sound", soundProperties);
+                else
+                    data.put("npc-data.npc-" + npc + ".sound", soundProperties);
+
+                player.sendMessage(color(HEADER));
+                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.SOUND_ADDED));
+
+                dataConfigurator.save(savesFile);
+            } catch (IOException | InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    /**
      * Gets the click commands from the saves.yml
      *
      * @param npc   The NPC id
@@ -266,6 +311,12 @@ public class DataHandler {
         return true;
     }
 
+    public boolean hasSound(int npc) {
+        if (data.containsKey("npc-data.npc-" + npc + ".sound"))
+            return !(((List<String>) data.get("npc-data.npc-" + npc + ".sound")).isEmpty());
+        return false;
+    }
+
     /**
      * Gets the cooldown of the NPC
      *
@@ -274,6 +325,10 @@ public class DataHandler {
      */
     public int getNPCCooldown(int npc) {
         return data.containsKey("npc-data.npc-" + npc + ".cooldown") ? (int) data.get("npc-data.npc-" + npc + ".cooldown") : 0;
+    }
+
+    public List<String> getNPCSound(int npc) {
+        return (List<String>) data.get("npc-data.npc-" + npc + ".sound");
     }
 
     /**
@@ -309,6 +364,27 @@ public class DataHandler {
 
                 player.sendMessage(color(HEADER));
                 player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.REMOVED_COMMAND));
+
+                dataConfigurator.save(savesFile);
+            } catch (IOException | InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void removeSound(int npc, Player player) {
+        new Thread(() -> {
+            try {
+                createBasics();
+                dataConfigurator.load(savesFile);
+
+                List<String> soundProperties = new ArrayList<>();
+
+                data.replace("npc-data.npc-" + npc + ".sound", soundProperties);
+                dataConfigurator.set("npc-data.npc-" + npc + ".sound", soundProperties);
+
+                player.sendMessage(color(HEADER));
+                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.SOUND_REMOVED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {

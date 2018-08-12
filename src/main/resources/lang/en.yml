@@ -21,6 +21,9 @@ messages:
     reload-command: "&aAll files have been reloaded successfully!"
     removed-command: "&aThe command was removed successfully!"
     edit-command: "&aThe {type} was edited successfully!"
+    invalid-sound: "&cPlease enter a valid sound!"
+    sound-added: "&aSound added successfully!"
+    sound-removed: "&aSound removed successfully!"
   warnings:
     no-npc-selected: "&cYou must have an NPC selected to execute that command!"
     invalid-cooldown: "&cThe cooldown must be a number!"

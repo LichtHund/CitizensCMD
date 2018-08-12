@@ -38,6 +38,9 @@ public class Path {
     public static final String RELOAD = MAIN_PATH_COMMANDS + "reload-command";
     public static final String REMOVED_COMMAND = MAIN_PATH_COMMANDS + "removed-command";
     public static final String EDITED_COMMAND = MAIN_PATH_COMMANDS + "edit-command";
+    public static final String INVALID_SOUND = MAIN_PATH_COMMANDS + "invalid-sound";
+    public static final String SOUND_ADDED = MAIN_PATH_COMMANDS + "sound-added";
+    public static final String SOUND_REMOVED = MAIN_PATH_COMMANDS + "sound-removed";
 
     /**
      * WARNINGS

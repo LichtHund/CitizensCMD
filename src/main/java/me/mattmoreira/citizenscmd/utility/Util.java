@@ -22,6 +22,7 @@ import me.mattmoreira.citizenscmd.CitizensCMD;
 import net.citizensnpcs.api.CitizensAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -63,6 +64,19 @@ public class Util {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param str String to check if it is a float number or not
+     * @return Returns true if it is a number false if it is a string or contains any non numeric character
+     */
+    public static boolean isFloat(String str) {
+        try {
+            Float.parseFloat(str);
+        } catch (NumberFormatException | NullPointerException e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -159,8 +173,24 @@ public class Util {
                 argComplete[2] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
                 argComplete[3] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
                 argComplete[4] = new String[]{"console", "none", "permission", "server", "message"};
+                break;
+
+            case "sound":
+                argComplete[0] = getSoundsList();
+                break;
         }
         return argComplete;
+    }
+
+    private static String[] getSoundsList() {
+        Sound[] sounds = Sound.values();
+        String[] soundString = new String[sounds.length];
+
+        for (int i = 0; i < sounds.length; i++) {
+            soundString[i] = sounds[i].name();
+        }
+
+        return soundString;
     }
 
     /**

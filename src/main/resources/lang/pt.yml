@@ -21,6 +21,8 @@ messages:
     reload-command: "&aTodos os arquivos foram recarregados com sucesso!"
     removed-command: "&aO comando foi removido com sucesso!"
     edit-command: "&aO {type} foi editado com sucesso!"
+    invalid-sound: "&cSelecione um som válido!"
+    sound-added: "&aSom adicionado com sucesso!"
   warnings:
     no-npc-selected: "&cVocê deve ter um NPC selecionado para executar esse comando!"
     invalid-cooldown: "&cO cooldown deve ser um número!"

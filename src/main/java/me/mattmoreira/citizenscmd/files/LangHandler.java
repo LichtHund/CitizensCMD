@@ -91,6 +91,90 @@ public class LangHandler {
                 if (!langConf.contains(Path.MESSAGE_DISPLAY))
                     langConf.set(Path.MESSAGE_DISPLAY, "{name}:&r");
 
+                if (!langConf.contains(Path.INVALID_SOUND)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.INVALID_SOUND, "&cPlease enter a valid sound!");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.INVALID_SOUND, "&cSelecione um som válido!");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.INVALID_SOUND, "&cIntroduceți un sunet valid!");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.INVALID_SOUND, "&cМоля, въведете валиден звук!");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.INVALID_SOUND, "&cVennligst skriv inn en gyldig lyd!");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.INVALID_SOUND, "&c请输入有效的声音!");
+                            break;
+                    }
+                }
+
+                if (!langConf.contains(Path.SOUND_ADDED)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.SOUND_ADDED, "&aSound added successfully!");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.SOUND_ADDED, "&aSom adicionado com sucesso!");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.SOUND_ADDED, "&aSunetul a fost adăugat cu succes!");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.SOUND_ADDED, "&aЗвукът е добавен успешно!");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.SOUND_ADDED, "&aLyd lagt til!");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.SOUND_ADDED, "&a声音成功添加！");
+                            break;
+                    }
+                }
+
+                if (!langConf.contains(Path.SOUND_REMOVED)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.SOUND_REMOVED, "&aSound removed successfully!");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.SOUND_REMOVED, "&aSom removido com sucesso!");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.SOUND_REMOVED, "&aSunetul a fost eliminat cu succes!");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.SOUND_REMOVED, "&aЗвукът е премахнат успешно!");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.SOUND_REMOVED, "&aLyden fjernet vellykket!");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.SOUND_REMOVED, "&a声音已成功删除！");
+                            break;
+                    }
+                }
+
                 for (String parent : langConf.getConfigurationSection("messages").getKeys(false)) {
                     for (String child : langConf.getConfigurationSection("messages." + parent).getKeys(false))
                         messages.put("messages." + parent + "." + child, langConf.getString("messages." + parent + "." + child));

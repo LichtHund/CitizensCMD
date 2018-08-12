@@ -28,6 +28,7 @@ import net.citizensnpcs.api.event.NPCRemoveEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,6 +69,11 @@ public class NPCListener implements Listener {
                     player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(CitizensCMD.getPlugin().getCooldownHandler().getTimeLeft(npc, player.getUniqueId().toString()), CitizensCMD.getPlugin().getDisplayFormat())));
                     return;
                 }
+            }
+
+            if (CitizensCMD.getPlugin().getDataHandler().hasSound(npc)) {
+                List<String> soundProperties = CitizensCMD.getPlugin().getDataHandler().getNPCSound(npc);
+                player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0)), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
             }
 
             if (CitizensCMD.getPlugin().getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.RIGHT)) return;
@@ -159,7 +165,6 @@ public class NPCListener implements Listener {
             }
         }
 
-
         if (!player.hasPermission("citizenscmd.bypass") || CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) != 0)
             CitizensCMD.getPlugin().getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.nanoTime());
 
@@ -183,6 +188,11 @@ public class NPCListener implements Listener {
                     player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(CitizensCMD.getPlugin().getCooldownHandler().getTimeLeft(npc, player.getUniqueId().toString()), CitizensCMD.getPlugin().getDisplayFormat())));
                     return;
                 }
+            }
+
+            if (CitizensCMD.getPlugin().getDataHandler().hasSound(npc)) {
+                List<String> soundProperties = CitizensCMD.getPlugin().getDataHandler().getNPCSound(npc);
+                player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0)), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
             }
 
             if (CitizensCMD.getPlugin().getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.LEFT)) return;
