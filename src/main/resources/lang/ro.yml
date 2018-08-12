@@ -57,6 +57,7 @@ messages:
     description-edit: "&7Editati o anumita comands sau permisiune."
     description-remove: "&7Stergeti o comanda a NPC-ului."
     description-reload: "&7Reincarcati toate fisierele."
+    description-sound: "&7Adaugă un sunet unui NPC."
 # IMPORTANT!!
 # NU MODIFICATI ACEST MODEL, PASTRATI "[]," SI MODIFICATI DOAR TEXTUL DIN INTERIOR
   time-format:

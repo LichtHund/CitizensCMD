@@ -73,7 +73,7 @@ public class NPCListener implements Listener {
 
             if (CitizensCMD.getPlugin().getDataHandler().hasSound(npc)) {
                 List<String> soundProperties = CitizensCMD.getPlugin().getDataHandler().getNPCSound(npc);
-                player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0)), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
+                player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0).toUpperCase()), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
             }
 
             if (CitizensCMD.getPlugin().getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.RIGHT)) return;

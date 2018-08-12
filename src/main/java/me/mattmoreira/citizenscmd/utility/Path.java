@@ -89,6 +89,7 @@ public class Path {
     public static final String HELP_DESCRIPTION_EDIT = MAIN_PATH_HELP + "description-edit";
     public static final String HELP_DESCRIPTION_REMOVE = MAIN_PATH_HELP + "description-remove";
     public static final String HELP_DESCRIPTION_RELOAD = MAIN_PATH_HELP + "description-reload";
+    public static final String HELP_DESCRIPTION_SOUND = MAIN_PATH_HELP + "description-sound";
 
     /**
      * Time format

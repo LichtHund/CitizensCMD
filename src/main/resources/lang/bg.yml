@@ -57,6 +57,7 @@ messages:
     description-edit: "&7Променя команда или права."
     description-remove: "&7Премахва команда от NPC."
     description-reload: "&7Презарежда всички файлове."
+    description-sound: "&7Добавя звук към NPC."
 # ВАЖНО!!
 # НЕ ПРОМЕНЯЙТЕ МОДЕЛА, ОСТАВЕТЕ СКОБИТЕ "[]," ПРОМЕНЕТЕ САМО ТЕКСТА В ТЯХ
   time-format:

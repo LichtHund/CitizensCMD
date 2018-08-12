@@ -57,6 +57,7 @@ messages:
     description-edit: "&7編輯特定的指令或權限."
     description-remove: "&7從一個NPC移除一個指令."
     description-reload: "&7重新載入所有檔案."
+    description-sound: "&7向NPC添加声音."
 # IMPORTANT!!
 # DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE
   time-format:

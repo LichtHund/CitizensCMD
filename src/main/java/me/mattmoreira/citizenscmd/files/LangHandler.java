@@ -175,6 +175,34 @@ public class LangHandler {
                     }
                 }
 
+                if (!langConf.contains(Path.HELP_DESCRIPTION_SOUND)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.HELP_DESCRIPTION_SOUND, "&7Adds a sound to an NPC.");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.HELP_DESCRIPTION_SOUND, "&7Adiciona um som a um NPC.");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.HELP_DESCRIPTION_SOUND, "&7Adaugă un sunet unui NPC.");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.HELP_DESCRIPTION_SOUND, "&7Добавя звук към NPC.");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.HELP_DESCRIPTION_SOUND, "&7Legger til en lyd til en NPC.");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.HELP_DESCRIPTION_SOUND, "&7向NPC添加声音.");
+                            break;
+                    }
+                }
+
                 for (String parent : langConf.getConfigurationSection("messages").getKeys(false)) {
                     for (String child : langConf.getConfigurationSection("messages." + parent).getKeys(false))
                         messages.put("messages." + parent + "." + child, langConf.getString("messages." + parent + "." + child));

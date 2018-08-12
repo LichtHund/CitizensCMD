@@ -56,6 +56,7 @@ messages:
     description-edit: "&7Edita um comando ou permissão específica."
     description-remove: "&7Remove um comando do NPC."
     description-reload: "&7Recarrega todos os arquivos."
+    description-sound: "&7Adiciona um som a um NPC."
 # IMPORTANT!!
 # NÃO MUDE ESTE PADRÃO, MANTENHA O "[]," MUDE APENAS O TEXTO DENTRO
   time-format:

@@ -57,6 +57,7 @@ messages:
     description-edit: "&7Endre en kommando eller permission"
     description-remove: "&7Fjerne en kommando fra NPCen"
     description-reload: "&7reloade alle filene"
+    description-sound: "&7Legger til en lyd til en NPC."
 # IMPORTANT!!
 # DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE
   time-format:
