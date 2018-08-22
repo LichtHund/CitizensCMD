@@ -18,13 +18,13 @@
 
 package me.mattmoreira.citizenscmd;
 
-import me.mattmoreira.citizenscmd.Listeners.NPCListener;
-import me.mattmoreira.citizenscmd.Listeners.UpdateEvent;
 import me.mattmoreira.citizenscmd.commands.*;
 import me.mattmoreira.citizenscmd.commands.base.CommandHandler;
 import me.mattmoreira.citizenscmd.files.CooldownHandler;
 import me.mattmoreira.citizenscmd.files.DataHandler;
 import me.mattmoreira.citizenscmd.files.LangHandler;
+import me.mattmoreira.citizenscmd.listeners.NPCListener;
+import me.mattmoreira.citizenscmd.listeners.UpdateEvent;
 import me.mattmoreira.citizenscmd.metrics.Metrics;
 import me.mattmoreira.citizenscmd.permissions.PermissionsManager;
 import me.mattmoreira.citizenscmd.schedulers.CooldownScheduler;

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.mattmoreira.citizenscmd.Listeners;
+package me.mattmoreira.citizenscmd.listeners;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.mattmoreira.citizenscmd.CitizensCMD;
