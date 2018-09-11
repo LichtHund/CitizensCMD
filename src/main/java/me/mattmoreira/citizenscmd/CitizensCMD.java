@@ -31,13 +31,16 @@ import me.mattmoreira.citizenscmd.schedulers.CooldownScheduler;
 import me.mattmoreira.citizenscmd.schedulers.UpdateScheduler;
 import me.mattmoreira.citizenscmd.updater.SpigotUpdater;
 import me.mattmoreira.citizenscmd.utility.DisplayFormat;
+import me.mattmoreira.citizenscmd.utility.Util;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
@@ -67,20 +70,23 @@ public final class CitizensCMD extends JavaPlugin {
 
     private static HashMap<String, Boolean> waitingList;
 
+    public void onLoad() {
+        if (!hasCitizensFile()) {
+            info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
+            info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
+            info(color(TAG + "&cDownloading Citizens jar..."));
+            Util.downloadCitizens();
+        }
+    }
+
     public void onEnable() {
+
+        if (!hasCitizens()) Util.loadCitizens();
 
         plugin = this;
 
         commandHandler = new CommandHandler();
         commandHandler.enable();
-
-        if (!hasCitizens()) {
-            info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
-            info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
-            info(color(TAG + "&cDisabling CitizensCMD..."));
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
 
         checkOldConfig();
 
@@ -221,6 +227,10 @@ public final class CitizensCMD extends JavaPlugin {
      *
      * @return Returns true if Citizens is found and false if not
      */
+    private boolean hasCitizensFile() {
+        return Util.doesCitizensExist();
+    }
+
     private boolean hasCitizens() {
         return Bukkit.getPluginManager().isPluginEnabled("Citizens");
     }
