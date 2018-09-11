@@ -271,4 +271,10 @@ public class Util {
             e.printStackTrace();
         }
     }
+
+    public static boolean doesCitizensExist() {
+        File pluginFolder = Bukkit.getServer().getUpdateFolderFile().getParentFile();
+        File citizens = new File(pluginFolder, "Citizens.jar");
+        return citizens.exists();
+    }
 }

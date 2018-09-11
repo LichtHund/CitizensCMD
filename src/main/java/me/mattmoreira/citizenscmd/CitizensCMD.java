@@ -71,7 +71,7 @@ public final class CitizensCMD extends JavaPlugin {
     private static HashMap<String, Boolean> waitingList;
 
     public void onLoad() {
-        if (!hasCitizens()) {
+        if (!hasCitizensFile()) {
             info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
             info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
             info(color(TAG + "&cDownloading Citizens jar..."));
@@ -81,7 +81,7 @@ public final class CitizensCMD extends JavaPlugin {
 
     public void onEnable() {
 
-        Util.loadCitizens();
+        if (!hasCitizens()) Util.loadCitizens();
 
         plugin = this;
 
@@ -227,6 +227,10 @@ public final class CitizensCMD extends JavaPlugin {
      *
      * @return Returns true if Citizens is found and false if not
      */
+    private boolean hasCitizensFile() {
+        return Util.doesCitizensExist();
+    }
+
     private boolean hasCitizens() {
         return Bukkit.getPluginManager().isPluginEnabled("Citizens");
     }
