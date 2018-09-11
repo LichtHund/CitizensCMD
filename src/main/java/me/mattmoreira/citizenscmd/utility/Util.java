@@ -27,9 +27,14 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 
 public class Util {
@@ -243,6 +248,26 @@ public class Util {
             }
 
         } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void downloadCitizens() {
+        try {
+            Files.copy(new URL("http://ci.citizensnpcs.co/job/Citizens2/lastSuccessfulBuild/artifact/dist/target/citizens-2.0.24-SNAPSHOT.jar").openStream(), new File(Bukkit.getServer().getUpdateFolderFile().getParentFile(), "Citizens.jar").toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadCitizens() {
+        File pluginFolder = Bukkit.getServer().getUpdateFolderFile().getParentFile();
+        Plugin loadedPlugin;
+        try {
+            loadedPlugin = Bukkit.getPluginManager().loadPlugin(new File(pluginFolder, "Citizens.jar"));
+            loadedPlugin.onLoad();
+            Bukkit.getPluginManager().enablePlugin(loadedPlugin);
+        } catch (InvalidPluginException | InvalidDescriptionException e) {
             e.printStackTrace();
         }
     }
