@@ -1,0 +1,67 @@
+# Citizens CMD Plugin by Mateus Moreira
+# @LichtHund
+# Version 2.1
+#
+# Change as much as you need.
+# Remove placeholders with caution!
+# Some placeholders can be removed but might not work correctly
+# Cooldown placeholder is safe to be deleted
+messages:
+  commands:
+    npc-add-command-added: "&aVous avez ajouté une commande au PNJ avec succès!"
+    npc-add-command-failed: "&cImpossible d'ajouter une commande au PNJ!"
+    npc-cooldown-set: "&aVous avez défini le temps de recharge avec succès!"
+    npc-cooldown-error: "&cUne erreur s'est produite lors de la configuration du temps de recharge!"
+    npc-price-set: "&aVous avez réussi à fixer le prix!"
+    list-commnads-counter-right: "&c&o{count} &7&o- Commandes de clic droit:"
+    list-commnads-counter-left: "&c&o{count} &7&o- Commandes de clic gauche:"
+    list-cooldown: "&7Cooldown: &c"
+    list-price: "&7Prix: &c"
+    list-tooltip: "&7Cliquez pour éditer!"
+    reload-command: "&aTous les fichiers ont été rechargés avec succès!"
+    removed-command: "&aLa commande a été supprimée avec succès!"
+    edit-command: "&aLe {type} a été édité avec succès!"
+    invalid-sound: "&cVeuillez entrer un son valide!"
+    sound-added: "&aSon ajouté avec succès!"
+    sound-removed: "&aSon enlevé avec succès!"
+  warnings:
+    no-npc-selected: "&cVous devez avoir un PNJ sélectionné pour exécuter cette commande!"
+    invalid-cooldown: "&cLe temps de recharge doit être un nombre!"
+    invalid-price: "&cLe prix doit être un nombre!"
+    invalid-id: "&cVeuillez introduire un ID de commande valide! "
+    invalid-click-type: "&cVous devez sélectionner avec clique droit ou clique gauche"
+    no-commands: "&cIl n'y a plus de commandes dans ce PNJ!"
+    invalid-arguments: "&cVous devez sélectionner CMD ou PERM!"
+    invalid-permission: "&cLes permissions ne peuvent pas contenir d'espaces!"
+    console-not-allowed: "&cCette commande ne peut pas être exécutée depuis la console, uniquement en jeu!"
+    no-permission: "&cVous n'êtes pas autorisé à exécuter cette commande!"
+    wrong-usage: "&cMauvaise utilisation de la commande! &7/npcmd &cpour de l'aide!"
+    new-version: "&7Nouvelle version disponible: &cv"
+    download-at: "&7Télécharger sur"
+  npc:
+    on-cooldown: "&7Veuillez patienter &c{time} &7avant d'utiliser à nouveau ce PNJ!"
+    one-time-click: "&7Ce PNJ ne permet qu'une seule utilisation!"
+    pay-confirm: "&7Pour utiliser ce NPC, vous devez payer {price}$ &7!\N&a{shift} Clique droit pour confirmer &7et &c{shift} Clique gauche pour annuler\n&8Cette opération sera annulée dans &c15 &8seconds!"
+    pay-canceled: "&cPaiement annulé!"
+    pay-no-money: "&cVous n'avez pas assez d'argent pour faire cela!"
+    pay-completed: "&a{price}$ a été retiré de votre compte!"
+    message-display: "{name}:&r"
+  help:
+    version: "&7&oVersion:"
+    info: "&7Survolez une commande pour plus d'informations et d'exemple!"
+    example: "&8Example:"
+    description-add: "&7Ajoute des commandes à un PNJ."
+    description-cooldown: "&7Définit le temps de recharge du clique du PNJ, en secondes."
+    description-price: "&7Définit le prix à utiliser pour le PNJ."
+    description-list: "&7Affiche la liste des commandes pour le NPC actuel."
+    description-edit: "&7Modifie une commande ou une autorisation spécifique."
+    description-remove: "&7Supprime une commande du PNJ."
+    description-reload: "&7Recharge tous les fichiers."
+    description-sound: "&7Ajoute un son à un PNJ."
+# IMPORTANT!!
+# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE, O "()" contém os PLURALS
+  time-format:
+    seconds: "[s], [sec(s)], [seconde(s)]"
+    minutes: "[m], [min(s)], [minute(s)]"
+    hours: "[h], [heure(s)], [heure(s)]"
+    days: "[d], [jour(s)], [jour(s)]"
