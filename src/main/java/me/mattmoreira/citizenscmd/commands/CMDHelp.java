@@ -32,23 +32,26 @@ import static me.mattmoreira.citizenscmd.utility.Util.color;
  */
 public class CMDHelp extends CommandBase {
 
-    public CMDHelp() {
+    private CitizensCMD plugin;
+
+    public CMDHelp(CitizensCMD plugin) {
         super("help", "citizenscmd.npcmd", false, null, 0, 0);
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(Player player, String[] args) {
         JSONMessage.create(color(HEADER)).send(player);
-        JSONMessage.create(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_VERSION) + " &c&o" + CitizensCMD.getPlugin().getDescription().getVersion())).send(player);
-        JSONMessage.create(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_INFO))).send(player);
-        JSONMessage.create(color("&3/npcmd &cadd &b<console &b| &bmessage &b| &bnone | &bpermission &b| &b> &6<command> &d[-l]")).suggestCommand("/npcmd add ").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_ADD) + "\n" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oadd &b&ossentials.heal &6&oheal")).send(player);
-        JSONMessage.create(color("&3/npcmd &ccooldown &6<time>")).suggestCommand("/npcmd cooldown ").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_COOLDOWN) + "\n" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&ocooldown &6&o15")).send(player);
-        JSONMessage.create(color("&3/npcmd &cprice &6<price>")).suggestCommand("/npcmd price ").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_PRICE) + "\n" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oprice &6&o250")).send(player);
-        JSONMessage.create(color("&3/npcmd &clist")).suggestCommand("/npcmd list").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_LIST) + "\n&8" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&olist")).send(player);
-        JSONMessage.create(color("&3/npcmd &cedit &b<cmd | perm> &b<left | right> &6<id> &6<new command | new permission>")).suggestCommand("/npcmd edit ").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_EDIT) + "\n" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oedit &b&ocmd &b&oright &6&o1 fly")).send(player);
-        JSONMessage.create(color("&3/npcmd &csound &b<sound> &d[volume] &d[pitch]")).suggestCommand("/npcmd sound ").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_SOUND) + "\n" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&osound &b&oENTITY_VILLAGER_YES")).send(player);
-        JSONMessage.create(color("&3/npcmd &cremove &b<left | right> &6<id>")).suggestCommand("/npcmd remove ").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_REMOVE) + "\n" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oremove &b&oright &6&o1")).send(player);
-        JSONMessage.create(color("&3/npcmd &creload")).suggestCommand("/npcmd reload").tooltip(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_RELOAD) + "\n" + CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oreload")).send(player);
+        JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.HELP_VERSION) + " &c&o" + plugin.getDescription().getVersion())).send(player);
+        JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.HELP_INFO))).send(player);
+        JSONMessage.create(color("&3/npcmd &cadd &b<console &b| &bmessage &b| &bnone | &bpermission &b| &b> &6<command> &d[-l]")).suggestCommand("/npcmd add ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_ADD) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oadd &b&ossentials.heal &6&oheal")).send(player);
+        JSONMessage.create(color("&3/npcmd &ccooldown &6<time>")).suggestCommand("/npcmd cooldown ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_COOLDOWN) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&ocooldown &6&o15")).send(player);
+        JSONMessage.create(color("&3/npcmd &cprice &6<price>")).suggestCommand("/npcmd price ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_PRICE) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oprice &6&o250")).send(player);
+        JSONMessage.create(color("&3/npcmd &clist")).suggestCommand("/npcmd list").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_LIST) + "\n&8" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&olist")).send(player);
+        JSONMessage.create(color("&3/npcmd &cedit &b<cmd | perm> &b<left | right> &6<id> &6<new command | new permission>")).suggestCommand("/npcmd edit ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_EDIT) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oedit &b&ocmd &b&oright &6&o1 fly")).send(player);
+        JSONMessage.create(color("&3/npcmd &csound &b<sound> &d[volume] &d[pitch]")).suggestCommand("/npcmd sound ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_SOUND) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&osound &b&oENTITY_VILLAGER_YES")).send(player);
+        JSONMessage.create(color("&3/npcmd &cremove &b<left | right> &6<id>")).suggestCommand("/npcmd remove ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_REMOVE) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oremove &b&oright &6&o1")).send(player);
+        JSONMessage.create(color("&3/npcmd &creload")).suggestCommand("/npcmd reload").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_RELOAD) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oreload")).send(player);
 
     }
 

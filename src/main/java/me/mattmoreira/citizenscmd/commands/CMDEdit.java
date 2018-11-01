@@ -30,18 +30,21 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class CMDEdit extends CommandBase {
 
-    public CMDEdit() {
+    private CitizensCMD plugin;
+
+    public CMDEdit(CitizensCMD plugin) {
         super("edit", "citizenscmd.edit", false, null, 4, 512);
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(Player player, String[] args) {
 
-        if (npcNotSelected(player)) return;
+        if (npcNotSelected(plugin, player)) return;
 
         if (notInteger(args[2])) {
             player.sendMessage(color(HEADER));
-            player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_ID_NUMBER));
+            player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ID_NUMBER));
             return;
         }
 
@@ -57,49 +60,49 @@ public class CMDEdit extends CommandBase {
             case "perm":
                 if (args.length > 4) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_PERMISSION));
+                    player.sendMessage(plugin.getLang().getMessage(Path.INVALID_PERMISSION));
                     return;
                 }
                 type = EnumTypes.EditType.PERM;
                 break;
             default:
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_ARGUMENTS));
+                player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ARGUMENTS));
                 return;
         }
 
         switch (args[1].toLowerCase()) {
             case "left":
-                int leftCommandSize = CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT).size();
+                int leftCommandSize = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT).size();
                 if (leftCommandSize == 0) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NO_COMMANDS));
+                    player.sendMessage(plugin.getLang().getMessage(Path.NO_COMMANDS));
                     return;
                 }
                 if (commandID < 1 || commandID > leftCommandSize) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_ID_NUMBER));
+                    player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ID_NUMBER));
                     return;
                 }
                 click = EnumTypes.ClickType.LEFT;
                 break;
             case "right":
-                int rightCommandSize = CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT).size();
+                int rightCommandSize = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT).size();
                 if (rightCommandSize == 0) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NO_COMMANDS));
+                    player.sendMessage(plugin.getLang().getMessage(Path.NO_COMMANDS));
                     return;
                 }
                 if (commandID < 1 || commandID > rightCommandSize) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_ID_NUMBER));
+                    player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ID_NUMBER));
                     return;
                 }
                 click = EnumTypes.ClickType.RIGHT;
                 break;
             default:
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_CLICK_TYPE));
+                player.sendMessage(plugin.getLang().getMessage(Path.INVALID_CLICK_TYPE));
                 return;
         }
 
@@ -112,6 +115,6 @@ public class CMDEdit extends CommandBase {
             else stringBuilder.append(commandsArray[i]).append(" ");
         }
 
-        CitizensCMD.getPlugin().getDataHandler().edit(npc, commandID, click, type, stringBuilder.toString().trim(), player);
+        plugin.getDataHandler().edit(npc, commandID, click, type, stringBuilder.toString().trim(), player);
     }
 }

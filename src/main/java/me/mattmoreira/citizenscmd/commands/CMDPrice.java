@@ -27,22 +27,25 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class CMDPrice extends CommandBase {
 
-    public CMDPrice() {
+    private CitizensCMD plugin;
+
+    public CMDPrice(CitizensCMD plugin) {
         super("price", "citizenscmd.price", false, new String[]{"p"}, 1, 1);
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(Player player, String[] args) {
 
-        if (npcNotSelected(player)) return;
+        if (npcNotSelected(plugin, player)) return;
 
         if (notDouble(args[0])) {
             player.sendMessage(color(HEADER));
-            player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_PRICE));
+            player.sendMessage(plugin.getLang().getMessage(Path.INVALID_PRICE));
             return;
         }
 
-        CitizensCMD.getPlugin().getDataHandler().setPrice(getSelectedNpcId(player), Double.valueOf(args[0]), player);
+        plugin.getDataHandler().setPrice(getSelectedNpcId(player), Double.valueOf(args[0]), player);
     }
 
 }

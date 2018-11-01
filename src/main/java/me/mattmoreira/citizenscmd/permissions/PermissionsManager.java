@@ -29,8 +29,10 @@ import java.util.UUID;
 public class PermissionsManager {
 
     private HashMap<UUID, PermissionAttachment> permissionsData;
+    private CitizensCMD plugin;
 
-    public PermissionsManager() {
+    public PermissionsManager(CitizensCMD plugin) {
+        this.plugin = plugin;
         permissionsData = new HashMap<>();
     }
 
@@ -41,7 +43,7 @@ public class PermissionsManager {
      * @param permission The permission node
      */
     public void setPermission(Player player, String permission) {
-        PermissionAttachment permissionAttachment = player.addAttachment(CitizensCMD.getPlugin());
+        PermissionAttachment permissionAttachment = player.addAttachment(plugin);
         permissionsData.put(player.getUniqueId(), permissionAttachment);
         PermissionAttachment permissionAttachment1 = permissionsData.get(player.getUniqueId());
         permissionAttachment1.setPermission(permission, true);

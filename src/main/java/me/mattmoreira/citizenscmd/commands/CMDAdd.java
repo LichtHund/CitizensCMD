@@ -29,8 +29,11 @@ import static me.mattmoreira.citizenscmd.utility.Util.npcNotSelected;
 
 public class CMDAdd extends CommandBase {
 
-    public CMDAdd() {
+    private CitizensCMD plugin;
+
+    public CMDAdd(CitizensCMD plugin) {
         super("add", "citizenscmd.add", false, null, 2, 512);
+        this.plugin = plugin;
     }
 
     /**
@@ -42,7 +45,7 @@ public class CMDAdd extends CommandBase {
     @Override
     public void execute(Player player, String[] args) {
 
-        if (npcNotSelected(player)) return;
+        if (npcNotSelected(plugin, player)) return;
 
         String permission = args[0];
         boolean left = false;
@@ -76,7 +79,7 @@ public class CMDAdd extends CommandBase {
 
         boolean finalLeft = left;
 
-        CitizensCMD.getPlugin().getDataHandler().addCommand(getSelectedNpcId(player), permission, finalString, player, finalLeft);
+        plugin.getDataHandler().addCommand(getSelectedNpcId(player), permission, finalString, player, finalLeft);
     }
 
 }

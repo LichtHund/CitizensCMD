@@ -27,14 +27,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.InvalidDescriptionException;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.concurrent.TimeUnit;
 
 public class Util {
@@ -90,11 +85,11 @@ public class Util {
      * @param player The player to check if it has any NPC selected or not
      * @return Returns true if has an NPC selected and false if not
      */
-    public static boolean npcNotSelected(Player player) {
+    public static boolean npcNotSelected(CitizensCMD plugin, Player player) {
         if (CitizensAPI.getDefaultNPCSelector().getSelected(player) != null) return false;
 
         player.sendMessage(color(HEADER));
-        player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NO_NPC));
+        player.sendMessage(plugin.getLang().getMessage(Path.NO_NPC));
         return true;
     }
 
@@ -123,8 +118,8 @@ public class Util {
      *
      * @return Returns true if CheckUpdates is true on the config and false if not
      */
-    public static boolean upCheck() {
-        return CitizensCMD.getPlugin().getConfig().getBoolean("check-updates");
+    public static boolean upCheck(CitizensCMD plugin) {
+        return plugin.getConfig().getBoolean("check-updates");
     }
 
     /**
@@ -151,8 +146,8 @@ public class Util {
      *
      * @return returns the seconds from the config
      */
-    public static int getDefaultCooldown() {
-        return CitizensCMD.getPlugin().getConfig().getInt("default-cooldown");
+    public static int getDefaultCooldown(CitizensCMD plugin) {
+        return plugin.getConfig().getInt("default-cooldown");
     }
 
     /**
@@ -160,7 +155,7 @@ public class Util {
      *
      * @return Returns 2d string array with arguments for tab completion
      */
-    public static String[][] getTabCompleteArgs(String subCMD, Player player) {
+    public static String[][] getTabCompleteArgs(CitizensCMD plugin, String subCMD, Player player) {
         String[][] argComplete = new String[5][];
 
         switch (subCMD.toLowerCase()) {
@@ -169,14 +164,14 @@ public class Util {
                 break;
             case "remove":
                 argComplete[0] = new String[]{"left", "right"};
-                argComplete[1] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
-                argComplete[2] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
+                argComplete[1] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
+                argComplete[2] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
                 break;
             case "edit":
                 argComplete[0] = new String[]{"perm", "cmd"};
                 argComplete[1] = new String[]{"left", "right"};
-                argComplete[2] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
-                argComplete[3] = CitizensCMD.getPlugin().getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
+                argComplete[2] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
+                argComplete[3] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
                 argComplete[4] = new String[]{"console", "none", "permission", "server", "message"};
                 break;
 
@@ -205,13 +200,13 @@ public class Util {
      * @return returns the difference in seconds
      */
     public static long getSecondsDifference(long storedTime) {
-        return TimeUnit.SECONDS.convert((System.nanoTime() - storedTime), TimeUnit.NANOSECONDS);
+        return TimeUnit.SECONDS.convert((System.currentTimeMillis() - storedTime), TimeUnit.MILLISECONDS);
     }
 
     /**
      * Checks for old config and renames it
      */
-    public static void checkOldConfig() {
+    public static void checkOldConfig(CitizensCMD plugin) {
         File configFile;
         File configFileNew;
         FileConfiguration configConf;
@@ -224,8 +219,8 @@ public class Util {
         }
 
         try {
-            configFile = new File(CitizensCMD.getPlugin().getDataFolder(), "config.yml");
-            configFileNew = new File(CitizensCMD.getPlugin().getDataFolder(), "config_old.yml");
+            configFile = new File(plugin.getDataFolder(), "config.yml");
+            configFileNew = new File(plugin.getDataFolder(), "config_old.yml");
             configConf = new YamlConfiguration();
 
             if (configFile.exists()) {
@@ -252,29 +247,14 @@ public class Util {
         }
     }
 
-    public static void downloadCitizens() {
-        try {
-            Files.copy(new URL("http://ci.citizensnpcs.co/job/Citizens2/lastSuccessfulBuild/artifact/dist/target/citizens-2.0.24-SNAPSHOT.jar").openStream(), new File(Bukkit.getServer().getUpdateFolderFile().getParentFile(), "Citizens.jar").toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void loadCitizens() {
-        File pluginFolder = Bukkit.getServer().getUpdateFolderFile().getParentFile();
-        Plugin loadedPlugin;
-        try {
-            loadedPlugin = Bukkit.getPluginManager().loadPlugin(new File(pluginFolder, "Citizens.jar"));
-            loadedPlugin.onLoad();
-            Bukkit.getPluginManager().enablePlugin(loadedPlugin);
-        } catch (InvalidPluginException | InvalidDescriptionException e) {
-            e.printStackTrace();
-        }
+    public static void disablePlugin(CitizensCMD plugin) {
+        info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
+        info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
+        info(color(TAG + "&cDisabling CitizensCMD..."));
+        Bukkit.getServer().getPluginManager().disablePlugin(plugin);
     }
 
     public static boolean doesCitizensExist() {
-        File pluginFolder = Bukkit.getServer().getUpdateFolderFile().getParentFile();
-        File citizens = new File(pluginFolder, "Citizens.jar");
-        return citizens.exists();
+        return Bukkit.getPluginManager().isPluginEnabled("Citizens");
     }
 }

@@ -34,13 +34,11 @@ import me.mattmoreira.citizenscmd.utility.DisplayFormat;
 import me.mattmoreira.citizenscmd.utility.Util;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.*;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
@@ -52,8 +50,6 @@ public final class CitizensCMD extends JavaPlugin {
      * Supported languages
      */
     private final String[] REGISTERED_LANG_FILES = {"en", "pt", "ro", "bg", "no", "ch"};
-
-    private static CitizensCMD plugin;
 
     private static CommandHandler commandHandler = null;
     private static LangHandler lang = null;
@@ -70,43 +66,32 @@ public final class CitizensCMD extends JavaPlugin {
 
     private static HashMap<String, Boolean> waitingList;
 
-    public void onLoad() {
-        if (!hasCitizensFile()) {
-            info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
-            info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
-            info(color(TAG + "&cDownloading Citizens jar..."));
-            Util.downloadCitizens();
-        }
-    }
-
     public void onEnable() {
 
-        if (!hasCitizens()) Util.loadCitizens();
+        if (!hasCitizens()) Util.disablePlugin(this);
 
-        plugin = this;
-
-        commandHandler = new CommandHandler();
+        commandHandler = new CommandHandler(this);
         commandHandler.enable();
 
-        checkOldConfig();
+        checkOldConfig(this);
 
         new Metrics(this);
 
         info(color(TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
 
-        permissionsManager = new PermissionsManager();
+        permissionsManager = new PermissionsManager(this);
 
-        dataHandler = new DataHandler();
+        dataHandler = new DataHandler(this);
         dataHandler.initialize();
 
-        cooldownHandler = new CooldownHandler();
+        cooldownHandler = new CooldownHandler(this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> cooldownHandler.initialize(), 30L);
 
         saveDefaultConfig();
         registerCommands();
         registerEvents();
 
-        registerLangs();
+        registerLangs(this);
         setLang(getConfig().getString("lang"));
 
         if (hasPAPI()) {
@@ -175,7 +160,7 @@ public final class CitizensCMD extends JavaPlugin {
         } else
             displayFormat = DisplayFormat.MEDIUM;
 
-        if (upCheck()) {
+        if (upCheck(this)) {
             SpigotUpdater updater = new SpigotUpdater(this, 30224);
             try {
                 // If there's an update, tell the user that they can update
@@ -211,24 +196,14 @@ public final class CitizensCMD extends JavaPlugin {
             }
         }
 
-        new UpdateScheduler().runTaskTimerAsynchronously(this, 72000L, 72000L);
-        new CooldownScheduler().runTaskTimerAsynchronously(this, 36000L, 36000L);
+        new UpdateScheduler(this).runTaskTimerAsynchronously(this, 72000L, 72000L);
+        new CooldownScheduler(this).runTaskTimerAsynchronously(this, 36000L, 36000L);
     }
 
     @Override
     public void onDisable() {
         commandHandler.disable();
         cooldownHandler.saveToFile();
-    }
-
-
-    /**
-     * Checks if Citizens is installed or not on the server
-     *
-     * @return Returns true if Citizens is found and false if not
-     */
-    private boolean hasCitizensFile() {
-        return Util.doesCitizensExist();
     }
 
     private boolean hasCitizens() {
@@ -249,7 +224,7 @@ public final class CitizensCMD extends JavaPlugin {
      */
     private void registerCommands() {
         getCommand("npcmd").setExecutor(commandHandler);
-        Stream.of(new CMDHelp(), new CMDAdd(), new CMDCooldown(), new CMDList(), new CMDReload(), new CMDRemove(), new CMDEdit(), new CMDPrice(), new CMDSound()).forEach(commandHandler::register);
+        Stream.of(new CMDHelp(this), new CMDAdd(this), new CMDCooldown(this), new CMDList(this), new CMDReload(this), new CMDRemove(this), new CMDEdit(this), new CMDPrice(this), new CMDSound()).forEach(commandHandler::register);
     }
 
     /**
@@ -257,8 +232,8 @@ public final class CitizensCMD extends JavaPlugin {
      */
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new UpdateEvent(), this);
-        pm.registerEvents(new NPCListener(), this);
+        pm.registerEvents(new UpdateEvent(this), this);
+        pm.registerEvents(new NPCListener(this), this);
     }
 
     /**
@@ -280,25 +255,16 @@ public final class CitizensCMD extends JavaPlugin {
     }
 
     /**
-     * Gets the plugin instance
-     *
-     * @return Returns instance of the plugin
-     */
-    public static CitizensCMD getPlugin() {
-        return plugin;
-    }
-
-    /**
      * Creates all the language files
      */
-    private void registerLangs() {
+    private void registerLangs(CitizensCMD plugin) {
         File langFile;
 
         for (String registeredLangFile : REGISTERED_LANG_FILES) {
-            langFile = new File(CitizensCMD.getPlugin().getDataFolder(), "lang/" + registeredLangFile + ".yml");
+            langFile = new File(plugin.getDataFolder(), "lang/" + registeredLangFile + ".yml");
 
             if (!langFile.exists())
-                CitizensCMD.getPlugin().saveResource("lang/" + registeredLangFile + ".yml", false);
+                plugin.saveResource("lang/" + registeredLangFile + ".yml", false);
         }
 
     }
@@ -311,41 +277,41 @@ public final class CitizensCMD extends JavaPlugin {
             case "en":
             case "eng":
             case "english":
-                lang = new LangHandler("en");
+                lang = new LangHandler(this, "en");
                 break;
 
             case "pt":
             case "port":
             case "portuguese":
-                lang = new LangHandler("pt");
+                lang = new LangHandler(this, "pt");
                 break;
 
             case "ro":
             case "roma":
             case "romanian":
-                lang = new LangHandler("ro");
+                lang = new LangHandler(this, "ro");
                 break;
 
             case "bg":
             case "bulg":
             case "bulgarian":
-                lang = new LangHandler("bg");
+                lang = new LangHandler(this, "bg");
                 break;
 
             case "no":
             case "norw":
             case "norwegian":
-                lang = new LangHandler("no");
+                lang = new LangHandler(this, "no");
                 break;
 
             case "ch":
             case "chi":
             case "chinese":
-                lang = new LangHandler("ch");
+                lang = new LangHandler(this, "ch");
                 break;
 
             default:
-                lang = new LangHandler("en");
+                lang = new LangHandler(this, "en");
                 break;
         }
         lang.initialize();

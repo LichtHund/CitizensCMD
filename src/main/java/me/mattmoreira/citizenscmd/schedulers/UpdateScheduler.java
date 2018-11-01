@@ -24,16 +24,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class UpdateScheduler extends BukkitRunnable {
 
+    private CitizensCMD plugin;
+
+    public UpdateScheduler(CitizensCMD plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Checks for updates every hour and tells the player on join
      */
     @Override
     public void run() {
-        SpigotUpdater updater = new SpigotUpdater(CitizensCMD.getPlugin(), 30224);
+        SpigotUpdater updater = new SpigotUpdater(plugin, 30224);
         try {
             if (updater.checkForUpdates()) {
-                CitizensCMD.getPlugin().setUpdateStatus(true);
-                CitizensCMD.getPlugin().setNewVersion(updater.getLatestVersion());
+                plugin.setUpdateStatus(true);
+                plugin.setNewVersion(updater.getLatestVersion());
             }
         } catch (Exception e) {
             e.printStackTrace();

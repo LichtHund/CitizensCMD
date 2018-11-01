@@ -32,11 +32,13 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class LangHandler {
 
+    private CitizensCMD plugin;
     private String lang;
 
     private HashMap<String, String> messages;
 
-    public LangHandler(String lang) {
+    public LangHandler(CitizensCMD plugin, String lang) {
+        this.plugin = plugin;
         this.lang = lang;
     }
 
@@ -81,10 +83,10 @@ public class LangHandler {
             FileConfiguration langConf;
 
             try {
-                langFile = new File(CitizensCMD.getPlugin().getDataFolder(), "lang/" + lang + ".yml");
+                langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
                 langConf = new YamlConfiguration();
 
-                if (!langFile.exists()) CitizensCMD.getPlugin().saveResource("lang/" + lang + ".yml", false);
+                if (!langFile.exists()) plugin.saveResource("lang/" + lang + ".yml", false);
 
                 langConf.load(langFile);
 

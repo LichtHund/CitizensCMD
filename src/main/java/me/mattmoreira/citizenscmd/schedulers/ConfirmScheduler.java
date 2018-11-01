@@ -27,10 +27,12 @@ public class ConfirmScheduler extends BukkitRunnable {
 
     private Player player;
     private int npc;
+    private CitizensCMD plugin;
 
-    public ConfirmScheduler(Player player, int npc) {
+    public ConfirmScheduler(CitizensCMD plugin, Player player, int npc) {
         this.player = player;
         this.npc = npc;
+        this.plugin = plugin;
     }
 
     /**
@@ -38,9 +40,9 @@ public class ConfirmScheduler extends BukkitRunnable {
      */
     @Override
     public void run() {
-        if (CitizensCMD.getPlugin().getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
-            player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.PAY_CANCELED));
-            CitizensCMD.getPlugin().getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
+        if (plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
+            player.sendMessage(plugin.getLang().getMessage(Path.PAY_CANCELED));
+            plugin.getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
         }
     }
 

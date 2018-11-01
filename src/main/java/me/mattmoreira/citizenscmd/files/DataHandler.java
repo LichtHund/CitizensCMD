@@ -37,6 +37,7 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class DataHandler {
 
+    private CitizensCMD plugin;
     private static File savesFile;
     private static File dir;
 
@@ -44,11 +45,15 @@ public class DataHandler {
 
     private HashMap<String, Object> data;
 
+    public DataHandler(CitizensCMD plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Creates file and folder
      */
     public void initialize() {
-        File pluginFolder = CitizensCMD.getPlugin().getDataFolder();
+        File pluginFolder = plugin.getDataFolder();
         dir = new File(pluginFolder + "/data");
         savesFile = new File(dir.getPath(), "saves.yml");
         dataConfigurator = new YamlConfiguration();
@@ -139,8 +144,8 @@ public class DataHandler {
                 List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
 
                 if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
-                    data.put("npc-data.npc-" + npc + ".cooldown", getDefaultCooldown());
-                    dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", getDefaultCooldown());
+                    data.put("npc-data.npc-" + npc + ".cooldown", getDefaultCooldown(plugin));
+                    dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", getDefaultCooldown(plugin));
                 }
 
                 if (left) commandListLeft.add("[" + permission + "] " + command);
@@ -169,12 +174,12 @@ public class DataHandler {
                 }
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NPC_ADDED));
+                player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADDED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NPC_ADD_FAIL));
+                player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADD_FAIL));
             }
         }).start();
     }
@@ -197,12 +202,12 @@ public class DataHandler {
                 data.replace("npc-data.npc-" + npc + ".cooldown", cooldown);
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NPC_COOLDOWN_SET));
+                player.sendMessage(plugin.getLang().getMessage(Path.NPC_COOLDOWN_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NPC_COOLDOWN_SET_ERROR));
+                player.sendMessage(plugin.getLang().getMessage(Path.NPC_COOLDOWN_SET_ERROR));
             }
         }).start();
     }
@@ -225,7 +230,7 @@ public class DataHandler {
                 data.replace("npc-data.npc-" + npc + ".price", price);
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NPC_PRICE_SET));
+                player.sendMessage(plugin.getLang().getMessage(Path.NPC_PRICE_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -263,7 +268,7 @@ public class DataHandler {
                     data.put("npc-data.npc-" + npc + ".sound", soundProperties);
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.SOUND_ADDED));
+                player.sendMessage(plugin.getLang().getMessage(Path.SOUND_ADDED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -363,7 +368,7 @@ public class DataHandler {
                 dataConfigurator.set("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands", commands);
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.REMOVED_COMMAND));
+                player.sendMessage(plugin.getLang().getMessage(Path.REMOVED_COMMAND));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -384,7 +389,7 @@ public class DataHandler {
                 dataConfigurator.set("npc-data.npc-" + npc + ".sound", soundProperties);
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.SOUND_REMOVED));
+                player.sendMessage(plugin.getLang().getMessage(Path.SOUND_REMOVED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -432,7 +437,7 @@ public class DataHandler {
                 dataConfigurator.set("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands", commandsData);
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.EDITED_COMMAND).replace("{type}", typeText));
+                player.sendMessage(plugin.getLang().getMessage(Path.EDITED_COMMAND).replace("{type}", typeText));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -455,8 +460,8 @@ public class DataHandler {
                 if (dataConfigurator.contains("npc-data.npc-" + npc))
                     dataConfigurator.set("npc-data.npc-" + npc, null);
 
-                clearCache();
-                cacheData();
+                /*clearCache();
+                cacheData();*/
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {

@@ -47,66 +47,69 @@ import static me.mattmoreira.citizenscmd.utility.Util.color;
 
 public class NPCListener implements Listener {
 
-    public NPCListener() {
-        Bukkit.getMessenger().registerOutgoingPluginChannel(CitizensCMD.getPlugin(), "BungeeCord");
+    private CitizensCMD plugin;
+
+    public NPCListener(CitizensCMD plugin) {
+        this.plugin = plugin;
+        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onRightClick(NPCRightClickEvent event) {
         int npc = event.getNPC().getId();
         Player player = event.getClicker();
 
         if (!player.hasPermission("citizenscmd.use")) return;
 
-        if (!CitizensCMD.getPlugin().getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
+        if (!plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
             if (!player.hasPermission("citizenscmd.bypass")) {
-                if (CitizensCMD.getPlugin().getCooldownHandler().onCooldown(npc, player.getUniqueId().toString())) {
+                if (plugin.getCooldownHandler().onCooldown(npc, player.getUniqueId().toString())) {
                     String cooldownMessage;
-                    if (CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) == -1)
-                        cooldownMessage = CitizensCMD.getPlugin().getLang().getMessage(Path.ONE_TIME_CLICK);
+                    if (plugin.getDataHandler().getNPCCooldown(npc) == -1)
+                        cooldownMessage = plugin.getLang().getMessage(Path.ONE_TIME_CLICK);
                     else
-                        cooldownMessage = CitizensCMD.getPlugin().getLang().getMessage(Path.ON_COOLDOWN);
-                    player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(CitizensCMD.getPlugin().getCooldownHandler().getTimeLeft(npc, player.getUniqueId().toString()), CitizensCMD.getPlugin().getDisplayFormat())));
+                        cooldownMessage = plugin.getLang().getMessage(Path.ON_COOLDOWN);
+                    player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(plugin, plugin.getCooldownHandler().getTimeLeft(npc, player.getUniqueId().toString()), plugin.getDisplayFormat())));
                     return;
                 }
             }
 
-            if (CitizensCMD.getPlugin().getDataHandler().hasSound(npc)) {
-                List<String> soundProperties = CitizensCMD.getPlugin().getDataHandler().getNPCSound(npc);
+            if (plugin.getDataHandler().hasSound(npc)) {
+                List<String> soundProperties = plugin.getDataHandler().getNPCSound(npc);
                 player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0).toUpperCase()), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
             }
 
-            if (CitizensCMD.getPlugin().getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.RIGHT)) return;
+            if (plugin.getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.RIGHT)) return;
         }
 
-        double price = CitizensCMD.getPlugin().getDataHandler().getPrice(npc);
+        double price = plugin.getDataHandler().getPrice(npc);
 
         if (price > 0.0) {
             if (CitizensCMD.getEconomy() != null) {
 
-                if (!CitizensCMD.getPlugin().getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
-                    String messageConfirm = CitizensCMD.getPlugin().getLang().getMessage(Path.PAY_CONFIRM);
-                    if (!CitizensCMD.getPlugin().shouldShift())
+                if (!plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
+                    String messageConfirm = plugin.getLang().getMessage(Path.PAY_CONFIRM);
+                    if (!plugin.shouldShift())
                         messageConfirm = messageConfirm.replace("{shift}", "");
                     else
                         messageConfirm = messageConfirm.replace("{shift}", "Shift ");
                     messageConfirm = messageConfirm.replace("{price}", String.valueOf(price));
                     player.sendMessage(messageConfirm);
-                    CitizensCMD.getPlugin().getWaitingList().put(player.getUniqueId().toString() + "." + npc, true);
-                    new ConfirmScheduler(player, npc).runTaskLaterAsynchronously(CitizensCMD.getPlugin(), 300L);
+                    plugin.getWaitingList().put(player.getUniqueId().toString() + "." + npc, true);
+                    new ConfirmScheduler(plugin, player, npc).runTaskLaterAsynchronously(plugin, 300L);
                     return;
                 }
 
-                if (CitizensCMD.getPlugin().shouldShift() && !player.isSneaking()) return;
+                if (plugin.shouldShift() && !player.isSneaking()) return;
 
                 if (CitizensCMD.getEconomy().getBalance(player) < price) {
-                    player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.PAY_NO_MONEY));
+                    player.sendMessage(plugin.getLang().getMessage(Path.PAY_NO_MONEY));
                     return;
                 }
 
-                CitizensCMD.getPlugin().getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
+                plugin.getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
                 CitizensCMD.getEconomy().withdrawPlayer(player, price);
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.PAY_COMPLETED).replace("{price}", String.valueOf(price)));
+                player.sendMessage(plugin.getLang().getMessage(Path.PAY_COMPLETED).replace("{price}", String.valueOf(price)));
 
             }
         }
@@ -114,20 +117,18 @@ public class NPCListener implements Listener {
         List<String> permissions = new ArrayList<>();
         List<String> commands = new ArrayList<>();
 
-        for (String list : CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT)) {
+        for (String list : plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT)) {
             Pattern pattern = Pattern.compile("\\[([^]]*)] ([^]]*)");
             Matcher matcher = pattern.matcher(list);
             if (matcher.find()) {
                 permissions.add(matcher.group(1));
                 String command = matcher.group(2);
-                if (command.contains("%p%"))
-                    command = command.replace("%p%", player.getName());
-                if (command.contains("%player%"))
-                    command = command.replace("%player%", player.getName());
-                if (CitizensCMD.getPlugin().papiEnabled())
+                if (command.contains("%p%")) command = command.replace("%p%", player.getName());
+                if (command.contains("%player%")) command = command.replace("%player%", player.getName());
+                if (plugin.papiEnabled())
                     commands.add(PlaceholderAPI.setPlaceholders((OfflinePlayer) player, command));
-                else
-                    commands.add(command);
+                else commands.add(command);
+
             }
         }
 
@@ -137,7 +138,7 @@ public class NPCListener implements Listener {
             switch (permissions.get(i).toLowerCase()) {
 
                 case "console":
-                    CitizensCMD.getPlugin().getServer().dispatchCommand(CitizensCMD.getPlugin().getServer().getConsoleSender(), commands.get(i));
+                    plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commands.get(i));
                     break;
 
                 case "none":
@@ -151,7 +152,7 @@ public class NPCListener implements Listener {
                 case "message":
                     String finalMessage;
                     if (commands.get(i).contains("{display}")) {
-                        String tmpStr = commands.get(i).replace("{display}", CitizensCMD.getPlugin().getLang().getMessage(Path.MESSAGE_DISPLAY));
+                        String tmpStr = commands.get(i).replace("{display}", plugin.getLang().getMessage(Path.MESSAGE_DISPLAY));
                         finalMessage = tmpStr.replace("{name}", event.getNPC().getFullName());
                     } else
                         finalMessage = commands.get(i);
@@ -159,67 +160,68 @@ public class NPCListener implements Listener {
                     break;
 
                 default:
-                    CitizensCMD.getPlugin().getPermissionsManager().setPermission(player, permissions.get(i));
+                    plugin.getPermissionsManager().setPermission(player, permissions.get(i));
                     player.chat("/" + commands.get(i));
-                    CitizensCMD.getPlugin().getPermissionsManager().unsetPermission(player, permissions.get(i));
+                    plugin.getPermissionsManager().unsetPermission(player, permissions.get(i));
             }
         }
 
-        if (!player.hasPermission("citizenscmd.bypass") || CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) != 0)
-            CitizensCMD.getPlugin().getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.nanoTime());
+        if (!player.hasPermission("citizenscmd.bypass") || plugin.getDataHandler().getNPCCooldown(npc) != 0) {
+            plugin.getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.currentTimeMillis());
+        }
 
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onLeftClick(NPCLeftClickEvent event) {
         int npc = event.getNPC().getId();
         Player player = event.getClicker();
 
         if (!player.hasPermission("citizenscmd.use")) return;
 
-        if (!CitizensCMD.getPlugin().getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
+        if (!plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
             if (!player.hasPermission("citizenscmd.bypass")) {
-                if (CitizensCMD.getPlugin().getCooldownHandler().onCooldown(npc, player.getUniqueId().toString())) {
+                if (plugin.getCooldownHandler().onCooldown(npc, player.getUniqueId().toString())) {
                     String cooldownMessage;
-                    if (CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) == -1)
-                        cooldownMessage = CitizensCMD.getPlugin().getLang().getMessage(Path.ONE_TIME_CLICK);
+                    if (plugin.getDataHandler().getNPCCooldown(npc) == -1)
+                        cooldownMessage = plugin.getLang().getMessage(Path.ONE_TIME_CLICK);
                     else
-                        cooldownMessage = CitizensCMD.getPlugin().getLang().getMessage(Path.ON_COOLDOWN);
-                    player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(CitizensCMD.getPlugin().getCooldownHandler().getTimeLeft(npc, player.getUniqueId().toString()), CitizensCMD.getPlugin().getDisplayFormat())));
+                        cooldownMessage = plugin.getLang().getMessage(Path.ON_COOLDOWN);
+                    player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(plugin, plugin.getCooldownHandler().getTimeLeft(npc, player.getUniqueId().toString()), plugin.getDisplayFormat())));
                     return;
                 }
             }
 
-            if (CitizensCMD.getPlugin().getDataHandler().hasSound(npc)) {
-                List<String> soundProperties = CitizensCMD.getPlugin().getDataHandler().getNPCSound(npc);
+            if (plugin.getDataHandler().hasSound(npc)) {
+                List<String> soundProperties = plugin.getDataHandler().getNPCSound(npc);
                 player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0)), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
             }
 
-            if (CitizensCMD.getPlugin().getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.LEFT)) return;
+            if (plugin.getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.LEFT)) return;
         }
 
-        double price = CitizensCMD.getPlugin().getDataHandler().getPrice(npc);
+        double price = plugin.getDataHandler().getPrice(npc);
 
         if (price > 0.0) {
             if (CitizensCMD.getEconomy() != null) {
 
-                if (!CitizensCMD.getPlugin().getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
-                    String messageConfirm = CitizensCMD.getPlugin().getLang().getMessage(Path.PAY_CONFIRM);
-                    if (!CitizensCMD.getPlugin().shouldShift())
+                if (!plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
+                    String messageConfirm = plugin.getLang().getMessage(Path.PAY_CONFIRM);
+                    if (!plugin.shouldShift())
                         messageConfirm = messageConfirm.replace("{shift}", "");
                     else
                         messageConfirm = messageConfirm.replace("{shift}", "Shift ");
                     messageConfirm = messageConfirm.replace("{price}", String.valueOf(price));
                     player.sendMessage(messageConfirm);
-                    CitizensCMD.getPlugin().getWaitingList().put(player.getUniqueId().toString() + "." + npc, true);
-                    new ConfirmScheduler(player, npc).runTaskLaterAsynchronously(CitizensCMD.getPlugin(), 300L);
+                    plugin.getWaitingList().put(player.getUniqueId().toString() + "." + npc, true);
+                    new ConfirmScheduler(plugin, player, npc).runTaskLaterAsynchronously(plugin, 300L);
                     return;
                 }
 
-                if (CitizensCMD.getPlugin().shouldShift() && !player.isSneaking()) return;
+                if (plugin.shouldShift() && !player.isSneaking()) return;
 
-                CitizensCMD.getPlugin().getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
-                player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.PAY_CANCELED));
+                plugin.getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
+                player.sendMessage(plugin.getLang().getMessage(Path.PAY_CANCELED));
 
             }
         }
@@ -227,7 +229,7 @@ public class NPCListener implements Listener {
         List<String> permissions = new ArrayList<>();
         List<String> commands = new ArrayList<>();
 
-        for (String list : CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT)) {
+        for (String list : plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT)) {
             Pattern pattern = Pattern.compile("\\[([^]]*)] ([^]]*)");
             Matcher matcher = pattern.matcher(list);
             if (matcher.find()) {
@@ -237,7 +239,7 @@ public class NPCListener implements Listener {
                     command = command.replace("%p%", player.getName());
                 if (command.contains("%player%"))
                     command = command.replace("%player%", player.getName());
-                if (CitizensCMD.getPlugin().papiEnabled())
+                if (plugin.papiEnabled())
                     commands.add(PlaceholderAPI.setPlaceholders((OfflinePlayer) player, command));
                 else
                     commands.add(command);
@@ -250,7 +252,7 @@ public class NPCListener implements Listener {
             switch (permissions.get(i).toLowerCase()) {
 
                 case "console":
-                    CitizensCMD.getPlugin().getServer().dispatchCommand(CitizensCMD.getPlugin().getServer().getConsoleSender(), commands.get(i));
+                    plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commands.get(i));
                     break;
 
                 case "none":
@@ -264,7 +266,7 @@ public class NPCListener implements Listener {
                 case "message":
                     String finalMessage;
                     if (commands.get(i).contains("{display}")) {
-                        String tmpStr = commands.get(i).replace("{display}", CitizensCMD.getPlugin().getLang().getMessage(Path.MESSAGE_DISPLAY));
+                        String tmpStr = commands.get(i).replace("{display}", plugin.getLang().getMessage(Path.MESSAGE_DISPLAY));
                         finalMessage = tmpStr.replace("{name}", event.getNPC().getFullName());
                     } else
                         finalMessage = commands.get(i);
@@ -272,19 +274,20 @@ public class NPCListener implements Listener {
                     break;
 
                 default:
-                    CitizensCMD.getPlugin().getPermissionsManager().setPermission(player, permissions.get(i));
+                    plugin.getPermissionsManager().setPermission(player, permissions.get(i));
                     player.chat("/" + commands.get(i));
-                    CitizensCMD.getPlugin().getPermissionsManager().unsetPermission(player, permissions.get(i));
+                    plugin.getPermissionsManager().unsetPermission(player, permissions.get(i));
             }
         }
 
-        if (!player.hasPermission("citizenscmd.bypass") || CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) != 0)
-            CitizensCMD.getPlugin().getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.nanoTime());
+        if (!player.hasPermission("citizenscmd.bypass") || plugin.getDataHandler().getNPCCooldown(npc) != 0) {
+            plugin.getCooldownHandler().addInteraction(npc, player.getUniqueId().toString(), System.currentTimeMillis());
+        }
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onRemoveNPC(NPCRemoveEvent event) {
-        CitizensCMD.getPlugin().getDataHandler().removeNPCData(event.getNPC().getId());
+        plugin.getDataHandler().removeNPCData(event.getNPC().getId());
     }
 
     /**
@@ -302,7 +305,7 @@ public class NPCListener implements Listener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        player.sendPluginMessage(CitizensCMD.getPlugin(), "BungeeCord", byteArrayOutputStream.toByteArray());
+        player.sendPluginMessage(plugin, "BungeeCord", byteArrayOutputStream.toByteArray());
     }
 
 }

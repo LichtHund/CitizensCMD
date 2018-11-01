@@ -31,12 +31,18 @@ import static me.mattmoreira.citizenscmd.utility.Util.color;
 
 public class UpdateEvent implements Listener {
 
+    private CitizensCMD plugin;
+
+    public UpdateEvent(CitizensCMD plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (CitizensCMD.getPlugin().getUpdateStatus() && event.getPlayer().hasPermission("citizenscmd.update")) {
+        if (plugin.getUpdateStatus() && event.getPlayer().hasPermission("citizenscmd.update")) {
             JSONMessage.create(color(HEADER)).send(event.getPlayer());
-            JSONMessage.create(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.NEW_VERSION) + CitizensCMD.getPlugin().getNewVersion())).send(event.getPlayer());
-            JSONMessage.create(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.DOWNLOAD_AT) + " spigotmc.org/resources/citizens-CMD.30224/")).openURL("https://spigotmc.org/resources/citizens-CMD.30224/").send(event.getPlayer());
+            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.NEW_VERSION) + plugin.getNewVersion())).send(event.getPlayer());
+            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.DOWNLOAD_AT) + " spigotmc.org/resources/citizens-CMD.30224/")).openURL("https://spigotmc.org/resources/citizens-CMD.30224/").send(event.getPlayer());
         }
     }
 

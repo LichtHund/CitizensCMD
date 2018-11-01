@@ -27,22 +27,25 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class CMDCooldown extends CommandBase {
 
-    public CMDCooldown() {
+    private CitizensCMD plugin;
+
+    public CMDCooldown(CitizensCMD plugin) {
         super("cooldown", "citizenscmd.cooldown", false, new String[]{"cd"}, 1, 1);
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(Player player, String[] args) {
 
-        if (npcNotSelected(player)) return;
+        if (npcNotSelected(plugin, player)) return;
 
         if (notInteger(args[0])) {
             player.sendMessage(color(HEADER));
-            player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_COOLDOWN));
+            player.sendMessage(plugin.getLang().getMessage(Path.INVALID_COOLDOWN));
             return;
         }
 
-        CitizensCMD.getPlugin().getDataHandler().setCooldown(getSelectedNpcId(player), Integer.valueOf(args[0]), player);
+        plugin.getDataHandler().setCooldown(getSelectedNpcId(player), Integer.valueOf(args[0]), player);
     }
 
 }

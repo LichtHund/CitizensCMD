@@ -23,12 +23,18 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class CooldownScheduler extends BukkitRunnable {
 
+    private CitizensCMD plugin;
+
+    public CooldownScheduler(CitizensCMD plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Saves the cached cooldowns on file every 30 minutes
      */
     @Override
     public void run() {
-        CitizensCMD.getPlugin().getCooldownHandler().saveToFile();
+        plugin.getCooldownHandler().saveToFile();
     }
 
 }

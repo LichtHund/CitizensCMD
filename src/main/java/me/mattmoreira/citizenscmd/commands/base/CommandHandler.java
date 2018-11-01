@@ -40,7 +40,12 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
  */
 public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
 
+    private CitizensCMD plugin;
     private List<CommandBase> commands;
+
+    public CommandHandler(CitizensCMD plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void enable() {
@@ -78,13 +83,13 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
 
             if (!command.allowConsole() && !(sender instanceof Player)) {
                 sender.sendMessage(color(HEADER));
-                sender.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.CONSOLE_NOT_ALLOWED));
+                sender.sendMessage(plugin.getLang().getMessage(Path.CONSOLE_NOT_ALLOWED));
                 return true;
             }
 
             if (!sender.hasPermission(command.getPermission())) {
                 sender.sendMessage(color(HEADER));
-                sender.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.NO_PERMISSION));
+                sender.sendMessage(plugin.getLang().getMessage(Path.NO_PERMISSION));
                 return true;
             }
 
@@ -94,7 +99,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                     || (command.getMaximumArguments() != -1
                     && command.getMaximumArguments() < args.length)) {
                 sender.sendMessage(color(HEADER));
-                sender.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.WRONG_USAGE));
+                sender.sendMessage(plugin.getLang().getMessage(Path.WRONG_USAGE));
                 return true;
             }
 
@@ -110,7 +115,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
             }
         }
         sender.sendMessage(color(HEADER));
-        sender.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.WRONG_USAGE));
+        sender.sendMessage(plugin.getLang().getMessage(Path.WRONG_USAGE));
         return true;
     }
 
@@ -202,7 +207,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
      */
     private List<String> getCommandNames(String subCMD, String[] args, int arg, Player player) {
         List<String> commandNames = new ArrayList<>();
-        String[][] argsComplete = getTabCompleteArgs(subCMD, player);
+        String[][] argsComplete = getTabCompleteArgs(plugin, subCMD, player);
 
         if (!args[arg - 1].equals("")) {
             for (String commandName : argsComplete[arg - 1]) {

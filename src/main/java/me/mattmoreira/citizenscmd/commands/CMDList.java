@@ -32,38 +32,41 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class CMDList extends CommandBase {
 
-    public CMDList() {
-        super("list", "citizescmd.list", false, new String[]{"l"}, 0, 0);
+    private CitizensCMD plugin;
+
+    public CMDList(CitizensCMD plugin) {
+        super("list", "citizenscmd.list", false, new String[]{"l"}, 0, 0);
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(Player player, String[] args) {
 
-        if (npcNotSelected(player)) return;
+        if (npcNotSelected(plugin, player)) return;
 
         int npc = getSelectedNpcId(player);
 
-        List<String> leftCommands = CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT) != null ? CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT) : new ArrayList<>();
-        List<String> rightCommands = CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT) != null ? CitizensCMD.getPlugin().getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT) : new ArrayList<>();
+        List<String> leftCommands = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT) != null ? plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT) : new ArrayList<>();
+        List<String> rightCommands = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT) != null ? plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT) : new ArrayList<>();
 
         player.sendMessage(color(HEADER));
-        JSONMessage.create(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.LIST_COOLDOWN) + CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc))).tooltip(CitizensCMD.getPlugin().getLang().getMessage(Path.LIST_TOOLTIP)).suggestCommand("/npcmd cooldown ").send(player);
-        JSONMessage.create(color(CitizensCMD.getPlugin().getLang().getUncoloredMessage(Path.LIST_PRICE) + CitizensCMD.getPlugin().getDataHandler().getPrice(npc))).tooltip(CitizensCMD.getPlugin().getLang().getMessage(Path.LIST_TOOLTIP)).suggestCommand("/npcmd price ").send(player);
+        JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.LIST_COOLDOWN) + plugin.getDataHandler().getNPCCooldown(npc))).tooltip(plugin.getLang().getMessage(Path.LIST_TOOLTIP)).suggestCommand("/npcmd cooldown ").send(player);
+        JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.LIST_PRICE) + plugin.getDataHandler().getPrice(npc))).tooltip(plugin.getLang().getMessage(Path.LIST_TOOLTIP)).suggestCommand("/npcmd price ").send(player);
         player.sendMessage("");
-        player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.LIST_COUNT_RIGHT).replace("{count}", String.valueOf(rightCommands.size())));
+        player.sendMessage(plugin.getLang().getMessage(Path.LIST_COUNT_RIGHT).replace("{count}", String.valueOf(rightCommands.size())));
 
         int rightCount = 1;
         for (String command : rightCommands) {
-            JSONMessage.create(color("&c" + rightCount + " &7- &7" + command.replace("[", "&8[&c").replace("]", "&8]&b"))).suggestCommand("/npcmd edit cmd right " + rightCount + " ").tooltip(CitizensCMD.getPlugin().getLang().getMessage(Path.LIST_TOOLTIP)).send(player);
+            JSONMessage.create(color("&c" + rightCount + " &7- &7" + command.replace("[", "&8[&c").replace("]", "&8]&b"))).suggestCommand("/npcmd edit cmd right " + rightCount + " ").tooltip(plugin.getLang().getMessage(Path.LIST_TOOLTIP)).send(player);
             rightCount++;
         }
 
         player.sendMessage("");
-        player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.LIST_COUNT_LEFT).replace("{count}", String.valueOf(leftCommands.size())));
+        player.sendMessage(plugin.getLang().getMessage(Path.LIST_COUNT_LEFT).replace("{count}", String.valueOf(leftCommands.size())));
 
         int leftCount = 1;
         for (String command : leftCommands) {
-            JSONMessage.create(color("&c" + leftCount + " &7- &7" + command.replace("[", "&8[&c").replace("]", "&8]&b"))).suggestCommand("/npcmd edit cmd left " + leftCount + " ").tooltip(CitizensCMD.getPlugin().getLang().getMessage(Path.LIST_TOOLTIP)).send(player);
+            JSONMessage.create(color("&c" + leftCount + " &7- &7" + command.replace("[", "&8[&c").replace("]", "&8]&b"))).suggestCommand("/npcmd edit cmd left " + leftCount + " ").tooltip(plugin.getLang().getMessage(Path.LIST_TOOLTIP)).send(player);
             leftCount++;
         }
     }

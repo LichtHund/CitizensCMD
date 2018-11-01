@@ -18,9 +18,7 @@
 
 package me.mattmoreira.citizenscmd.commands;
 
-import me.mattmoreira.citizenscmd.CitizensCMD;
 import me.mattmoreira.citizenscmd.commands.base.CommandBase;
-import me.mattmoreira.citizenscmd.utility.Path;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
@@ -34,12 +32,12 @@ public class CMDSound extends CommandBase {
 
     public void execute(Player player, String[] args) {
 
-        if (npcNotSelected(player)) return;
+        //if (npcNotSelected(player)) return;
 
         int npc = getSelectedNpcId(player);
 
         if (args.length == 0) {
-            CitizensCMD.getPlugin().getDataHandler().removeSound(npc, player);
+            //CitizensCMD.getPlugin().getDataHandler().removeSound(npc, player);
             return;
         }
 
@@ -60,11 +58,11 @@ public class CMDSound extends CommandBase {
             sound = Sound.valueOf(soundString);
         } catch (Exception e) {
             player.sendMessage(color(HEADER));
-            player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_SOUND));
+            //player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.INVALID_SOUND));
             return;
         }
 
-        CitizensCMD.getPlugin().getDataHandler().setSound(npc, sound, volume, pitch, player);
+        //CitizensCMD.getPlugin().getDataHandler().setSound(npc, sound, volume, pitch, player);
 
     }
 

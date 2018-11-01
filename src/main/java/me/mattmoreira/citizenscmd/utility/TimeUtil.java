@@ -47,13 +47,13 @@ public class TimeUtil {
      * @param seconds The time in seconds to be converted
      * @return String with the time like "2d 2h 2m 2s"
      */
-    public static String getFormattedTime(long seconds, DisplayFormat format) {
+    public static String getFormattedTime(CitizensCMD plugin, long seconds, DisplayFormat format) {
 
         String messagesString[] = new String[4];
-        messagesString[0] = CitizensCMD.getPlugin().getLang().getMessage(Path.SECONDS);
-        messagesString[1] = CitizensCMD.getPlugin().getLang().getMessage(Path.MINUTES);
-        messagesString[2] = CitizensCMD.getPlugin().getLang().getMessage(Path.HOURS);
-        messagesString[3] = CitizensCMD.getPlugin().getLang().getMessage(Path.DAYS);
+        messagesString[0] = plugin.getLang().getMessage(Path.SECONDS);
+        messagesString[1] = plugin.getLang().getMessage(Path.MINUTES);
+        messagesString[2] = plugin.getLang().getMessage(Path.HOURS);
+        messagesString[3] = plugin.getLang().getMessage(Path.DAYS);
 
         String shorts[] = new String[4];
         String mediums[] = new String[4];

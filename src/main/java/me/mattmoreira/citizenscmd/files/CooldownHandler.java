@@ -31,6 +31,7 @@ import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class CooldownHandler {
 
+    private CitizensCMD plugin;
     private static File cooldownsFile;
     private static File dir;
 
@@ -38,11 +39,15 @@ public class CooldownHandler {
 
     private static HashMap<String, Long> cooldownData;
 
+    public CooldownHandler(CitizensCMD plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Createst the basic of the class and starts the HashMap
      */
     public void initialize() {
-        File pluginFolder = CitizensCMD.getPlugin().getDataFolder();
+        File pluginFolder = plugin.getDataFolder();
         dir = new File(pluginFolder + "/data");
         cooldownsFile = new File(dir.getPath(), "cooldowns.yml");
         cooldownsConfigurator = new YamlConfiguration();
@@ -78,7 +83,7 @@ public class CooldownHandler {
 
             if (!cooldownsConfigurator.contains("cooldown-data")) return;
 
-            HashMap<String, Integer> cachedDataFromSaves = CitizensCMD.getPlugin().getDataHandler().getCachedCooldownByID();
+            HashMap<String, Integer> cachedDataFromSaves = plugin.getDataHandler().getCachedCooldownByID();
 
             for (String parent : cooldownsConfigurator.getConfigurationSection("cooldown-data").getKeys(false)) {
                 for (String child : cooldownsConfigurator.getConfigurationSection("cooldown-data." + parent).getKeys(false)) {
@@ -136,7 +141,7 @@ public class CooldownHandler {
      * @return returns in seconds the time left
      */
     public long getTimeLeft(int npc, String uuid) {
-        return CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) - getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid));
+        return plugin.getDataHandler().getNPCCooldown(npc) - getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid));
     }
 
     /**
@@ -148,10 +153,10 @@ public class CooldownHandler {
      */
     public boolean onCooldown(int npc, String uuid) {
         if (cooldownData.containsKey("cooldown-data.npc-" + npc + "." + uuid)) {
-            if (CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc) == -1)
+            if (plugin.getDataHandler().getNPCCooldown(npc) == -1)
                 return true;
             else
-                return getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid)) < CitizensCMD.getPlugin().getDataHandler().getNPCCooldown(npc);
+                return getSecondsDifference(cooldownData.get("cooldown-data.npc-" + npc + "." + uuid)) < plugin.getDataHandler().getNPCCooldown(npc);
         }
         return false;
     }

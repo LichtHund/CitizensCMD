@@ -30,74 +30,77 @@ import static me.mattmoreira.citizenscmd.utility.Util.color;
 
 public class CMDReload extends CommandBase {
 
-    public CMDReload() {
+    private CitizensCMD plugin;
+
+    public CMDReload(CitizensCMD plugin) {
         super("reload", "citizenscmd.reload", true, null, 0, 0);
+        this.plugin = plugin;
     }
 
     @Override
     public void execute(Player player, String[] args) {
-        CitizensCMD.getPlugin().reloadConfig();
-        CitizensCMD.getPlugin().saveDefaultConfig();
-        CitizensCMD.getPlugin().setLang(CitizensCMD.getPlugin().getConfig().getString("lang"));
+        plugin.reloadConfig();
+        plugin.saveDefaultConfig();
+        plugin.setLang(plugin.getConfig().getString("lang"));
 
-        if (CitizensCMD.getPlugin().getConfig().contains("cooldown-time-display")) {
-            switch (CitizensCMD.getPlugin().getConfig().getString("cooldown-time-display").toLowerCase()) {
+        if (plugin.getConfig().contains("cooldown-time-display")) {
+            switch (plugin.getConfig().getString("cooldown-time-display").toLowerCase()) {
                 case "short":
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.SHORT);
+                    plugin.setDisplayFormat(DisplayFormat.SHORT);
                     break;
                 case "medium":
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.MEDIUM);
+                    plugin.setDisplayFormat(DisplayFormat.MEDIUM);
                     break;
                 case "full":
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.FULL);
+                    plugin.setDisplayFormat(DisplayFormat.FULL);
                     break;
                 default:
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.MEDIUM);
+                    plugin.setDisplayFormat(DisplayFormat.MEDIUM);
             }
         } else
-            CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.MEDIUM);
+            plugin.setDisplayFormat(DisplayFormat.MEDIUM);
 
         if (CitizensCMD.getEconomy() != null)
-            CitizensCMD.getPlugin().setShift(CitizensCMD.getPlugin().getConfig().getBoolean("shift-confirm"));
+            plugin.setShift(plugin.getConfig().getBoolean("shift-confirm"));
 
-        CitizensCMD.getPlugin().getDataHandler().reload();
-        CitizensCMD.getPlugin().getCooldownHandler().reload();
+        plugin.getDataHandler().reload();
+        plugin.getCooldownHandler().reload();
 
         player.sendMessage(color(HEADER));
-        player.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.RELOAD));
+        player.sendMessage(plugin.getLang().getMessage(Path.RELOAD));
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        CitizensCMD.getPlugin().reloadConfig();
-        CitizensCMD.getPlugin().saveConfig();
-        CitizensCMD.getPlugin().setLang(CitizensCMD.getPlugin().getConfig().getString("lang"));
+        plugin.reloadConfig();
+        plugin.saveConfig();
+        plugin.setLang(plugin.getConfig().getString("lang"));
 
-        if (CitizensCMD.getPlugin().getConfig().contains("cooldonw-time-display")) {
-            switch (CitizensCMD.getPlugin().getConfig().getString("cooldonw-time-display").toLowerCase()) {
+        if (plugin.getConfig().contains("cooldonw-time-display")) {
+            switch (plugin.getConfig().getString("cooldonw-time-display").toLowerCase()) {
                 case "short":
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.SHORT);
+                    plugin.setDisplayFormat(DisplayFormat.SHORT);
                     break;
                 case "medium":
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.MEDIUM);
+                    plugin.setDisplayFormat(DisplayFormat.MEDIUM);
                     break;
                 case "full":
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.FULL);
+                    plugin.setDisplayFormat(DisplayFormat.FULL);
                     break;
                 default:
-                    CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.MEDIUM);
+                    plugin.setDisplayFormat(DisplayFormat.MEDIUM);
             }
         } else
-            CitizensCMD.getPlugin().setDisplayFormat(DisplayFormat.MEDIUM);
+            plugin.setDisplayFormat(DisplayFormat.MEDIUM);
 
         if (CitizensCMD.getEconomy() != null)
-            CitizensCMD.getPlugin().setShift(CitizensCMD.getPlugin().getConfig().getBoolean("shift-confirm"));
+            plugin.setShift(plugin.getConfig().getBoolean("shift-confirm"));
 
-        CitizensCMD.getPlugin().getDataHandler().reload();
-        CitizensCMD.getPlugin().getCooldownHandler().reload();
+        plugin.getDataHandler().reload();
+        plugin.getCooldownHandler().reload();
 
         sender.sendMessage(color(HEADER));
-        sender.sendMessage(CitizensCMD.getPlugin().getLang().getMessage(Path.RELOAD));
+        sender.sendMessage(plugin.getLang().getMessage(Path.RELOAD));
     }
 
 }
