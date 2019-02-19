@@ -68,7 +68,10 @@ public final class CitizensCMD extends JavaPlugin {
 
     public void onEnable() {
 
-        if (!hasCitizens()) Util.disablePlugin(this);
+        if (!hasCitizens()) {
+            Util.disablePlugin(this);
+            return;
+        }
 
         commandHandler = new CommandHandler(this);
         commandHandler.enable();
@@ -121,22 +124,22 @@ public final class CitizensCMD extends JavaPlugin {
         if (setupEconomy()) {
             switch (lang.getLanguage()) {
                 case "en":
-                    info(color(TAG + "&7Using &aVult&7!"));
+                    info(color(TAG + "&7Using &aVault&7!"));
                     break;
                 case "pt":
-                    info(color(TAG + "&7Usando &aVult&7!"));
+                    info(color(TAG + "&7Usando &aVault&7!"));
                     break;
                 case "ro":
-                    info(color(TAG + "&7Folositi &aVult&7!"));
+                    info(color(TAG + "&7Folositi &aVault&7!"));
                     break;
                 case "bg":
-                    info(color(TAG + "&7Използвайки &aVult&7!"));
+                    info(color(TAG + "&7Използвайки &aVault&7!"));
                     break;
                 case "no":
-                    info(color(TAG + "&7Bruk &aVult&7!"));
+                    info(color(TAG + "&7Bruk &aVault&7!"));
                     break;
                 case "ch":
-                    info(color(TAG + "&7运用 &aVult&7!"));
+                    info(color(TAG + "&7运用 &aVault&7!"));
                     break;
             }
         }
@@ -202,8 +205,10 @@ public final class CitizensCMD extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        commandHandler.disable();
-        cooldownHandler.saveToFile();
+        if (commandHandler != null) {
+            commandHandler.disable();
+            cooldownHandler.saveToFile();
+        }
     }
 
     private boolean hasCitizens() {

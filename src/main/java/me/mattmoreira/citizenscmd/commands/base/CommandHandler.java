@@ -157,6 +157,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                 switch (subCMD) {
                     case "add":
                         if (args.length == 2) return getCommandNames(subCMD, args, 1, (Player) sender);
+                        if (args.length == 3) return getCommandNames(subCMD, args, 2, (Player) sender);
                         break;
 
                     case "remove":
@@ -184,10 +185,6 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                             if (args[1].equalsIgnoreCase("perm"))
                                 return getCommandNames(subCMD, args, 5, (Player) sender);
                         }
-                        break;
-
-                    case "sound":
-                        if (args.length == 2) return getCommandNames(subCMD, args, 1, (Player) sender);
                         break;
                 }
 

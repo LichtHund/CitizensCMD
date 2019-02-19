@@ -160,7 +160,8 @@ public class Util {
 
         switch (subCMD.toLowerCase()) {
             case "add":
-                argComplete[0] = new String[]{"console", "none", "permission", "server", "message"};
+                argComplete[0] = new String[]{"console", "none", "permission", "server", "message", "sound"};
+                argComplete[1] = getSoundsList();
                 break;
             case "remove":
                 argComplete[0] = new String[]{"left", "right"};
@@ -173,10 +174,6 @@ public class Util {
                 argComplete[2] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
                 argComplete[3] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
                 argComplete[4] = new String[]{"console", "none", "permission", "server", "message"};
-                break;
-
-            case "sound":
-                argComplete[0] = getSoundsList();
                 break;
         }
         return argComplete;
