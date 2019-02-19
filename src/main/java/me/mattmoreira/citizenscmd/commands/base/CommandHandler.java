@@ -157,7 +157,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                 switch (subCMD) {
                     case "add":
                         if (args.length == 2) return getCommandNames(subCMD, args, 1, (Player) sender);
-                        if (args.length == 3) return getCommandNames(subCMD, args, 2, (Player) sender);
+                        if (args[1].equalsIgnoreCase("sound")) {
+                            if (args.length == 3) return getCommandNames(subCMD, args, 2, (Player) sender);
+                        }
                         break;
 
                     case "remove":

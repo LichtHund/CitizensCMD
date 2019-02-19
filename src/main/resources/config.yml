@@ -20,3 +20,6 @@ shift-confirm: true
 #
 # Select cooldown display format, SHORT = 3m 3s | MEDIUM = 3 min 3 sec | FULL - 3 minutes 3 seconds
 cooldown-time-display: MEDIUM
+#
+# Disables citizens check on startup
+citizens-check: true

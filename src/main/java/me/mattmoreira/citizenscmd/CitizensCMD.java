@@ -68,15 +68,16 @@ public final class CitizensCMD extends JavaPlugin {
 
     public void onEnable() {
 
-        if (!hasCitizens()) {
+        checkOldConfig(this);
+        saveDefaultConfig();
+
+        if (!hasCitizens() && getConfig().getBoolean("citizens-check")) {
             Util.disablePlugin(this);
             return;
         }
 
         commandHandler = new CommandHandler(this);
         commandHandler.enable();
-
-        checkOldConfig(this);
 
         new Metrics(this);
 
@@ -90,7 +91,6 @@ public final class CitizensCMD extends JavaPlugin {
         cooldownHandler = new CooldownHandler(this);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> cooldownHandler.initialize(), 30L);
 
-        saveDefaultConfig();
         registerCommands();
         registerEvents();
 
