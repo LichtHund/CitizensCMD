@@ -8,7 +8,8 @@ main: me.mattmoreira.citizenscmd.CitizensCMD
 version: ${project.version}
 name: CitizensCMD
 author: Mateus Moreira
-softdepend: [Citizens, PlaceholderAPI, Vault]
+depend: Citizens
+softdepend: [PlaceholderAPI, Vault]
 api-version: 1.13
 
 commands:
