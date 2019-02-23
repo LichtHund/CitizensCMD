@@ -162,6 +162,8 @@ public class Util {
             case "add":
                 argComplete[0] = new String[]{"console", "none", "permission", "server", "message", "sound"};
                 argComplete[1] = getSoundsList();
+                argComplete[2] = new String[]{"1","0.5"};
+                argComplete[3] = new String[]{"1","0.5"};
                 break;
             case "remove":
                 argComplete[0] = new String[]{"left", "right"};
@@ -222,6 +224,7 @@ public class Util {
 
             if (configFile.exists()) {
                 configConf.load(configFile);
+
                 if (configConf.contains("check-updates")) contains[0] = true;
                 if (configConf.contains("lang")) contains[1] = true;
                 if (configConf.contains("default-cooldown")) contains[2] = true;

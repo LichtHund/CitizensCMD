@@ -74,11 +74,6 @@ public class NPCListener implements Listener {
                 }
             }
 
-            if (plugin.getDataHandler().hasSound(npc)) {
-                List<String> soundProperties = plugin.getDataHandler().getNPCSound(npc);
-                player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0).toUpperCase()), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
-            }
-
             if (plugin.getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.RIGHT)) return;
         }
 
@@ -159,6 +154,14 @@ public class NPCListener implements Listener {
                     player.sendMessage(color(finalMessage));
                     break;
 
+                case "sound":
+                    Pattern pattern = Pattern.compile("(\\w+)\\s([\\d\\.]+)\\s([\\d\\.]+)");
+                    Matcher matcher = pattern.matcher(commands.get(i));
+                    if (matcher.find()) {
+                        player.playSound(player.getLocation(), Sound.valueOf(matcher.group(1)), Float.parseFloat(matcher.group(2)), Float.parseFloat(matcher.group(3)));
+                    }
+                    break;
+
                 default:
                     plugin.getPermissionsManager().setPermission(player, permissions.get(i));
                     player.chat("/" + commands.get(i));
@@ -190,11 +193,6 @@ public class NPCListener implements Listener {
                     player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(plugin, plugin.getCooldownHandler().getTimeLeft(npc, player.getUniqueId().toString()), plugin.getDisplayFormat())));
                     return;
                 }
-            }
-
-            if (plugin.getDataHandler().hasSound(npc)) {
-                List<String> soundProperties = plugin.getDataHandler().getNPCSound(npc);
-                player.playSound(player.getLocation(), Sound.valueOf(soundProperties.get(0)), Float.parseFloat(soundProperties.get(1)), Float.parseFloat(soundProperties.get(2)));
             }
 
             if (plugin.getDataHandler().hasNoCommands(npc, EnumTypes.ClickType.LEFT)) return;
@@ -271,6 +269,14 @@ public class NPCListener implements Listener {
                     } else
                         finalMessage = commands.get(i);
                     player.sendMessage(color(finalMessage));
+                    break;
+
+                case "sound":
+                    Pattern pattern = Pattern.compile("(\\w+)\\s([\\d\\.]+)\\s([\\d\\.]+)");
+                    Matcher matcher = pattern.matcher(commands.get(i));
+                    if (matcher.find()) {
+                        player.playSound(player.getLocation(), Sound.valueOf(matcher.group(1)), Float.parseFloat(matcher.group(2)), Float.parseFloat(matcher.group(3)));
+                    }
                     break;
 
                 default:

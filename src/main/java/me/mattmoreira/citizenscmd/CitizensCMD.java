@@ -229,7 +229,7 @@ public final class CitizensCMD extends JavaPlugin {
      */
     private void registerCommands() {
         getCommand("npcmd").setExecutor(commandHandler);
-        Stream.of(new CMDHelp(this), new CMDAdd(this), new CMDCooldown(this), new CMDList(this), new CMDReload(this), new CMDRemove(this), new CMDEdit(this), new CMDPrice(this), new CMDSound()).forEach(commandHandler::register);
+        Stream.of(new CMDHelp(this), new CMDAdd(this), new CMDCooldown(this), new CMDList(this), new CMDReload(this), new CMDRemove(this), new CMDEdit(this), new CMDPrice(this)).forEach(commandHandler::register);
     }
 
     /**

@@ -56,7 +56,6 @@ public class CMDAdd extends CommandBase {
         commandsArray[0] = commandsArray[0].replace("/", "");
 
         for (int i = 0; i < commandsArray.length; i++) {
-
             if (commandsArray[i].equalsIgnoreCase("-d")) {
                 displayName = true;
                 commandsArray[i] = "";
@@ -72,14 +71,22 @@ public class CMDAdd extends CommandBase {
 
         String finalString;
 
-        if (displayName)
+        if (displayName) {
             finalString = "{display} " + stringBuilder.toString().trim();
-        else
+        } else
             finalString = stringBuilder.toString().trim();
 
-        boolean finalLeft = left;
+        if (permission.equalsIgnoreCase("sound")) {
+            if (commandsArray.length < 2) {
+                finalString += " 1 1";
+            } else {
+                if (commandsArray.length < 3) {
+                    finalString += " 1";
+                }
+            }
+        }
 
-        plugin.getDataHandler().addCommand(getSelectedNpcId(player), permission, finalString, player, finalLeft);
+        plugin.getDataHandler().addCommand(getSelectedNpcId(player), permission, finalString, player, left);
     }
 
 }
