@@ -1,36 +1,47 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.utility;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.mattmoreira.citizenscmd.CitizensCMD;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.bukkit.Bukkit.getScheduler;
 
 public class Util {
 
@@ -64,19 +75,6 @@ public class Util {
             return true;
         }
         return false;
-    }
-
-    /**
-     * @param str String to check if it is a float number or not
-     * @return Returns true if it is a number false if it is a string or contains any non numeric character
-     */
-    public static boolean isFloat(String str) {
-        try {
-            Float.parseFloat(str);
-        } catch (NumberFormatException | NullPointerException e) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -123,7 +121,7 @@ public class Util {
     }
 
     /**
-     * Utility to use color codes easierly
+     * Utility to use color codes easily
      *
      * @param msg The message String
      * @return returns the string with color
@@ -162,14 +160,24 @@ public class Util {
             case "add":
                 argComplete[0] = new String[]{"console", "none", "permission", "server", "message", "sound"};
                 argComplete[1] = getSoundsList();
-                argComplete[2] = new String[]{"1","0.5"};
-                argComplete[3] = new String[]{"1","0.5"};
+                argComplete[2] = new String[]{"1", "0.5"};
+                argComplete[3] = new String[]{"1", "0.5"};
                 break;
+
             case "remove":
                 argComplete[0] = new String[]{"left", "right"};
                 argComplete[1] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
                 argComplete[2] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
                 break;
+
+            case "cooldown":
+                argComplete[0] = new String[]{"1", "2", "5", "10"};
+                break;
+
+            case "permission":
+                argComplete[0] = new String[]{"set", "remove"};
+                break;
+
             case "edit":
                 argComplete[0] = new String[]{"perm", "cmd"};
                 argComplete[1] = new String[]{"left", "right"};
@@ -205,6 +213,7 @@ public class Util {
     /**
      * Checks for old config and renames it
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void checkOldConfig(CitizensCMD plugin) {
         File configFile;
         File configFileNew;
@@ -212,7 +221,7 @@ public class Util {
 
         boolean isNew = true;
 
-        boolean contains[] = new boolean[5];
+        boolean[] contains = new boolean[5];
         for (int i = 0; i < contains.length; i++) {
             contains[i] = false;
         }
@@ -247,6 +256,11 @@ public class Util {
         }
     }
 
+    /**
+     * Disables the plugin if Citizens is not present.
+     *
+     * @param plugin The plugin to disable.
+     */
     public static void disablePlugin(CitizensCMD plugin) {
         info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
         info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
@@ -254,7 +268,120 @@ public class Util {
         Bukkit.getServer().getPluginManager().disablePlugin(plugin);
     }
 
-    public static boolean doesCitizensExist() {
-        return Bukkit.getPluginManager().isPluginEnabled("Citizens");
+    /**
+     * Bungee cord connection method
+     *
+     * @param player The player to be sent to the server
+     * @param server the server name
+     */
+    private static void changeServer(CitizensCMD plugin, Player player, String server) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+        try {
+            dataOutputStream.writeUTF("Connect");
+            dataOutputStream.writeUTF(server);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        player.sendPluginMessage(plugin, "BungeeCord", byteArrayOutputStream.toByteArray());
+    }
+
+    /**
+     * Does the main commands for both left and right clicks.
+     *
+     * @param plugin    The CitizensCMD plugin.
+     * @param npc       The NPC to get ID.
+     * @param player    The player using the NPC.
+     * @param clickType The type of click, either left or right.
+     */
+    public static void doCommands(CitizensCMD plugin, NPC npc, Player player, EnumTypes.ClickType clickType) {
+        List<String> permissions = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
+
+        for (String list : plugin.getDataHandler().getClickCommandsData(npc.getId(), clickType)) {
+            Pattern pattern = Pattern.compile("\\[([^]]*)] (.*)");
+            Matcher matcher = pattern.matcher(list);
+            if (matcher.find()) {
+                permissions.add(matcher.group(1));
+                String command = matcher.group(2);
+                if (command.contains("%p%")) command = command.replace("%p%", player.getName());
+                if (command.contains("%player%")) command = command.replace("%player%", player.getName());
+                if (plugin.papiEnabled())
+                    commands.add(PlaceholderAPI.setPlaceholders((OfflinePlayer) player, command));
+                else commands.add(command);
+
+            }
+        }
+
+        if (permissions.size() != commands.size()) return;
+
+        for (int i = 0; i < permissions.size(); i++) {
+
+            double delay = 0;
+
+            if (permissions.get(i).contains("(")) {
+                Pattern pattern = Pattern.compile("(.*)\\(([^]]*)\\)");
+                Matcher matcher = pattern.matcher(permissions.get(i));
+                if (matcher.find()) {
+                    delay = Double.parseDouble(matcher.group(2));
+                    String permission = matcher.group(1);
+                    permissions.set(i, permission);
+                }
+            }
+
+            int finalI = i;
+            switch (permissions.get(i).toLowerCase()) {
+                case "console":
+                    getScheduler().runTaskLater(plugin, () -> plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commands.get(finalI)), (int) delay * 20);
+                    break;
+
+                case "none":
+                    getScheduler().runTaskLater(plugin, () -> player.chat("/" + commands.get(finalI)), (int) delay * 20);
+                    break;
+
+                case "server":
+                    getScheduler().runTaskLater(plugin, () -> changeServer(plugin, player, commands.get(finalI)), (int) delay * 20);
+                    break;
+
+                case "message":
+                    getScheduler().runTaskLater(plugin, () -> {
+                        String finalMessage;
+                        if (commands.get(finalI).contains("{display}")) {
+                            String tmpStr = commands.get(finalI).replace("{display}", plugin.getLang().getMessage(Path.MESSAGE_DISPLAY));
+                            finalMessage = tmpStr.replace("{name}", npc.getFullName());
+                        } else
+                            finalMessage = commands.get(finalI);
+                        player.sendMessage(color(finalMessage));
+                    }, (int) delay * 20);
+                    break;
+
+                case "sound":
+                    getScheduler().runTaskLater(plugin, () -> {
+                        Pattern pattern = Pattern.compile("(\\w+)\\s([\\d.]+)\\s([\\d.]+)");
+                        Matcher matcher = pattern.matcher(commands.get(finalI));
+                        if (matcher.find()) {
+                            if (soundExists(matcher.group(1))) {
+                                player.playSound(player.getLocation(), Sound.valueOf(matcher.group(1)), Float.parseFloat(matcher.group(2)), Float.parseFloat(matcher.group(3)));
+                            }
+                        }
+                    }, (int) delay * 20);
+                    break;
+
+                default:
+                    getScheduler().runTaskLater(plugin, () -> {
+                        plugin.getPermissionsManager().setPermission(player, permissions.get(finalI));
+                        player.chat("/" + commands.get(finalI));
+                        plugin.getPermissionsManager().unsetPermission(player, permissions.get(finalI));
+                    }, (int) delay * 20);
+            }
+        }
+    }
+
+    private static boolean soundExists(String soundName) {
+        for (Sound sound : Sound.values()) {
+            if (sound.name().equalsIgnoreCase(soundName)) return true;
+        }
+
+        return false;
     }
 }

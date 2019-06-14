@@ -1,19 +1,19 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.utility;
@@ -27,20 +27,20 @@ public class Path {
 
     public static final String NPC_ADDED = MAIN_PATH_COMMANDS + "npc-add-command-added";
     public static final String NPC_ADD_FAIL = MAIN_PATH_COMMANDS + "npc-add-command-failed";
+    public static final String NPC_ADD_DELAY_FAIL = MAIN_PATH_COMMANDS + "npc-add-command-delay-failed";
     public static final String NPC_COOLDOWN_SET = MAIN_PATH_COMMANDS + "npc-cooldown-set";
     public static final String NPC_COOLDOWN_SET_ERROR = MAIN_PATH_COMMANDS + "npc-cooldown-error";
     public static final String NPC_PRICE_SET = MAIN_PATH_COMMANDS + "npc-price-set";
-    public static final String LIST_COUNT_RIGHT = MAIN_PATH_COMMANDS + "list-commnads-counter-right";
-    public static final String LIST_COUNT_LEFT = MAIN_PATH_COMMANDS + "list-commnads-counter-left";
+    public static final String LIST_COUNT_RIGHT = MAIN_PATH_COMMANDS + "list-commands-counter-right";
+    public static final String LIST_COUNT_LEFT = MAIN_PATH_COMMANDS + "list-commands-counter-left";
     public static final String LIST_TOOLTIP = MAIN_PATH_COMMANDS + "list-tooltip";
     public static final String LIST_COOLDOWN = MAIN_PATH_COMMANDS + "list-cooldown";
     public static final String LIST_PRICE = MAIN_PATH_COMMANDS + "list-price";
     public static final String RELOAD = MAIN_PATH_COMMANDS + "reload-command";
     public static final String REMOVED_COMMAND = MAIN_PATH_COMMANDS + "removed-command";
     public static final String EDITED_COMMAND = MAIN_PATH_COMMANDS + "edit-command";
-    public static final String INVALID_SOUND = MAIN_PATH_COMMANDS + "invalid-sound";
-    public static final String SOUND_ADDED = MAIN_PATH_COMMANDS + "sound-added";
-    public static final String SOUND_REMOVED = MAIN_PATH_COMMANDS + "sound-removed";
+    public static final String PERMISSION_SET = MAIN_PATH_COMMANDS + "set-permission";
+    public static final String PERMISSION_REMOVED = MAIN_PATH_COMMANDS + "remove-permission";
 
     /**
      * WARNINGS

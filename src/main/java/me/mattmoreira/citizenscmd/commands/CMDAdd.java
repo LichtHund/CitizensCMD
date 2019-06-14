@@ -1,38 +1,38 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.commands;
 
 import me.mattmoreira.citizenscmd.CitizensCMD;
 import me.mattmoreira.citizenscmd.commands.base.CommandBase;
+import me.mattmoreira.citizenscmd.utility.Path;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-import static me.mattmoreira.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattmoreira.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class CMDAdd extends CommandBase {
 
     private CitizensCMD plugin;
 
     public CMDAdd(CitizensCMD plugin) {
-        super("add", "citizenscmd.add", false, null, 2, 512);
+        super("add", "citizenscmd.add", false, null, 2, 2048);
         this.plugin = plugin;
     }
 
@@ -47,36 +47,64 @@ public class CMDAdd extends CommandBase {
 
         if (npcNotSelected(plugin, player)) return;
 
-        String permission = args[0];
+        StringBuilder permission = new StringBuilder(args[0]);
         boolean left = false;
         boolean displayName = false;
+        boolean hasDelayError = false;
 
         StringBuilder stringBuilder = new StringBuilder();
         String[] commandsArray = Arrays.copyOfRange(args, 1, args.length);
         commandsArray[0] = commandsArray[0].replace("/", "");
 
         for (int i = 0; i < commandsArray.length; i++) {
-            if (commandsArray[i].equalsIgnoreCase("-d")) {
+
+            if (commandsArray[i].equalsIgnoreCase("")) continue;
+
+            if (commandsArray[i].equalsIgnoreCase("-n")) {
                 displayName = true;
-                commandsArray[i] = "";
+                continue;
             }
 
             if (commandsArray[i].equalsIgnoreCase("-l")) {
                 left = true;
-                break;
+                continue;
             }
+
+            if (commandsArray[i].equalsIgnoreCase("-d")) {
+                if (i + 1 >= commandsArray.length) {
+                    hasDelayError = true;
+                    continue;
+                }
+
+                if (notDouble(commandsArray[i + 1])) {
+                    hasDelayError = true;
+                    continue;
+                }
+
+                permission.append("(").append(commandsArray[i + 1]).append(")");
+                commandsArray[i + 1] = "";
+                continue;
+            }
+
             if (i == commandsArray.length - 1) stringBuilder.append(commandsArray[i]);
             else stringBuilder.append(commandsArray[i]).append(" ");
+        }
+
+        if (hasDelayError) {
+            player.sendMessage(color(HEADER));
+            player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADD_DELAY_FAIL));
+            return;
         }
 
         String finalString;
 
         if (displayName) {
             finalString = "{display} " + stringBuilder.toString().trim();
-        } else
+        } else {
             finalString = stringBuilder.toString().trim();
+        }
 
-        if (permission.equalsIgnoreCase("sound")) {
+        if (permission.toString().equalsIgnoreCase("sound")) {
             if (commandsArray.length < 2) {
                 finalString += " 1 1";
             } else {
@@ -86,7 +114,7 @@ public class CMDAdd extends CommandBase {
             }
         }
 
-        plugin.getDataHandler().addCommand(getSelectedNpcId(player), permission, finalString, player, left);
+        plugin.getDataHandler().addCommand(getSelectedNpcId(player), permission.toString(), finalString, player, left);
     }
 
 }

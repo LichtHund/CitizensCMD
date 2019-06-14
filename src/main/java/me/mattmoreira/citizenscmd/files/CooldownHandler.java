@@ -1,19 +1,19 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.files;
@@ -26,25 +26,26 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static me.mattmoreira.citizenscmd.utility.Util.*;
 
 public class CooldownHandler {
 
     private CitizensCMD plugin;
-    private static File cooldownsFile;
-    private static File dir;
+    private File cooldownsFile;
+    private File dir;
 
-    private static FileConfiguration cooldownsConfigurator;
+    private FileConfiguration cooldownsConfigurator;
 
-    private static HashMap<String, Long> cooldownData;
+    private HashMap<String, Long> cooldownData;
 
     public CooldownHandler(CitizensCMD plugin) {
         this.plugin = plugin;
     }
 
     /**
-     * Createst the basic of the class and starts the HashMap
+     * Creates the basic of the class and starts the HashMap
      */
     public void initialize() {
         File pluginFolder = plugin.getDataFolder();
@@ -62,6 +63,7 @@ public class CooldownHandler {
     /**
      * Creates files and folders
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createBasics() {
         if (!dir.exists()) dir.mkdirs();
 
@@ -85,8 +87,8 @@ public class CooldownHandler {
 
             HashMap<String, Integer> cachedDataFromSaves = plugin.getDataHandler().getCachedCooldownByID();
 
-            for (String parent : cooldownsConfigurator.getConfigurationSection("cooldown-data").getKeys(false)) {
-                for (String child : cooldownsConfigurator.getConfigurationSection("cooldown-data." + parent).getKeys(false)) {
+            for (String parent : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data")).getKeys(false)) {
+                for (String child : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data." + parent)).getKeys(false)) {
                     for (String npc : cachedDataFromSaves.keySet()) {
                         if (npc.equalsIgnoreCase(parent) && ((getSecondsDifference(cooldownsConfigurator.getLong("cooldown-data." + parent + "." + child)) < cachedDataFromSaves.get(npc)) || cachedDataFromSaves.get(npc) == -1))
                             cooldownData.put("cooldown-data." + parent + "." + child, cooldownsConfigurator.getLong("cooldown-data." + parent + "." + child));

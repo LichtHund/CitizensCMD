@@ -1,19 +1,19 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.commands;
@@ -50,6 +50,7 @@ public class CMDHelp extends CommandBase {
         JSONMessage.create(color("&3/npcmd &clist")).suggestCommand("/npcmd list").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_LIST) + "\n&8" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&olist")).send(player);
         JSONMessage.create(color("&3/npcmd &cedit &b<cmd | perm> &b<left | right> &6<id> &6<new command | new permission>")).suggestCommand("/npcmd edit ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_EDIT) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oedit &b&ocmd &b&oright &6&o1 fly")).send(player);
         JSONMessage.create(color("&3/npcmd &cremove &b<left | right> &6<id>")).suggestCommand("/npcmd remove ").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_REMOVE) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oremove &b&oright &6&o1")).send(player);
+        JSONMessage.create(color("&3/npcmd &cpermission &b<set | remove> &6<custom.permission>")).suggestCommand("/npcmd permission ").send(player);
         JSONMessage.create(color("&3/npcmd &creload")).suggestCommand("/npcmd reload").tooltip(color(plugin.getLang().getUncoloredMessage(Path.HELP_DESCRIPTION_RELOAD) + "\n" + plugin.getLang().getUncoloredMessage(Path.HELP_EXAMPLE) + "\n&3&o/npcmd &c&oreload")).send(player);
 
     }

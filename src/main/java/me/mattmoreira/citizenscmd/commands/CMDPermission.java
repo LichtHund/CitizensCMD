@@ -25,12 +25,12 @@ import org.bukkit.entity.Player;
 
 import static me.mattmoreira.citizenscmd.utility.Util.*;
 
-public class CMDPrice extends CommandBase {
+public class CMDPermission extends CommandBase {
 
     private CitizensCMD plugin;
 
-    public CMDPrice(CitizensCMD plugin) {
-        super("price", "citizenscmd.price", false, new String[]{"p"}, 1, 1);
+    public CMDPermission(CitizensCMD plugin) {
+        super("permission", "citizenscmd.permission", false, null, 1, 2);
         this.plugin = plugin;
     }
 
@@ -39,13 +39,29 @@ public class CMDPrice extends CommandBase {
 
         if (npcNotSelected(plugin, player)) return;
 
-        if (notDouble(args[0])) {
-            player.sendMessage(color(HEADER));
-            player.sendMessage(plugin.getLang().getMessage(Path.INVALID_PRICE));
-            return;
-        }
+        switch (args[0]) {
+            case "set":
+                if (args.length < 2) {
+                    player.sendMessage(color(HEADER));
+                    player.sendMessage(plugin.getLang().getMessage(Path.WRONG_USAGE));
+                    return;
+                }
+                plugin.getDataHandler().setCustomPermission(getSelectedNpcId(player), args[1], player);
+                break;
 
-        plugin.getDataHandler().setPrice(getSelectedNpcId(player), Double.valueOf(args[0]), player);
+            case "remove":
+                if (args.length > 1) {
+                    player.sendMessage(color(HEADER));
+                    player.sendMessage(plugin.getLang().getMessage(Path.WRONG_USAGE));
+                    return;
+                }
+                plugin.getDataHandler().removeCustomPermission(getSelectedNpcId(player), player);
+                break;
+
+            default:
+                player.sendMessage(color(HEADER));
+                player.sendMessage(plugin.getLang().getMessage(Path.WRONG_USAGE));
+        }
     }
 
 }

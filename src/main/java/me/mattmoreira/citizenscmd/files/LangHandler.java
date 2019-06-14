@@ -1,19 +1,19 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.files;
@@ -27,6 +27,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static me.mattmoreira.citizenscmd.utility.Util.*;
 
@@ -93,90 +94,6 @@ public class LangHandler {
                 if (!langConf.contains(Path.MESSAGE_DISPLAY))
                     langConf.set(Path.MESSAGE_DISPLAY, "{name}:&r");
 
-                if (!langConf.contains(Path.INVALID_SOUND)) {
-                    switch (lang) {
-                        case "en":
-                            langConf.set(Path.INVALID_SOUND, "&cPlease enter a valid sound!");
-                            break;
-
-                        case "pt":
-                            langConf.set(Path.INVALID_SOUND, "&cSelecione um som válido!");
-                            break;
-
-                        case "ro":
-                            langConf.set(Path.INVALID_SOUND, "&cIntroduceți un sunet valid!");
-                            break;
-
-                        case "bg":
-                            langConf.set(Path.INVALID_SOUND, "&cМоля, въведете валиден звук!");
-                            break;
-
-                        case "no":
-                            langConf.set(Path.INVALID_SOUND, "&cVennligst skriv inn en gyldig lyd!");
-                            break;
-
-                        case "ch":
-                            langConf.set(Path.INVALID_SOUND, "&c请输入有效的声音!");
-                            break;
-                    }
-                }
-
-                if (!langConf.contains(Path.SOUND_ADDED)) {
-                    switch (lang) {
-                        case "en":
-                            langConf.set(Path.SOUND_ADDED, "&aSound added successfully!");
-                            break;
-
-                        case "pt":
-                            langConf.set(Path.SOUND_ADDED, "&aSom adicionado com sucesso!");
-                            break;
-
-                        case "ro":
-                            langConf.set(Path.SOUND_ADDED, "&aSunetul a fost adăugat cu succes!");
-                            break;
-
-                        case "bg":
-                            langConf.set(Path.SOUND_ADDED, "&aЗвукът е добавен успешно!");
-                            break;
-
-                        case "no":
-                            langConf.set(Path.SOUND_ADDED, "&aLyd lagt til!");
-                            break;
-
-                        case "ch":
-                            langConf.set(Path.SOUND_ADDED, "&a声音成功添加！");
-                            break;
-                    }
-                }
-
-                if (!langConf.contains(Path.SOUND_REMOVED)) {
-                    switch (lang) {
-                        case "en":
-                            langConf.set(Path.SOUND_REMOVED, "&aSound removed successfully!");
-                            break;
-
-                        case "pt":
-                            langConf.set(Path.SOUND_REMOVED, "&aSom removido com sucesso!");
-                            break;
-
-                        case "ro":
-                            langConf.set(Path.SOUND_REMOVED, "&aSunetul a fost eliminat cu succes!");
-                            break;
-
-                        case "bg":
-                            langConf.set(Path.SOUND_REMOVED, "&aЗвукът е премахнат успешно!");
-                            break;
-
-                        case "no":
-                            langConf.set(Path.SOUND_REMOVED, "&aLyden fjernet vellykket!");
-                            break;
-
-                        case "ch":
-                            langConf.set(Path.SOUND_REMOVED, "&a声音已成功删除！");
-                            break;
-                    }
-                }
-
                 if (!langConf.contains(Path.HELP_DESCRIPTION_SOUND)) {
                     switch (lang) {
                         case "en":
@@ -205,8 +122,168 @@ public class LangHandler {
                     }
                 }
 
-                for (String parent : langConf.getConfigurationSection("messages").getKeys(false)) {
-                    for (String child : langConf.getConfigurationSection("messages." + parent).getKeys(false))
+                if (!langConf.contains(Path.NPC_ADD_DELAY_FAIL)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.NPC_ADD_DELAY_FAIL, "&cWhen adding &d-d &cthe delay must be a number!");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.NPC_ADD_DELAY_FAIL, "&cAo adicionar &d-d &co atraso deve ser um número!");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.NPC_ADD_DELAY_FAIL, "&cCând adăugați &d-d &cdelay-ul trebuie să fie un număr!");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.NPC_ADD_DELAY_FAIL, "&cПри добавяне &d-d &cзакъснението трябва да бъде число!");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.NPC_ADD_DELAY_FAIL, "&cNår du legger til &d-d &cforsinkelsen må være et tall!");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.NPC_ADD_DELAY_FAIL, "&c添加&d-d&c时延迟必须是数字!");
+                            break;
+
+                        case "fr":
+                            langConf.set(Path.NPC_ADD_DELAY_FAIL, "&cLors de l'ajout de &d-d &cle délai doit être un nombre!");
+                            break;
+                    }
+                }
+
+                if (!langConf.contains(Path.LIST_COUNT_RIGHT)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- Right click commands:");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- Comandos de clique direito:");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- Comenzile cu click dreapta:");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- Команди с Десен Клик:");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- Høyre klikk:");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- 右鍵指令:");
+                            break;
+
+                        case "fr":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- Commandes de clic droit:");
+                            break;
+                    }
+                }
+
+                if (!langConf.contains(Path.LIST_COUNT_LEFT)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.LIST_COUNT_LEFT, "&c&o{count} &7&o- left click commands:");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.LIST_COUNT_LEFT, "&c&o{count} &7&o- Comandos de clique esquerdo:");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.LIST_COUNT_LEFT, "&c&o{count} &7&o- Comenzile cu click stanga:");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.LIST_COUNT_LEFT, "&c&o{count} &7&o- Команди с Ляв Клик:");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.LIST_COUNT_LEFT, "&c&o{count} &7&o- Venstre klikk:");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- 左鍵指令:");
+                            break;
+
+                        case "fr":
+                            langConf.set(Path.LIST_COUNT_RIGHT, "&c&o{count} &7&o- Commandes de clic gauche:");
+                            break;
+                    }
+                }
+
+                if (!langConf.contains(Path.PERMISSION_SET)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.PERMISSION_SET, "&aPermission set successfully!");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.PERMISSION_SET, "&aPermissão definida com sucesso!");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.PERMISSION_SET, "&aPermisiunea este setată cu succes!");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.PERMISSION_SET, "&aРазрешението е успешно!");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.PERMISSION_SET, "&aTillatelse vellykket!");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.PERMISSION_SET, "&a权限设置成功!");
+                            break;
+
+                        case "fr":
+                            langConf.set(Path.PERMISSION_SET, "&aPermission définie avec succès!");
+                            break;
+                    }
+                }
+
+                if (!langConf.contains(Path.PERMISSION_REMOVED)) {
+                    switch (lang) {
+                        case "en":
+                            langConf.set(Path.PERMISSION_REMOVED, "&aPermission removed successfully!");
+                            break;
+
+                        case "pt":
+                            langConf.set(Path.PERMISSION_REMOVED, "&aPermissão removida com sucesso!");
+                            break;
+
+                        case "ro":
+                            langConf.set(Path.PERMISSION_REMOVED, "&aPermisiunea a fost eliminată cu succes!");
+                            break;
+
+                        case "bg":
+                            langConf.set(Path.PERMISSION_REMOVED, "&aРазрешението бе премахнато успешно!");
+                            break;
+
+                        case "no":
+                            langConf.set(Path.PERMISSION_REMOVED, "&aTillatelse fjernet vellykket!");
+                            break;
+
+                        case "ch":
+                            langConf.set(Path.PERMISSION_REMOVED, "&a权限已成功删除!");
+                            break;
+
+                        case "fr":
+                            langConf.set(Path.PERMISSION_REMOVED, "&aPermission supprimée avec succès!");
+                            break;
+                    }
+                }
+
+                for (String parent : Objects.requireNonNull(langConf.getConfigurationSection("messages")).getKeys(false)) {
+                    for (String child : Objects.requireNonNull(langConf.getConfigurationSection("messages." + parent)).getKeys(false))
                         messages.put("messages." + parent + "." + child, langConf.getString("messages." + parent + "." + child));
                 }
 

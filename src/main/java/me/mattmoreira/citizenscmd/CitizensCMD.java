@@ -1,23 +1,26 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd;
 
+import lombok.Getter;
+import lombok.Setter;
+import me.mattmoreira.citizenscmd.API.CitizensCMDAPI;
 import me.mattmoreira.citizenscmd.commands.*;
 import me.mattmoreira.citizenscmd.commands.base.CommandHandler;
 import me.mattmoreira.citizenscmd.files.CooldownHandler;
@@ -40,10 +43,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static me.mattmoreira.citizenscmd.utility.Util.*;
 
+@Getter
+@Setter
 public final class CitizensCMD extends JavaPlugin {
 
     /**
@@ -51,20 +57,26 @@ public final class CitizensCMD extends JavaPlugin {
      */
     private final String[] REGISTERED_LANG_FILES = {"en", "pt", "ro", "bg", "no", "ch"};
 
-    private static CommandHandler commandHandler = null;
-    private static LangHandler lang = null;
-    private static DataHandler dataHandler = null;
-    private static CooldownHandler cooldownHandler = null;
-    private static PermissionsManager permissionsManager = null;
+    private LangHandler lang = null;
+    private DataHandler dataHandler = null;
+    private CooldownHandler cooldownHandler = null;
+    private PermissionsManager permissionsManager = null;
+
+    @Getter
+    private static CitizensCMDAPI api;
+    @Getter
     private static Economy economy = null;
 
-    private static boolean papi = false;
-    private static boolean updateStatus = false;
-    private static boolean shift = false;
-    private static String newVersion;
-    private static DisplayFormat displayFormat;
+    private boolean papi = false;
+    private CommandHandler commandHandler = null;
 
-    private static HashMap<String, Boolean> waitingList;
+    private boolean updateStatus = false;
+    private boolean shift = false;
+
+    private String newVersion;
+    private DisplayFormat displayFormat;
+
+    private HashMap<String, Boolean> waitingList;
 
     public void onEnable() {
 
@@ -95,7 +107,7 @@ public final class CitizensCMD extends JavaPlugin {
         registerEvents();
 
         registerLangs(this);
-        setLang(getConfig().getString("lang"));
+        setLang(Objects.requireNonNull(getConfig().getString("lang")));
 
         if (hasPAPI()) {
             switch (lang.getLanguage()) {
@@ -147,12 +159,9 @@ public final class CitizensCMD extends JavaPlugin {
         waitingList = new HashMap<>();
 
         if (getConfig().contains("cooldown-time-display")) {
-            switch (getConfig().getString("cooldown-time-display").toLowerCase()) {
+            switch (Objects.requireNonNull(getConfig().getString("cooldown-time-display")).toLowerCase()) {
                 case "short":
                     displayFormat = DisplayFormat.SHORT;
-                    break;
-                case "medium":
-                    displayFormat = DisplayFormat.MEDIUM;
                     break;
                 case "full":
                     displayFormat = DisplayFormat.FULL;
@@ -175,7 +184,7 @@ public final class CitizensCMD extends JavaPlugin {
                             info(color(TAG + "&cA new version of CitizensCMD is now available:"));
                             break;
                         case "pt":
-                            info(color(TAG + "&cA new version of CitizensCMD is now available:"));
+                            info(color(TAG + "&cA nova versão de CitizensCMD está disponivel:"));
                             break;
                         case "ro":
                             info(color(TAG + "&cO noua versiune a CitizensCMD este acum valabila:"));
@@ -198,6 +207,8 @@ public final class CitizensCMD extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+
+        api = new CitizensCMDAPI(dataHandler);
 
         new UpdateScheduler(this).runTaskTimerAsynchronously(this, 72000L, 72000L);
         new CooldownScheduler(this).runTaskTimerAsynchronously(this, 36000L, 36000L);
@@ -228,8 +239,18 @@ public final class CitizensCMD extends JavaPlugin {
      * Registers all the commands to be used
      */
     private void registerCommands() {
-        getCommand("npcmd").setExecutor(commandHandler);
-        Stream.of(new CMDHelp(this), new CMDAdd(this), new CMDCooldown(this), new CMDList(this), new CMDReload(this), new CMDRemove(this), new CMDEdit(this), new CMDPrice(this)).forEach(commandHandler::register);
+        Objects.requireNonNull(getCommand("npcmd")).setExecutor(commandHandler);
+        Stream.of(
+                new CMDHelp(this),
+                new CMDAdd(this),
+                new CMDCooldown(this),
+                new CMDList(this),
+                new CMDReload(this),
+                new CMDRemove(this),
+                new CMDEdit(this),
+                new CMDPrice(this),
+                new CMDPermission(this)
+        ).forEach(commandHandler::register);
     }
 
     /**
@@ -279,12 +300,6 @@ public final class CitizensCMD extends JavaPlugin {
      */
     public void setLang(String language) {
         switch (language.toLowerCase()) {
-            case "en":
-            case "eng":
-            case "english":
-                lang = new LangHandler(this, "en");
-                break;
-
             case "pt":
             case "port":
             case "portuguese":
@@ -323,137 +338,11 @@ public final class CitizensCMD extends JavaPlugin {
     }
 
     /**
-     * Gets the language that is selected on the config
-     *
-     * @return returns the language
-     */
-    public LangHandler getLang() {
-        return lang;
-    }
-
-    /**
-     * Gets if or not should alert player of new update on join
-     *
-     * @return Returns update status
-     */
-    public boolean getUpdateStatus() {
-        return updateStatus;
-    }
-
-    /**
-     * Sets new update status from scheduler
-     *
-     * @param newUpdateStatus New boolean with the update status;
-     */
-    public void setUpdateStatus(boolean newUpdateStatus) {
-        CitizensCMD.updateStatus = newUpdateStatus;
-    }
-
-    /**
-     * Gets String with new version
-     *
-     * @return the new version
-     */
-    public String getNewVersion() {
-        return newVersion;
-    }
-
-    /**
-     * Sets the new version string
-     *
-     * @param newVersion the new version to be set
-     */
-    public void setNewVersion(String newVersion) {
-        CitizensCMD.newVersion = newVersion;
-    }
-
-    /**
-     * Gets the NPC data to be used in other classes without needing to open the file
-     *
-     * @return returns the DataHandler class
-     */
-    public DataHandler getDataHandler() {
-        return dataHandler;
-    }
-
-    /**
-     * Gets the cooldown handler to check for cooldown informations
-     *
-     * @return Returns the cooldown handler
-     */
-    public CooldownHandler getCooldownHandler() {
-        return cooldownHandler;
-    }
-
-    /**
-     * Gets the permission manager to set and unset permission
-     *
-     * @return the permission manager class
-     */
-    public PermissionsManager getPermissionsManager() {
-        return permissionsManager;
-    }
-
-    /**
-     * Gets the economy to be used
-     *
-     * @return Returns the economy
-     */
-    public static Economy getEconomy() {
-        return economy;
-    }
-
-    /**
-     * Gets the hashmap with the players waiting to confirm the NPC payment
-     *
-     * @return returns the list of players
-     */
-    public HashMap<String, Boolean> getWaitingList() {
-        return waitingList;
-    }
-
-    /**
-     * Checks if player needs to shift or not to confirm payment
-     *
-     * @return Returns the boolean of whether or not players should shift
-     */
-    public boolean shouldShift() {
-        return shift;
-    }
-
-    /**
-     * Sets the new shifting rule
-     *
-     * @param shift The new shifting rule
-     */
-    public void setShift(boolean shift) {
-        CitizensCMD.shift = shift;
-    }
-
-    /**
      * Checks is PAPI is present or not
      *
      * @return Returns true if PAPI is being used
      */
     public boolean papiEnabled() {
         return papi;
-    }
-
-    /**
-     * Gets the display format to be used
-     *
-     * @return Returns either SHORT, MEDIUM OR FULL
-     */
-    public DisplayFormat getDisplayFormat() {
-        return displayFormat;
-    }
-
-    /**
-     * Sets the new display format when reloading
-     *
-     * @param displayFormat The new display format
-     */
-    public void setDisplayFormat(DisplayFormat displayFormat) {
-        CitizensCMD.displayFormat = displayFormat;
     }
 }

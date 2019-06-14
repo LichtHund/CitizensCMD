@@ -1,19 +1,19 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.files;
@@ -21,7 +21,6 @@ package me.mattmoreira.citizenscmd.files;
 import me.mattmoreira.citizenscmd.CitizensCMD;
 import me.mattmoreira.citizenscmd.utility.EnumTypes;
 import me.mattmoreira.citizenscmd.utility.Path;
-import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,9 +31,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static me.mattmoreira.citizenscmd.utility.Util.*;
 
+@SuppressWarnings("unchecked")
 public class DataHandler {
 
     private CitizensCMD plugin;
@@ -67,6 +68,7 @@ public class DataHandler {
     /**
      * Creates files and folders
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void createBasics() {
         if (!dir.exists()) dir.mkdirs();
 
@@ -90,14 +92,17 @@ public class DataHandler {
 
                 if (!dataConfigurator.contains("npc-data")) return;
 
-                for (String parent : dataConfigurator.getConfigurationSection("npc-data").getKeys(false)) {
-                    for (String child : dataConfigurator.getConfigurationSection("npc-data." + parent).getKeys(false)) {
+                for (String parent : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data")).getKeys(false)) {
+                    for (String child : Objects.requireNonNull(dataConfigurator.getConfigurationSection("npc-data." + parent)).getKeys(false)) {
                         switch (child.toLowerCase()) {
+                            case "permission":
+                                data.put("npc-data." + parent + "." + child, dataConfigurator.getString("npc-data." + parent + "." + child));
+                                break;
+
                             case "cooldown":
                                 data.put("npc-data." + parent + "." + child, dataConfigurator.getInt("npc-data." + parent + "." + child));
                                 break;
 
-                            case "sound":
                             case "right-click-commands":
                             case "left-click-commands":
                                 data.put("npc-data." + parent + "." + child, dataConfigurator.getStringList("npc-data." + parent + "." + child));
@@ -116,13 +121,6 @@ public class DataHandler {
             }
 
         }).start();
-    }
-
-    /**
-     * Clears the data from the cache
-     */
-    private void clearCache() {
-        data.clear();
     }
 
     /**
@@ -168,11 +166,6 @@ public class DataHandler {
                     dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
                 }
 
-                if (!data.containsKey("npc-data.npc-" + npc + ".sound")) {
-                    data.put("npc-data.npc-" + npc + ".sound", new ArrayList<>());
-                    dataConfigurator.set("npc-data.npc-" + npc + ".sound", new ArrayList<>());
-                }
-
                 player.sendMessage(color(HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADDED));
 
@@ -180,6 +173,54 @@ public class DataHandler {
             } catch (IOException | InvalidConfigurationException e) {
                 player.sendMessage(color(HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADD_FAIL));
+            }
+        }).start();
+    }
+
+    /**
+     * Adds a new command to the NPC
+     *
+     * @param npc        The NPC id
+     * @param permission The permission to access the command
+     * @param command    The command
+     * @param left       If the command should be added to the left or right click
+     */
+    public void addCommand(int npc, String permission, String command, boolean left) {
+        new Thread(() -> {
+            try {
+                createBasics();
+                dataConfigurator.load(savesFile);
+
+                List<String> commandList = data.containsKey("npc-data.npc-" + npc + ".right-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".right-click-commands") : new ArrayList<>();
+                List<String> commandListLeft = data.containsKey("npc-data.npc-" + npc + ".left-click-commands") ? (List<String>) data.get("npc-data.npc-" + npc + ".left-click-commands") : new ArrayList<>();
+
+                if (!data.containsKey("npc-data.npc-" + npc + ".cooldown")) {
+                    data.put("npc-data.npc-" + npc + ".cooldown", getDefaultCooldown(plugin));
+                    dataConfigurator.set("npc-data.npc-" + npc + ".cooldown", getDefaultCooldown(plugin));
+                }
+
+                if (left) commandListLeft.add("[" + permission + "] " + command);
+                else commandList.add("[" + permission + "] " + command);
+
+                if (data.containsKey("npc-data.npc-" + npc + ".right-click-commands"))
+                    data.replace("npc-data.npc-" + npc + ".right-click-commands", commandList);
+                else
+                    data.put("npc-data.npc-" + npc + ".right-click-commands", commandList);
+                dataConfigurator.set("npc-data.npc-" + npc + ".right-click-commands", commandList);
+
+                if (data.containsKey("npc-data.npc-" + npc + ".left-click-commands"))
+                    data.replace("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+                else
+                    data.put("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+                dataConfigurator.set("npc-data.npc-" + npc + ".left-click-commands", commandListLeft);
+
+                if (!data.containsKey("npc-data.npc-" + npc + ".price")) {
+                    data.put("npc-data.npc-" + npc + ".price", 0);
+                    dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
+                }
+
+                dataConfigurator.save(savesFile);
+            } catch (IOException | InvalidConfigurationException ignored) {
             }
         }).start();
     }
@@ -240,41 +281,65 @@ public class DataHandler {
     }
 
     /**
-     * Sets the sound of the NPC command
+     * Sets the permission of the NPC
      *
      * @param npc    The NPC id
-     * @param sound  The sound to play
-     * @param volume the volume
-     * @param pitch  the pitch
+     * @param permission  The permission to be added
      * @param player The player who run the command
      */
-    public void setSound(int npc, Sound sound, float volume, float pitch, Player player) {
+    public void setCustomPermission(int npc, String permission, Player player) {
         new Thread(() -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                List<String> soundProperties = new ArrayList<>();
+                dataConfigurator.set("npc-data.npc-" + npc + ".permission", permission);
 
-                soundProperties.add(sound.name());
-                soundProperties.add(String.valueOf(volume));
-                soundProperties.add(String.valueOf(pitch));
-
-                dataConfigurator.set("npc-data.npc-" + npc + ".sound", soundProperties);
-
-                if (data.containsKey("npc-data.npc-" + npc + ".sound"))
-                    data.replace("npc-data.npc-" + npc + ".sound", soundProperties);
-                else
-                    data.put("npc-data.npc-" + npc + ".sound", soundProperties);
+                data.replace("npc-data.npc-" + npc + ".permission", permission);
 
                 player.sendMessage(color(HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.SOUND_ADDED));
+                player.sendMessage(plugin.getLang().getMessage(Path.PERMISSION_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    /**
+     * Remove the permission of the NPC
+     *
+     * @param npc    The NPC id
+     * @param player The player who run the command
+     */
+    public void removeCustomPermission(int npc, Player player) {
+        new Thread(() -> {
+            try {
+                createBasics();
+                dataConfigurator.load(savesFile);
+
+                if (dataConfigurator.contains("npc-data.npc-" + npc + ".permission"))
+                    dataConfigurator.set("npc-data.npc-" + npc + ".permission", null);
+
+                data.remove("npc-data.npc-" + npc + ".permission");
+
+                player.sendMessage(color(HEADER));
+                player.sendMessage(plugin.getLang().getMessage(Path.PERMISSION_REMOVED));
+
+                dataConfigurator.save(savesFile);
+            } catch (IOException | InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public String getCustomPermission(int npc) {
+        return (String) data.get("npc-data.npc-" + npc + ".permission");
+    }
+
+    public boolean hasCustomPermission(int npc) {
+        return data.containsKey("npc-data.npc-" + npc + ".permission");
     }
 
     /**
@@ -297,7 +362,7 @@ public class DataHandler {
      */
     public String[] getCompleteCommandsNumbers(int npc, EnumTypes.ClickType click) {
         List<String> commandList = (List<String>) data.get("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands");
-        String commandSet[] = new String[commandList.size()];
+        String[] commandSet = new String[commandList.size()];
         for (int i = 0; i < commandList.size(); i++)
             commandSet[i] = "" + (i + 1);
         return commandSet;
@@ -311,14 +376,22 @@ public class DataHandler {
      * @return Returns true if has and false if not
      */
     public boolean hasNoCommands(int npc, EnumTypes.ClickType click) {
-        if (data.containsKey("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands"))
-            return ((List<String>) data.get("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands")).isEmpty();
+        String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+        if (data.containsKey(key))
+            return ((List<String>) data.get(key)).isEmpty();
         return true;
     }
 
-    public boolean hasSound(int npc) {
-        if (data.containsKey("npc-data.npc-" + npc + ".sound"))
-            return !(((List<String>) data.get("npc-data.npc-" + npc + ".sound")).isEmpty());
+    /**
+     * Checks if there is NPC data for the ID.
+     *
+     * @param npc The NPC ID.
+     * @return True or false depending if it has or not.
+     */
+    public boolean hasNPCData(int npc) {
+        for (String key : data.keySet()) {
+            if (key.contains("npc-" + npc)) return true;
+        }
         return false;
     }
 
@@ -330,10 +403,6 @@ public class DataHandler {
      */
     public int getNPCCooldown(int npc) {
         return data.containsKey("npc-data.npc-" + npc + ".cooldown") ? (int) data.get("npc-data.npc-" + npc + ".cooldown") : 0;
-    }
-
-    public List<String> getNPCSound(int npc) {
-        return (List<String>) data.get("npc-data.npc-" + npc + ".sound");
     }
 
     /**
@@ -364,32 +433,12 @@ public class DataHandler {
 
                 commands.remove(commandID - 1);
 
-                data.replace("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands", commands);
-                dataConfigurator.set("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands", commands);
+                String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+                data.replace(key, commands);
+                dataConfigurator.set(key, commands);
 
                 player.sendMessage(color(HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.REMOVED_COMMAND));
-
-                dataConfigurator.save(savesFile);
-            } catch (IOException | InvalidConfigurationException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    public void removeSound(int npc, Player player) {
-        new Thread(() -> {
-            try {
-                createBasics();
-                dataConfigurator.load(savesFile);
-
-                List<String> soundProperties = new ArrayList<>();
-
-                data.replace("npc-data.npc-" + npc + ".sound", soundProperties);
-                dataConfigurator.set("npc-data.npc-" + npc + ".sound", soundProperties);
-
-                player.sendMessage(color(HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.SOUND_REMOVED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -433,8 +482,9 @@ public class DataHandler {
                         break;
                 }
 
-                data.replace("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands", commandsData);
-                dataConfigurator.set("npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands", commandsData);
+                String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
+                data.replace(key, commandsData);
+                dataConfigurator.set(key, commandsData);
 
                 player.sendMessage(color(HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.EDITED_COMMAND).replace("{type}", typeText));
@@ -460,8 +510,9 @@ public class DataHandler {
                 if (dataConfigurator.contains("npc-data.npc-" + npc))
                     dataConfigurator.set("npc-data.npc-" + npc, null);
 
-                /*clearCache();
-                cacheData();*/
+                for (String key : data.keySet()) {
+                    if (key.contains("npc-data.npc-" + npc)) data.remove(key);
+                }
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -479,7 +530,7 @@ public class DataHandler {
         HashMap<String, Integer> cachedData = new HashMap<>();
 
         for (String key : data.keySet()) {
-            String components[] = key.split("\\.");
+            String[] components = key.split("\\.");
             if (components[2].equalsIgnoreCase("cooldown"))
                 cachedData.put(components[1], (Integer) data.get(key));
         }
@@ -487,7 +538,6 @@ public class DataHandler {
     }
 
     public void reload() {
-        cacheData();
         initialize();
     }
 }

@@ -1,25 +1,25 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * A special thanks to @ExtendedClip for letting me use and modify this class from PlaceholderAPI
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  <p>
+  A special thanks to @ExtendedClip for letting me use and modify this class from PlaceholderAPI
  */
 
-/**
- * A special thanks to @ExtendedClip for letting me use and modify this class from PlaceholderAPI
+/*
+  A special thanks to @ExtendedClip for letting me use and modify this class from PlaceholderAPI
  */
 
 package me.mattmoreira.citizenscmd.utility;
@@ -49,15 +49,15 @@ public class TimeUtil {
      */
     public static String getFormattedTime(CitizensCMD plugin, long seconds, DisplayFormat format) {
 
-        String messagesString[] = new String[4];
+        String[] messagesString = new String[4];
         messagesString[0] = plugin.getLang().getMessage(Path.SECONDS);
         messagesString[1] = plugin.getLang().getMessage(Path.MINUTES);
         messagesString[2] = plugin.getLang().getMessage(Path.HOURS);
         messagesString[3] = plugin.getLang().getMessage(Path.DAYS);
 
-        String shorts[] = new String[4];
-        String mediums[] = new String[4];
-        String fulls[] = new String[4];
+        String[] shorts = new String[4];
+        String[] mediums = new String[4];
+        String[] fulls = new String[4];
 
         Pattern pattern = Pattern.compile("\\[([^]]*)], \\[([^]]*)], \\[([^]]*)]");
         for (int i = 0; i < messagesString.length; i++) {
@@ -77,8 +77,8 @@ public class TimeUtil {
                 secondFormat = shorts[0];
                 break;
             case MEDIUM:
-                String mediumsAfter[] = new String[4];
-                String mediumsPlurals[] = new String[4];
+                String[] mediumsAfter = new String[4];
+                String[] mediumsPlurals = new String[4];
                 Pattern patternMediums = Pattern.compile("([^]]*)\\(([^]]*)\\)");
                 for (int i = 0; i < mediums.length; i++) {
                     if (mediums[i].contains("(") && mediums[i].contains(")")) {
@@ -102,8 +102,8 @@ public class TimeUtil {
                 secondPlural = mediumsPlurals[0];
                 break;
             case FULL:
-                String fullsAfter[] = new String[4];
-                String fullsPlurals[] = new String[4];
+                String[] fullsAfter = new String[4];
+                String[] fullsPlurals = new String[4];
                 Pattern patternFulls = Pattern.compile("([^]]*)\\(([^]]*)\\)");
                 for (int i = 0; i < fulls.length; i++) {
                     if (fulls[i].contains("(") && fulls[i].contains(")")) {
@@ -140,18 +140,18 @@ public class TimeUtil {
         if (minutes < 60) {
             if (minutes == 1 && !format.equals(DisplayFormat.SHORT)) {
                 if (secondsLeft > 0) {
-                    if (secondsLeft == 1 && !format.equals(DisplayFormat.SHORT))
-                        return String.valueOf(minutes + minuteFormat + " " + secondsLeft + secondFormat);
-                    return String.valueOf(minutes + minuteFormat + " " + secondsLeft + secondFormat + secondPlural);
+                    if (secondsLeft == 1)
+                        return minutes + minuteFormat + " " + secondsLeft + secondFormat;
+                    return minutes + minuteFormat + " " + secondsLeft + secondFormat + secondPlural;
                 } else
-                    return String.valueOf(minutes + minuteFormat);
+                    return minutes + minuteFormat;
             } else {
                 if (secondsLeft > 0) {
                     if (secondsLeft == 1 && !format.equals(DisplayFormat.SHORT))
-                        return String.valueOf(minutes + minuteFormat + minutePlural + " " + secondsLeft + secondFormat);
-                    return String.valueOf(minutes + minuteFormat + minutePlural + " " + secondsLeft + secondFormat + secondPlural);
+                        return minutes + minuteFormat + minutePlural + " " + secondsLeft + secondFormat;
+                    return minutes + minuteFormat + minutePlural + " " + secondsLeft + secondFormat + secondPlural;
                 } else
-                    return String.valueOf(minutes + minuteFormat + minutePlural);
+                    return minutes + minuteFormat + minutePlural;
             }
         }
 

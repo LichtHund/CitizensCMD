@@ -1,19 +1,19 @@
-/**
- * CitizensCMD - Add-on for Citizens
- * Copyright (C) 2018 Mateus Moreira
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/*
+  CitizensCMD - Add-on for Citizens
+  Copyright (C) 2018 Mateus Moreira
+  <p>
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  <p>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  <p>
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package me.mattmoreira.citizenscmd.commands.base;
@@ -26,6 +26,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, @NotNull String[] args) {
         if (!cmd.getName().equalsIgnoreCase("npcmd")) {
             return true;
         }
@@ -71,7 +72,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
         if (args.length == 0 || args[0].isEmpty()) {
             if (sender.hasPermission("citizenscmd.npcmd"))
                 if (sender instanceof Player)
-                    getCommand("help").execute((Player) sender, args);
+                    getCommand().execute((Player) sender, args);
             return true;
         }
 
@@ -119,9 +120,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
         return true;
     }
 
-    private CommandBase getCommand(String name) {
+    private CommandBase getCommand() {
         return commands.stream().filter(
-                command -> command.getName() != null && command.getName().equalsIgnoreCase(name))
+                command -> command.getName() != null && command.getName().equalsIgnoreCase("help"))
                 .findFirst().orElse(null);
     }
 
@@ -130,8 +131,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel,
-                                      String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, @NotNull String[] args) {
         if (cmd.getName().equalsIgnoreCase("npcmd")) {
             if (args.length == 1) {
                 List<String> commandNames = new ArrayList<>();
@@ -162,6 +162,11 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                             if (args.length == 4) return getCommandNames(subCMD, args, 3, (Player) sender);
                             if (args.length == 5) return getCommandNames(subCMD, args, 4, (Player) sender);
                         }
+                        break;
+
+                    case "permission":
+                    case "cooldown":
+                        if (args.length == 2) return getCommandNames(subCMD, args, 1, (Player) sender);
                         break;
 
                     case "remove":
