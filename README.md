@@ -5,22 +5,21 @@
 [![GitHub issues](https://img.shields.io/badge/Guide-Wiki-blue.svg?longCache=true&style=flat-square)](https://github.com/ipsk/CitizensCMD/wiki)
 ![GitHub](https://img.shields.io/github/license/ipsk/CitizensCMD.svg?style=flat-square)
 
-
 # CitizensCMD
 **CitizensCMD** is an addition to the plugin [Citizens](https://www.spigotmc.org/resources/citizens.13811/) that allows you to execute commands by clicking an NPC.
 This plugin **NEEDS** Citizens to be installed, get it [here](https://www.spigotmc.org/resources/citizens.13811/).
 
-# Guide
+## Guide
 Need help? Check out the [wiki](https://github.com/ipsk/CitizensCMD/wiki) for more informations!
 
-# Useful links
+## Useful links
 
-+ [Project page](https://www.spigotmc.org/resources/citizens-cmd.30224/)
-+ [Citizens page](https://www.spigotmc.org/resources/citizens.13811/)
-+ [Wiki](https://github.com/ipsk/CitizensCMD/wiki)
-+ [Issues](https://github.com/ipsk/CitizensCMD/issues)
+  + [Project page](https://www.spigotmc.org/resources/citizens-cmd.30224/)
+  + [Citizens page](https://www.spigotmc.org/resources/citizens.13811/)
+  + [Wiki](https://github.com/ipsk/CitizensCMD/wiki)
+  + [Issues](https://github.com/ipsk/CitizensCMD/issues)
 
-# Author
+## Author
 
 + **Mateus Moreira** - LichtHund - [@LichtHund](https://twitter.com/LichtHund)
 
