@@ -4,7 +4,7 @@
 # GitHub: https://github.com/ipsk/CitizensCMD
 # Spigot: https://www.spigotmc.org/resources/citizens-cmd.30224/
 
-main: me.mattmoreira.citizenscmd.CitizensCMD
+main: me.mattstudios.citizenscmd.CitizensCMD
 version: ${project.version}
 name: CitizensCMD
 author: Mateus Moreira
