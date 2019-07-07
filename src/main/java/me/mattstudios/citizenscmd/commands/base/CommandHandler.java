@@ -34,7 +34,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.mattstudios.citizenscmd.utility.Util.*;
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.getTabCompleteArgs;
+import static me.mattstudios.citizenscmd.utility.Util.npcNotSelectedNM;
 
 /**
  * Thank you GlareMasters for creating this class!
@@ -70,9 +73,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
         }
 
         if (args.length == 0 || args[0].isEmpty()) {
-            if (sender.hasPermission("citizenscmd.npcmd"))
-                if (sender instanceof Player)
-                    getCommand().execute((Player) sender, args);
+            if (sender.hasPermission("citizenscmd.npcmd") && sender instanceof Player) {
+                getCommand().execute((Player) sender, args);
+            }
             return true;
         }
 
@@ -190,9 +193,8 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                             else if (args[2].equalsIgnoreCase("right"))
                                 return getCommandNames(subCMD, args, 4, (Player) sender);
                         }
-                        if (args.length == 5) {
-                            if (args[1].equalsIgnoreCase("perm"))
-                                return getCommandNames(subCMD, args, 5, (Player) sender);
+                        if (args.length == 5 && args[1].equalsIgnoreCase("perm")) {
+                            return getCommandNames(subCMD, args, 5, (Player) sender);
                         }
                         break;
                 }
@@ -213,7 +215,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
      */
     private List<String> getCommandNames(String subCMD, String[] args, int arg, Player player) {
         List<String> commandNames = new ArrayList<>();
-        String[][] argsComplete = getTabCompleteArgs(plugin, subCMD, player);
+        String[][] argsComplete = getTabCompleteArgs(plugin, subCMD.toLowerCase(), player);
 
         if (!args[arg - 1].equals("")) {
             for (String commandName : argsComplete[arg - 1]) {

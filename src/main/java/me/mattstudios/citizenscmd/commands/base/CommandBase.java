@@ -69,19 +69,19 @@ public abstract class CommandBase {
         return permission;
     }
 
-    boolean allowConsole() {
+    public boolean allowConsole() {
         return allowConsole;
     }
 
-    List<String> getAliases() {
+    public List<String> getAliases() {
         return aliases;
     }
 
-    int getMinimumArguments() {
+    public int getMinimumArguments() {
         return minimumArguments;
     }
 
-    int getMaximumArguments() {
+    public int getMaximumArguments() {
         return maximumArguments;
     }
 }

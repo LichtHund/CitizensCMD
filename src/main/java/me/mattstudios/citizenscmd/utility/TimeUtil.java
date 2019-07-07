@@ -71,16 +71,11 @@ public class TimeUtil {
         }
 
         switch (format) {
-            case SHORT:
-                dayFormat = shorts[3];
-                hourFormat = shorts[2];
-                minuteFormat = shorts[1];
-                secondFormat = shorts[0];
-                break;
             case MEDIUM:
                 String[] mediumsAfter = new String[4];
                 String[] mediumsPlurals = new String[4];
                 Pattern patternMediums = Pattern.compile("([^]]*)\\(([^]]*)\\)");
+
                 for (int i = 0; i < mediums.length; i++) {
                     if (mediums[i].contains("(") && mediums[i].contains(")")) {
                         Matcher matcher = patternMediums.matcher(mediums[i]);
@@ -93,6 +88,7 @@ public class TimeUtil {
                         mediumsPlurals[i] = "";
                     }
                 }
+
                 dayFormat = " " + mediumsAfter[3];
                 dayPlural = mediumsPlurals[3];
                 hourFormat = " " + mediumsAfter[2];
@@ -102,10 +98,12 @@ public class TimeUtil {
                 secondFormat = " " + mediumsAfter[0];
                 secondPlural = mediumsPlurals[0];
                 break;
+
             case FULL:
                 String[] fullsAfter = new String[4];
                 String[] fullsPlurals = new String[4];
                 Pattern patternFulls = Pattern.compile("([^]]*)\\(([^]]*)\\)");
+
                 for (int i = 0; i < fulls.length; i++) {
                     if (fulls[i].contains("(") && fulls[i].contains(")")) {
                         Matcher matcher = patternFulls.matcher(fulls[i]);
@@ -118,6 +116,7 @@ public class TimeUtil {
                         fullsPlurals[i] = "";
                     }
                 }
+
                 dayFormat = " " + fullsAfter[3];
                 dayPlural = fullsPlurals[3];
                 hourFormat = " " + fullsAfter[2];
@@ -126,6 +125,13 @@ public class TimeUtil {
                 minutePlural = fullsPlurals[1];
                 secondFormat = " " + fullsAfter[0];
                 secondPlural = fullsPlurals[0];
+                break;
+
+            default:
+                dayFormat = shorts[3];
+                hourFormat = shorts[2];
+                minuteFormat = shorts[1];
+                secondFormat = shorts[0];
                 break;
         }
 

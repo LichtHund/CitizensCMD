@@ -26,7 +26,12 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-import static me.mattstudios.citizenscmd.utility.Util.*;
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
+import static me.mattstudios.citizenscmd.utility.Util.notInteger;
+import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+
 
 public class CMDEdit extends CommandBase {
 

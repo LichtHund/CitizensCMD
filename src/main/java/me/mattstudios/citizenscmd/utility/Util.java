@@ -157,7 +157,7 @@ public class Util {
     public static String[][] getTabCompleteArgs(CitizensCMD plugin, String subCMD, Player player) {
         String[][] argComplete = new String[5][];
 
-        switch (subCMD.toLowerCase()) {
+        switch (subCMD) {
             case "add":
                 argComplete[0] = new String[]{"console", "none", "permission", "server", "message", "sound"};
                 argComplete[1] = getSoundsList();
@@ -360,10 +360,8 @@ public class Util {
                     getScheduler().runTaskLater(plugin, () -> {
                         Pattern pattern = Pattern.compile("(\\w+)\\s([\\d.]+)\\s([\\d.]+)");
                         Matcher matcher = pattern.matcher(commands.get(finalI));
-                        if (matcher.find()) {
-                            if (soundExists(matcher.group(1))) {
-                                player.playSound(player.getLocation(), Sound.valueOf(matcher.group(1)), Float.parseFloat(matcher.group(2)), Float.parseFloat(matcher.group(3)));
-                            }
+                        if (matcher.find() && soundExists(matcher.group(1))) {
+                            player.playSound(player.getLocation(), Sound.valueOf(matcher.group(1)), Float.parseFloat(matcher.group(2)), Float.parseFloat(matcher.group(3)));
                         }
                     }, (int) delay * 20);
                     break;
@@ -374,6 +372,7 @@ public class Util {
                         player.chat("/" + commands.get(finalI));
                         plugin.getPermissionsManager().unsetPermission(player, permissions.get(finalI));
                     }, (int) delay * 20);
+                    break;
             }
         }
     }

@@ -23,7 +23,11 @@ import me.mattstudios.citizenscmd.commands.base.CommandBase;
 import me.mattstudios.citizenscmd.paths.Path;
 import org.bukkit.entity.Player;
 
-import static me.mattstudios.citizenscmd.utility.Util.*;
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
+import static me.mattstudios.citizenscmd.utility.Util.notInteger;
+import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
 
 public class CMDCooldown extends CommandBase {
 
