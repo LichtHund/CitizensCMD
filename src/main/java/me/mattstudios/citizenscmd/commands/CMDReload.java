@@ -55,6 +55,7 @@ public class CMDReload extends CommandBase {
                     break;
                 default:
                     plugin.setDisplayFormat(DisplayFormat.MEDIUM);
+                    break;
             }
         } else
             plugin.setDisplayFormat(DisplayFormat.MEDIUM);
@@ -85,6 +86,7 @@ public class CMDReload extends CommandBase {
                     break;
                 default:
                     plugin.setDisplayFormat(DisplayFormat.MEDIUM);
+                    break;
             }
         } else
             plugin.setDisplayFormat(DisplayFormat.MEDIUM);
