@@ -20,6 +20,7 @@ package me.mattstudios.citizenscmd.utility;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.paths.Path;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;

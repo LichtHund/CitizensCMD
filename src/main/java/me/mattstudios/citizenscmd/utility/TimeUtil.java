@@ -25,6 +25,7 @@
 package me.mattstudios.citizenscmd.utility;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.paths.Path;
 
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;

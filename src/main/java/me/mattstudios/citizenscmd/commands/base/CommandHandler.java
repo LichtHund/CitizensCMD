@@ -19,8 +19,8 @@
 package me.mattstudios.citizenscmd.commands.base;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.paths.Path;
 import me.mattstudios.citizenscmd.utility.IHandler;
-import me.mattstudios.citizenscmd.utility.Path;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

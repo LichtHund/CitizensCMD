@@ -19,7 +19,7 @@
 package me.mattstudios.citizenscmd.schedulers;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.Path;
+import me.mattstudios.citizenscmd.paths.Path;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 

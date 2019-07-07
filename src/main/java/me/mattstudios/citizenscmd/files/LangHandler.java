@@ -19,7 +19,7 @@
 package me.mattstudios.citizenscmd.files;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.Path;
+import me.mattstudios.citizenscmd.paths.Path;
 import me.mattstudios.citizenscmd.utility.Util;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;

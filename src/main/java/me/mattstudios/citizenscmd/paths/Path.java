@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.mattstudios.citizenscmd.utility;
+package me.mattstudios.citizenscmd.paths;
 
 public class Path {
 
@@ -47,7 +47,7 @@ public class Path {
      */
     private static final String MAIN_PATH_WARNINGS = "messages.warnings.";
 
-    static final String NO_NPC = MAIN_PATH_WARNINGS + "no-npc-selected";
+    public static final String NO_NPC = MAIN_PATH_WARNINGS + "no-npc-selected";
     public static final String INVALID_COOLDOWN = MAIN_PATH_WARNINGS + "invalid-cooldown";
     public static final String INVALID_PRICE = MAIN_PATH_WARNINGS + "invalid-price";
     public static final String INVALID_ID_NUMBER = MAIN_PATH_WARNINGS + "invalid-id";
@@ -96,10 +96,10 @@ public class Path {
      */
     private static final String MAIN_PATH_TIME_FORMAT = "messages.time-format.";
 
-    static final String SECONDS = MAIN_PATH_TIME_FORMAT + "seconds";
-    static final String MINUTES = MAIN_PATH_TIME_FORMAT + "minutes";
-    static final String HOURS = MAIN_PATH_TIME_FORMAT + "hours";
-    static final String DAYS = MAIN_PATH_TIME_FORMAT + "days";
+    public static final String SECONDS = MAIN_PATH_TIME_FORMAT + "seconds";
+    public static final String MINUTES = MAIN_PATH_TIME_FORMAT + "minutes";
+    public static final String HOURS = MAIN_PATH_TIME_FORMAT + "hours";
+    public static final String DAYS = MAIN_PATH_TIME_FORMAT + "days";
 
 
 }
