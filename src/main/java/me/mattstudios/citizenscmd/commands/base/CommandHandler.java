@@ -26,7 +26,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,9 +34,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.getTabCompleteArgs;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelectedNM;
+import static me.mattstudios.utils.MessageUtils.color;
 
 /**
  * Thank you GlareMasters for creating this class!
@@ -67,7 +66,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (!cmd.getName().equalsIgnoreCase("npcmd")) {
             return true;
         }
@@ -134,7 +133,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("npcmd")) {
             if (args.length == 1) {
                 List<String> commandNames = new ArrayList<>();

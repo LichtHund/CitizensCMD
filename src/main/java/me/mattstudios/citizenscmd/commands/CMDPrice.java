@@ -24,10 +24,10 @@ import me.mattstudios.citizenscmd.paths.Path;
 import org.bukkit.entity.Player;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.notDouble;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.NumbersUtils.isDouble;
 
 
 public class CMDPrice extends CommandBase {
@@ -44,7 +44,7 @@ public class CMDPrice extends CommandBase {
 
         if (npcNotSelected(plugin, player)) return;
 
-        if (notDouble(args[0])) {
+        if (!isDouble(args[0])) {
             player.sendMessage(color(HEADER));
             player.sendMessage(plugin.getLang().getMessage(Path.INVALID_PRICE));
             return;

@@ -26,10 +26,10 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.notDouble;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.NumbersUtils.isDouble;
 
 
 public class CMDAdd extends CommandBase {
@@ -81,7 +81,7 @@ public class CMDAdd extends CommandBase {
                     continue;
                 }
 
-                if (notDouble(commandsArray[i + 1])) {
+                if (!isDouble(commandsArray[i + 1])) {
                     hasDelayError = true;
                     continue;
                 }

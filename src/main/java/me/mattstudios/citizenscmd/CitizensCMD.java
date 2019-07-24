@@ -18,10 +18,16 @@
 
 package me.mattstudios.citizenscmd;
 
-import lombok.Getter;
-import lombok.Setter;
 import me.mattstudios.citizenscmd.api.CitizensCMDAPI;
-import me.mattstudios.citizenscmd.commands.*;
+import me.mattstudios.citizenscmd.commands.CMDAdd;
+import me.mattstudios.citizenscmd.commands.CMDCooldown;
+import me.mattstudios.citizenscmd.commands.CMDEdit;
+import me.mattstudios.citizenscmd.commands.CMDHelp;
+import me.mattstudios.citizenscmd.commands.CMDList;
+import me.mattstudios.citizenscmd.commands.CMDPermission;
+import me.mattstudios.citizenscmd.commands.CMDPrice;
+import me.mattstudios.citizenscmd.commands.CMDReload;
+import me.mattstudios.citizenscmd.commands.CMDRemove;
 import me.mattstudios.citizenscmd.commands.base.CommandHandler;
 import me.mattstudios.citizenscmd.files.CooldownHandler;
 import me.mattstudios.citizenscmd.files.DataHandler;
@@ -47,8 +53,10 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-@Getter
-@Setter
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.MessageUtils.info;
+import static me.mattstudios.utils.YamlUtils.copyDefaults;
+
 public final class CitizensCMD extends JavaPlugin {
 
     /**
@@ -61,9 +69,7 @@ public final class CitizensCMD extends JavaPlugin {
     private CooldownHandler cooldownHandler = null;
     private PermissionsManager permissionsManager = null;
 
-    @Getter
     private static CitizensCMDAPI api;
-    @Getter
     private static Economy economy = null;
 
     private boolean papi = false;
@@ -79,8 +85,8 @@ public final class CitizensCMD extends JavaPlugin {
 
     public void onEnable() {
 
-        Util.checkOldConfig(this);
         saveDefaultConfig();
+        copyDefaults(getClassLoader().getResourceAsStream("config.yml"), new File(getDataFolder().getPath(), "config.yml"));
 
         if (!hasCitizens() && getConfig().getBoolean("citizens-check")) {
             Util.disablePlugin(this);
@@ -92,7 +98,7 @@ public final class CitizensCMD extends JavaPlugin {
 
         new Metrics(this);
 
-        Util.info(Util.color(Util.TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
+        info(color(Util.TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
 
         permissionsManager = new PermissionsManager(this);
 
@@ -111,22 +117,22 @@ public final class CitizensCMD extends JavaPlugin {
         if (hasPAPI()) {
             switch (lang.getLanguage()) {
                 case "en":
-                    Util.info(Util.color(Util.TAG + "&7Using &aPlaceholderAPI&7!"));
+                    info(color(Util.TAG + "&7Using &aPlaceholderAPI&7!"));
                     break;
                 case "pt":
-                    Util.info(Util.color(Util.TAG + "&7Usando &aPlaceholderAPI&7!"));
+                    info(color(Util.TAG + "&7Usando &aPlaceholderAPI&7!"));
                     break;
                 case "ro":
-                    Util.info(Util.color(Util.TAG + "&7Folositi &aPlaceholderAPI&7!"));
+                    info(color(Util.TAG + "&7Folositi &aPlaceholderAPI&7!"));
                     break;
                 case "bg":
-                    Util.info(Util.color(Util.TAG + "&7Използвайки &aPlaceholderAPI&7!"));
+                    info(color(Util.TAG + "&7Използвайки &aPlaceholderAPI&7!"));
                     break;
                 case "no":
-                    Util.info(Util.color(Util.TAG + "&7Bruk &aPlaceholderAPI&7!"));
+                    info(color(Util.TAG + "&7Bruk &aPlaceholderAPI&7!"));
                     break;
                 case "ch":
-                    Util.info(Util.color(Util.TAG + "&7运用 &aPlaceholderAPI&7!"));
+                    info(color(Util.TAG + "&7运用 &aPlaceholderAPI&7!"));
                     break;
             }
             papi = true;
@@ -135,22 +141,22 @@ public final class CitizensCMD extends JavaPlugin {
         if (setupEconomy()) {
             switch (lang.getLanguage()) {
                 case "en":
-                    Util.info(Util.color(Util.TAG + "&7Using &aVault&7!"));
+                    info(color(Util.TAG + "&7Using &aVault&7!"));
                     break;
                 case "pt":
-                    Util.info(Util.color(Util.TAG + "&7Usando &aVault&7!"));
+                    info(color(Util.TAG + "&7Usando &aVault&7!"));
                     break;
                 case "ro":
-                    Util.info(Util.color(Util.TAG + "&7Folositi &aVault&7!"));
+                    info(color(Util.TAG + "&7Folositi &aVault&7!"));
                     break;
                 case "bg":
-                    Util.info(Util.color(Util.TAG + "&7Използвайки &aVault&7!"));
+                    info(color(Util.TAG + "&7Използвайки &aVault&7!"));
                     break;
                 case "no":
-                    Util.info(Util.color(Util.TAG + "&7Bruk &aVault&7!"));
+                    info(color(Util.TAG + "&7Bruk &aVault&7!"));
                     break;
                 case "ch":
-                    Util.info(Util.color(Util.TAG + "&7运用 &aVault&7!"));
+                    info(color(Util.TAG + "&7运用 &aVault&7!"));
                     break;
             }
         }
@@ -180,29 +186,29 @@ public final class CitizensCMD extends JavaPlugin {
                     newVersion = updater.getLatestVersion();
                     switch (lang.getLanguage()) {
                         case "en":
-                            Util.info(Util.color(Util.TAG + "&cA new version of CitizensCMD is now available:"));
+                            info(color(Util.TAG + "&cA new version of CitizensCMD is now available:"));
                             break;
                         case "pt":
-                            Util.info(Util.color(Util.TAG + "&cA nova versão de CitizensCMD está disponivel:"));
+                            info(color(Util.TAG + "&cA nova versão de CitizensCMD está disponivel:"));
                             break;
                         case "ro":
-                            Util.info(Util.color(Util.TAG + "&cO noua versiune a CitizensCMD este acum valabila:"));
+                            info(color(Util.TAG + "&cO noua versiune a CitizensCMD este acum valabila:"));
                             break;
                         case "bg":
-                            Util.info(Util.color(Util.TAG + "&cНалична е нова версия на CitizensCMD:"));
+                            info(color(Util.TAG + "&cНалична е нова версия на CitizensCMD:"));
                             break;
                         case "no":
-                            Util.info(Util.color(Util.TAG + "&cEn ny versjon av CitizensCMD er nå tilgjengelig:"));
+                            info(color(Util.TAG + "&cEn ny versjon av CitizensCMD er nå tilgjengelig:"));
                             break;
                         case "ch":
-                            Util.info(Util.color(Util.TAG + "&cCitizensCMD的新版本现已推出:"));
+                            info(color(Util.TAG + "&cCitizensCMD的新版本现已推出:"));
                             break;
                     }
-                    Util.info(Util.color(Util.TAG + "&b&o" + updater.getResourceURL()));
+                    info(color(Util.TAG + "&b&o" + updater.getResourceURL()));
                 }
             } catch (Exception e) {
                 // If it can't check for an update, tell the user and throw an error.
-                Util.info("Could not check for updates! Stacktrace:");
+                info("Could not check for updates! Stacktrace:");
                 e.printStackTrace();
             }
         }
@@ -263,7 +269,7 @@ public final class CitizensCMD extends JavaPlugin {
         try {
             pm.registerEvents(new NPCListener(this), this);
         } catch (Exception ex) {
-            Util.info(Util.color("&cCould not register clone event, please update your Citizens."));
+            info(color("&cCould not register clone event, please update your Citizens."));
         }
     }
 
@@ -349,5 +355,143 @@ public final class CitizensCMD extends JavaPlugin {
      */
     public boolean papiEnabled() {
         return papi;
+    }
+
+    /**
+     * Gets the language that is selected on the config
+     *
+     * @return returns the language
+     */
+    public LangHandler getLang() {
+        return lang;
+    }
+
+    /**
+     * Gets if or not should alert player of new update on join
+     *
+     * @return Returns update status
+     */
+    public boolean getUpdateStatus() {
+        return updateStatus;
+    }
+
+    /**
+     * Sets new update status from scheduler
+     *
+     * @param newUpdateStatus New boolean with the update status;
+     */
+    public void setUpdateStatus(boolean newUpdateStatus) {
+        this.updateStatus = newUpdateStatus;
+    }
+
+    /**
+     * Gets String with new version
+     *
+     * @return the new version
+     */
+    public String getNewVersion() {
+        return newVersion;
+    }
+
+    /**
+     * Sets the new version string
+     *
+     * @param newVersion the new version to be set
+     */
+    public void setNewVersion(String newVersion) {
+        this.newVersion = newVersion;
+    }
+
+    /**
+     * Gets the NPC data to be used in other classes without needing to open the file
+     *
+     * @return returns the DataHandler class
+     */
+    public DataHandler getDataHandler() {
+        return dataHandler;
+    }
+
+    /**
+     * Gets the cooldown handler to check for cooldown informations
+     *
+     * @return Returns the cooldown handler
+     */
+    public CooldownHandler getCooldownHandler() {
+        return cooldownHandler;
+    }
+
+    /**
+     * Gets the permission manager to set and unset permission
+     *
+     * @return the permission manager class
+     */
+    public PermissionsManager getPermissionsManager() {
+        return permissionsManager;
+    }
+
+    /**
+     * Gets the economy to be used
+     *
+     * @return Returns the economy
+     */
+    public static Economy getEconomy() {
+        return economy;
+    }
+
+    /**
+     * Gets the hashmap with the players waiting to confirm the NPC payment
+     *
+     * @return returns the list of players
+     */
+    public HashMap<String, Boolean> getWaitingList() {
+        return waitingList;
+    }
+
+    /**
+     * Checks if player needs to shift or not to confirm payment
+     *
+     * @return Returns the boolean of whether or not players should shift
+     */
+    public boolean shouldShift() {
+        return shift;
+    }
+
+    /**
+     * Sets the new shifting rule
+     *
+     * @param shift The new shifting rule
+     */
+    public void setShift(boolean shift) {
+        this.shift = shift;
+    }
+
+    /**
+     * Gets the display format to be used
+     *
+     * @return Returns either SHORT, MEDIUM OR FULL
+     */
+    public DisplayFormat getDisplayFormat() {
+        return displayFormat;
+    }
+
+    /**
+     * Sets the new display format when reloading
+     *
+     * @param displayFormat The new display format
+     */
+    public void setDisplayFormat(DisplayFormat displayFormat) {
+        this.displayFormat = displayFormat;
+    }
+
+    public CitizensCMDAPI getApi() {
+        return api;
+    }
+
+    public boolean isShift() {
+        return shift;
+    }
+
+    public boolean isUpdateStatus() {
+        return updateStatus;
     }
 }

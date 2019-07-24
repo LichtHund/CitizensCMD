@@ -28,7 +28,7 @@ import org.bukkit.entity.Player;
 import java.util.Objects;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.utils.MessageUtils.color;
 
 public class CMDReload extends CommandBase {
 

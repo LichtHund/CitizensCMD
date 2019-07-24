@@ -24,10 +24,10 @@ import me.mattstudios.citizenscmd.paths.Path;
 import org.bukkit.entity.Player;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.notInteger;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.NumbersUtils.isInteger;
 
 public class CMDCooldown extends CommandBase {
 
@@ -43,7 +43,7 @@ public class CMDCooldown extends CommandBase {
 
         if (npcNotSelected(plugin, player)) return;
 
-        if (notInteger(args[0])) {
+        if (!isInteger(args[0])) {
             player.sendMessage(color(HEADER));
             player.sendMessage(plugin.getLang().getMessage(Path.INVALID_COOLDOWN));
             return;

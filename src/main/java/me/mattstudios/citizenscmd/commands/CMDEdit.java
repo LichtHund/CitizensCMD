@@ -27,10 +27,10 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.notInteger;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.NumbersUtils.isInteger;
 
 
 public class CMDEdit extends CommandBase {
@@ -47,7 +47,7 @@ public class CMDEdit extends CommandBase {
 
         if (npcNotSelected(plugin, player)) return;
 
-        if (notInteger(args[2])) {
+        if (!isInteger(args[2])) {
             player.sendMessage(color(HEADER));
             player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ID_NUMBER));
             return;

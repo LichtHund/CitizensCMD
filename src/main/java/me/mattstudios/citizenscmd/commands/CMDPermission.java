@@ -24,9 +24,9 @@ import me.mattstudios.citizenscmd.paths.Path;
 import org.bukkit.entity.Player;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattstudios.utils.MessageUtils.color;
 
 public class CMDPermission extends CommandBase {
 

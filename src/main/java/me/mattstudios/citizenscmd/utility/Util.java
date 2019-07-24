@@ -24,7 +24,6 @@ import me.mattstudios.citizenscmd.paths.Path;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -42,6 +41,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.MessageUtils.info;
 import static org.bukkit.Bukkit.getScheduler;
 
 public class Util {
@@ -51,32 +52,6 @@ public class Util {
      */
     public static final String HEADER = "&c&m-&6&m-&e&m-&a&m-&b&m-&3&l CitizensCMD &b&m-&a&m-&e&m-&6&m-&c&m-";
     public static final String TAG = "&f[&3Citizens&cCMD&f]&r ";
-
-    /**
-     * @param str String to check if it is a number or not
-     * @return Returns true if it is a number false if it is a string or contains any non numeric character
-     */
-    public static boolean notInteger(String str) {
-        try {
-            Integer.parseInt(str);
-        } catch (NumberFormatException | NullPointerException e) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @param str String to check if it is a double number or not
-     * @return Returns true if it is a number false if it is a string or contains any non numeric character
-     */
-    public static boolean notDouble(String str) {
-        try {
-            Double.parseDouble(str);
-        } catch (NumberFormatException | NullPointerException e) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * Checks if player has or not selected an NPC
@@ -119,25 +94,6 @@ public class Util {
      */
     public static boolean upCheck(CitizensCMD plugin) {
         return plugin.getConfig().getBoolean("check-updates");
-    }
-
-    /**
-     * Utility to use color codes easily
-     *
-     * @param msg The message String
-     * @return returns the string with color
-     */
-    public static String color(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
-    }
-
-    /**
-     * Simplified way for sending console messages
-     *
-     * @param msg the message to be sent to the console
-     */
-    public static void info(String msg) {
-        Bukkit.getServer().getConsoleSender().sendMessage(msg);
     }
 
     /**

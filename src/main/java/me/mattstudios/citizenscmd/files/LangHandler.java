@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.MessageUtils.info;
+
 public class LangHandler {
 
     private CitizensCMD plugin;
@@ -48,25 +51,25 @@ public class LangHandler {
     public void initialize() {
         switch (lang) {
             case "en":
-                Util.info(Util.color(Util.TAG + "&7Using &aEnglish &7messages!"));
+                info(color(Util.TAG + "&7Using &aEnglish &7messages!"));
                 break;
 
             case "pt":
-                Util.info(Util.color(Util.TAG + "&7Usando mensagens em Portugues!"));
+                info(color(Util.TAG + "&7Usando mensagens em Portugues!"));
                 break;
 
             case "ro":
-                Util.info(Util.color(Util.TAG + "&7Folositi mesajele in Limba &aRomana&7!"));
+                info(color(Util.TAG + "&7Folositi mesajele in Limba &aRomana&7!"));
                 break;
 
             case "bg":
-                Util.info(Util.color(Util.TAG + "&7Използване на &aбългарски &7език!"));
+                info(color(Util.TAG + "&7Използване на &aбългарски &7език!"));
                 break;
             case "no":
-                Util.info(Util.color(Util.TAG + "&aNorsk &7Oversettelse!"));
+                info(color(Util.TAG + "&aNorsk &7Oversettelse!"));
                 break;
             case "ch":
-                Util.info(Util.color(Util.TAG + "&7使用&a中文&7消息!"));
+                info(color(Util.TAG + "&7使用&a中文&7消息!"));
                 break;
         }
 
@@ -299,7 +302,7 @@ public class LangHandler {
      * @return Returns String with colored message from file
      */
     public String getMessage(String path) {
-        return Util.color(messages.get(path));
+        return color(messages.get(path));
     }
 
     /**

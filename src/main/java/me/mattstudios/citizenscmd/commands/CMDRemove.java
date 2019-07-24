@@ -25,10 +25,10 @@ import me.mattstudios.citizenscmd.utility.EnumTypes;
 import org.bukkit.entity.Player;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.notInteger;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.NumbersUtils.isInteger;
 
 
 public class CMDRemove extends CommandBase {
@@ -45,7 +45,7 @@ public class CMDRemove extends CommandBase {
 
         if (npcNotSelected(plugin, player)) return;
 
-        if (notInteger(args[1])) {
+        if (!isInteger(args[1])) {
             player.sendMessage(color(HEADER));
             player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ID_NUMBER));
             return;

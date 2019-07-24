@@ -27,6 +27,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import static me.mattstudios.utils.MessageUtils.color;
+
 public class UpdateEvent implements Listener {
 
     private CitizensCMD plugin;
@@ -38,9 +40,9 @@ public class UpdateEvent implements Listener {
     @EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (plugin.isUpdateStatus() && event.getPlayer().hasPermission("citizenscmd.update")) {
-            JSONMessage.create(Util.color(Util.HEADER)).send(event.getPlayer());
-            JSONMessage.create(Util.color(plugin.getLang().getUncoloredMessage(Path.NEW_VERSION) + plugin.getNewVersion())).send(event.getPlayer());
-            JSONMessage.create(Util.color(plugin.getLang().getUncoloredMessage(Path.DOWNLOAD_AT) + " spigotmc.org/resources/citizens-CMD.30224/")).openURL("https://spigotmc.org/resources/citizens-CMD.30224/").send(event.getPlayer());
+            JSONMessage.create(color(Util.HEADER)).send(event.getPlayer());
+            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.NEW_VERSION) + plugin.getNewVersion())).send(event.getPlayer());
+            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.DOWNLOAD_AT) + " spigotmc.org/resources/citizens-CMD.30224/")).openURL("https://spigotmc.org/resources/citizens-CMD.30224/").send(event.getPlayer());
         }
     }
 

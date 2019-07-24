@@ -34,6 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.MessageUtils.info;
+
 @SuppressWarnings("unchecked")
 public class DataHandler {
 
@@ -75,7 +78,7 @@ public class DataHandler {
             try {
                 savesFile.createNewFile();
             } catch (IOException e) {
-                Util.info(Util.color("&cError creating saves file.."));
+                info(color("&cError creating saves file.."));
             }
         }
     }
@@ -165,12 +168,12 @@ public class DataHandler {
                     dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
                 }
 
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADDED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADD_FAIL));
             }
         }).start();
@@ -241,12 +244,12 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".cooldown", cooldown);
 
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.NPC_COOLDOWN_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.NPC_COOLDOWN_SET_ERROR));
             }
         }).start();
@@ -269,7 +272,7 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".price", price);
 
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.NPC_PRICE_SET));
 
                 dataConfigurator.save(savesFile);
@@ -296,7 +299,7 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".permission", permission);
 
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.PERMISSION_SET));
 
                 dataConfigurator.save(savesFile);
@@ -323,7 +326,7 @@ public class DataHandler {
 
                 data.remove("npc-data.npc-" + npc + ".permission");
 
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.PERMISSION_REMOVED));
 
                 dataConfigurator.save(savesFile);
@@ -437,7 +440,7 @@ public class DataHandler {
                 data.replace(key, commands);
                 dataConfigurator.set(key, commands);
 
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.REMOVED_COMMAND));
 
                 dataConfigurator.save(savesFile);
@@ -486,7 +489,7 @@ public class DataHandler {
                 data.replace(key, commandsData);
                 dataConfigurator.set(key, commandsData);
 
-                player.sendMessage(Util.color(Util.HEADER));
+                player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Path.EDITED_COMMAND).replace("{type}", typeText));
 
                 dataConfigurator.save(savesFile);

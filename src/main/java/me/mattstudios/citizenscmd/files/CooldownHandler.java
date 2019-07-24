@@ -29,6 +29,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.utils.MessageUtils.info;
+
 public class CooldownHandler {
 
     private CitizensCMD plugin;
@@ -70,7 +73,7 @@ public class CooldownHandler {
             try {
                 cooldownsFile.createNewFile();
             } catch (IOException e) {
-                Util.info(Util.color("&cError creating cooldowns file.."));
+                info(color("&cError creating cooldowns file.."));
             }
         }
     }

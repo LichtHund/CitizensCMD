@@ -25,7 +25,7 @@ import me.rayzr522.jsonmessage.JSONMessage;
 import org.bukkit.entity.Player;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.utils.MessageUtils.color;
 
 /**
  * Thank you GlareMasters for creating this class as an example!
