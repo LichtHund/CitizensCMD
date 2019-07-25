@@ -41,7 +41,7 @@ import me.mattstudios.citizenscmd.schedulers.CooldownScheduler;
 import me.mattstudios.citizenscmd.schedulers.UpdateScheduler;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
-import me.mattstudios.citizenscmd.utility.Util;
+import me.mattstudios.citizenscmd.utility.paths.Path;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -53,27 +53,25 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static me.mattstudios.citizenscmd.utility.Util.TAG;
+import static me.mattstudios.citizenscmd.utility.Util.disablePlugin;
+import static me.mattstudios.citizenscmd.utility.Util.upCheck;
 import static me.mattstudios.utils.MessageUtils.color;
 import static me.mattstudios.utils.MessageUtils.info;
 import static me.mattstudios.utils.YamlUtils.copyDefaults;
 
 public final class CitizensCMD extends JavaPlugin {
 
-    /**
-     * Supported languages
-     */
-    private final String[] REGISTERED_LANG_FILES = {"en", "pt", "ro", "bg", "no", "ch"};
-
-    private LangHandler lang = null;
-    private DataHandler dataHandler = null;
-    private CooldownHandler cooldownHandler = null;
-    private PermissionsManager permissionsManager = null;
+    private LangHandler lang;
+    private DataHandler dataHandler;
+    private CooldownHandler cooldownHandler;
+    private PermissionsManager permissionsManager ;
 
     private static CitizensCMDAPI api;
-    private static Economy economy = null;
+    private static Economy economy;
 
     private boolean papi = false;
-    private CommandHandler commandHandler = null;
+    private CommandHandler commandHandler;
 
     private boolean updateStatus = false;
     private boolean shift = false;
@@ -88,8 +86,10 @@ public final class CitizensCMD extends JavaPlugin {
         saveDefaultConfig();
         copyDefaults(getClassLoader().getResourceAsStream("config.yml"), new File(getDataFolder().getPath(), "config.yml"));
 
+        setLang(Objects.requireNonNull(getConfig().getString("lang")));
+
         if (!hasCitizens() && getConfig().getBoolean("citizens-check")) {
-            Util.disablePlugin(this);
+            disablePlugin(this);
             return;
         }
 
@@ -98,7 +98,7 @@ public final class CitizensCMD extends JavaPlugin {
 
         new Metrics(this);
 
-        info(color(Util.TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
+        info(color(TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
 
         permissionsManager = new PermissionsManager(this);
 
@@ -111,54 +111,13 @@ public final class CitizensCMD extends JavaPlugin {
         registerCommands();
         registerEvents();
 
-        registerLangs(this);
-        setLang(Objects.requireNonNull(getConfig().getString("lang")));
-
         if (hasPAPI()) {
-            switch (lang.getLanguage()) {
-                case "en":
-                    info(color(Util.TAG + "&7Using &aPlaceholderAPI&7!"));
-                    break;
-                case "pt":
-                    info(color(Util.TAG + "&7Usando &aPlaceholderAPI&7!"));
-                    break;
-                case "ro":
-                    info(color(Util.TAG + "&7Folositi &aPlaceholderAPI&7!"));
-                    break;
-                case "bg":
-                    info(color(Util.TAG + "&7Използвайки &aPlaceholderAPI&7!"));
-                    break;
-                case "no":
-                    info(color(Util.TAG + "&7Bruk &aPlaceholderAPI&7!"));
-                    break;
-                case "ch":
-                    info(color(Util.TAG + "&7运用 &aPlaceholderAPI&7!"));
-                    break;
-            }
+            info(color(TAG + lang.getMessage(Path.PAPI_AVAILABLE)));
             papi = true;
         }
 
         if (setupEconomy()) {
-            switch (lang.getLanguage()) {
-                case "en":
-                    info(color(Util.TAG + "&7Using &aVault&7!"));
-                    break;
-                case "pt":
-                    info(color(Util.TAG + "&7Usando &aVault&7!"));
-                    break;
-                case "ro":
-                    info(color(Util.TAG + "&7Folositi &aVault&7!"));
-                    break;
-                case "bg":
-                    info(color(Util.TAG + "&7Използвайки &aVault&7!"));
-                    break;
-                case "no":
-                    info(color(Util.TAG + "&7Bruk &aVault&7!"));
-                    break;
-                case "ch":
-                    info(color(Util.TAG + "&7运用 &aVault&7!"));
-                    break;
-            }
+            info(color(TAG + lang.getUncoloredMessage(Path.VAULT_AVAILABLE)));
         }
 
         waitingList = new HashMap<>();
@@ -174,37 +133,19 @@ public final class CitizensCMD extends JavaPlugin {
                 default:
                     displayFormat = DisplayFormat.MEDIUM;
             }
-        } else
+        } else {
             displayFormat = DisplayFormat.MEDIUM;
+        }
 
-        if (Util.upCheck(this)) {
+        if (upCheck(this)) {
             SpigotUpdater updater = new SpigotUpdater(this, 30224);
             try {
                 // If there's an update, tell the user that they can update
                 if (updater.checkForUpdates()) {
                     updateStatus = true;
                     newVersion = updater.getLatestVersion();
-                    switch (lang.getLanguage()) {
-                        case "en":
-                            info(color(Util.TAG + "&cA new version of CitizensCMD is now available:"));
-                            break;
-                        case "pt":
-                            info(color(Util.TAG + "&cA nova versão de CitizensCMD está disponivel:"));
-                            break;
-                        case "ro":
-                            info(color(Util.TAG + "&cO noua versiune a CitizensCMD este acum valabila:"));
-                            break;
-                        case "bg":
-                            info(color(Util.TAG + "&cНалична е нова версия на CitizensCMD:"));
-                            break;
-                        case "no":
-                            info(color(Util.TAG + "&cEn ny versjon av CitizensCMD er nå tilgjengelig:"));
-                            break;
-                        case "ch":
-                            info(color(Util.TAG + "&cCitizensCMD的新版本现已推出:"));
-                            break;
-                    }
-                    info(color(Util.TAG + "&b&o" + updater.getResourceURL()));
+
+                    info(color(TAG + "&b&o" + updater.getResourceURL()));
                 }
             } catch (Exception e) {
                 // If it can't check for an update, tell the user and throw an error.
@@ -292,60 +233,10 @@ public final class CitizensCMD extends JavaPlugin {
     }
 
     /**
-     * Creates all the language files
-     */
-    private void registerLangs(CitizensCMD plugin) {
-        File langFile;
-
-        for (String registeredLangFile : REGISTERED_LANG_FILES) {
-            langFile = new File(plugin.getDataFolder(), "lang/" + registeredLangFile + ".yml");
-
-            if (!langFile.exists())
-                plugin.saveResource("lang/" + registeredLangFile + ".yml", false);
-        }
-
-    }
-
-    /**
      * Sets the language that is supposed to be used
      */
     public void setLang(String language) {
-        switch (language.toLowerCase()) {
-            case "pt":
-            case "port":
-            case "portuguese":
-                lang = new LangHandler(this, "pt");
-                break;
-
-            case "ro":
-            case "roma":
-            case "romanian":
-                lang = new LangHandler(this, "ro");
-                break;
-
-            case "bg":
-            case "bulg":
-            case "bulgarian":
-                lang = new LangHandler(this, "bg");
-                break;
-
-            case "no":
-            case "norw":
-            case "norwegian":
-                lang = new LangHandler(this, "no");
-                break;
-
-            case "ch":
-            case "chi":
-            case "chinese":
-                lang = new LangHandler(this, "ch");
-                break;
-
-            default:
-                lang = new LangHandler(this, "en");
-                break;
-        }
-        lang.initialize();
+        lang = new LangHandler(this, language);
     }
 
     /**

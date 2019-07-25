@@ -65,4 +65,3 @@ messages:
     minutes: "[m], [min(s)], [minuto(s)]"
     hours: "[h], [hora(s)], [hora(s)]"
     days: "[d], [dia(s)], [dia(s)]"
-

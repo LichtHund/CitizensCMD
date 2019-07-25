@@ -16,9 +16,19 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package me.mattstudios.citizenscmd.paths;
+package me.mattstudios.citizenscmd.utility.paths;
 
 public class Path {
+
+    /**
+     * START UP
+     */
+    private static final String MAIN_PATH_STARTUP = "messages.start-up.";
+
+    public static final String USING_LANGUAGE = MAIN_PATH_STARTUP + "using-language";
+    public static final String STARTUP_NEW_VERSION = MAIN_PATH_STARTUP + "new-version";
+    public static final String PAPI_AVAILABLE = MAIN_PATH_STARTUP + "papi-available";
+    public static final String VAULT_AVAILABLE = MAIN_PATH_STARTUP + "vault-available";
 
     /**
      * COMMANDS

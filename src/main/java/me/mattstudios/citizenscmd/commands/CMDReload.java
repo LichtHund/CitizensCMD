@@ -20,8 +20,8 @@ package me.mattstudios.citizenscmd.commands;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.commands.base.CommandBase;
-import me.mattstudios.citizenscmd.paths.Path;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
+import me.mattstudios.citizenscmd.utility.paths.Path;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

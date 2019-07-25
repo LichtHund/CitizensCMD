@@ -19,8 +19,8 @@
 package me.mattstudios.citizenscmd.commands.base;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.paths.Path;
 import me.mattstudios.citizenscmd.utility.IHandler;
+import me.mattstudios.citizenscmd.utility.paths.Path;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -66,21 +66,21 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] aguments) {
         if (!cmd.getName().equalsIgnoreCase("npcmd")) {
             return true;
         }
 
-        if (args.length == 0 || args[0].isEmpty()) {
+        if (aguments.length == 0 || aguments[0].isEmpty()) {
             if (sender.hasPermission("citizenscmd.npcmd") && sender instanceof Player) {
-                getCommand().execute((Player) sender, args);
+                getCommand().execute((Player) sender, aguments);
             }
             return true;
         }
 
         for (CommandBase command : commands) {
-            if (!command.getName().equalsIgnoreCase(args[0]) && !command.getAliases()
-                    .contains(args[0].toLowerCase())) {
+            if (!command.getName().equalsIgnoreCase(aguments[0]) && !command.getAliases()
+                    .contains(aguments[0].toLowerCase())) {
                 continue;
             }
 
@@ -96,11 +96,11 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
                 return true;
             }
 
-            args = Arrays.copyOfRange(args, 1, args.length);
+            aguments = Arrays.copyOfRange(aguments, 1, aguments.length);
 
-            if ((command.getMinimumArguments() != -1 && command.getMinimumArguments() > args.length)
+            if ((command.getMinimumArguments() != -1 && command.getMinimumArguments() > aguments.length)
                     || (command.getMaximumArguments() != -1
-                    && command.getMaximumArguments() < args.length)) {
+                    && command.getMaximumArguments() < aguments.length)) {
                 sender.sendMessage(color(HEADER));
                 sender.sendMessage(plugin.getLang().getMessage(Path.WRONG_USAGE));
                 return true;
@@ -108,12 +108,12 @@ public class CommandHandler implements CommandExecutor, TabCompleter, IHandler {
 
             if (command.allowConsole()) {
                 if (sender instanceof Player)
-                    command.execute((Player) sender, args);
+                    command.execute((Player) sender, aguments);
                 else
-                    command.execute(sender, args);
+                    command.execute(sender, aguments);
                 return true;
             } else {
-                command.execute((Player) sender, args);
+                command.execute((Player) sender, aguments);
                 return true;
             }
         }

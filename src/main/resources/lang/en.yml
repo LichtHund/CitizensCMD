@@ -7,6 +7,11 @@
 # Some placeholders can be removed but might not work correctly
 # Cooldown placeholder is safe to be deleted
 messages:
+  start-up:
+    using-language: "&7Using &aEnglish &7messages!"
+    new-version: "&cA new version of CitizensCMD is now available:"
+    papi-available: "&7Using &aPlaceholderAPI&7!"
+    vault-available: "&7Using &aVault&7!"
   commands:
     npc-add-command-added: "&aYou have successfully added a command to the NPC!"
     npc-add-command-failed: "&cFailed to add command to the NPC!"

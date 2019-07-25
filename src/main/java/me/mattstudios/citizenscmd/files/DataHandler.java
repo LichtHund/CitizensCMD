@@ -19,9 +19,9 @@
 package me.mattstudios.citizenscmd.files;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.paths.Path;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Util;
+import me.mattstudios.citizenscmd.utility.paths.Path;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

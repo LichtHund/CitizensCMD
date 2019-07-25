@@ -19,11 +19,11 @@
 package me.mattstudios.citizenscmd.listeners;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.paths.Path;
 import me.mattstudios.citizenscmd.schedulers.ConfirmScheduler;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.TimeUtil;
 import me.mattstudios.citizenscmd.utility.Util;
+import me.mattstudios.citizenscmd.utility.paths.Path;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRemoveEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;

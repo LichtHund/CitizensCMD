@@ -20,20 +20,16 @@ package me.mattstudios.citizenscmd.utility;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.paths.Path;
+import me.mattstudios.citizenscmd.utility.paths.Path;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -165,52 +161,6 @@ public class Util {
      */
     public static long getSecondsDifference(long storedTime) {
         return TimeUnit.SECONDS.convert((System.currentTimeMillis() - storedTime), TimeUnit.MILLISECONDS);
-    }
-
-    /**
-     * Checks for old config and renames it
-     */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void checkOldConfig(CitizensCMD plugin) {
-        File configFile;
-        File configFileNew;
-        FileConfiguration configConf;
-
-        boolean isNew = true;
-
-        boolean[] contains = new boolean[5];
-        for (int i = 0; i < contains.length; i++) {
-            contains[i] = false;
-        }
-
-        try {
-            configFile = new File(plugin.getDataFolder(), "config.yml");
-            configFileNew = new File(plugin.getDataFolder(), "config_old.yml");
-            configConf = new YamlConfiguration();
-
-            if (configFile.exists()) {
-                configConf.load(configFile);
-
-                if (configConf.contains("check-updates")) contains[0] = true;
-                if (configConf.contains("lang")) contains[1] = true;
-                if (configConf.contains("default-cooldown")) contains[2] = true;
-                if (configConf.contains("shift-confirm")) contains[3] = true;
-                if (configConf.contains("cooldown-time-display")) contains[4] = true;
-            }
-
-            for (boolean bool : contains) {
-                if (!bool) {
-                    isNew = false;
-                }
-            }
-
-            if (!isNew) {
-                configFile.renameTo(configFileNew);
-            }
-
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

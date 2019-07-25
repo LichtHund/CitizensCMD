@@ -19,8 +19,8 @@
 package me.mattstudios.citizenscmd.listeners;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.paths.Path;
 import me.mattstudios.citizenscmd.utility.Util;
+import me.mattstudios.citizenscmd.utility.paths.Path;
 import me.rayzr522.jsonmessage.JSONMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

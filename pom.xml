@@ -19,7 +19,7 @@
         <papi.version>2.10.2</papi.version>
         <vault.version>da407c0059</vault.version>
         <jsonmsg.version>1.0.0</jsonmsg.version>
-        <utils.version>636229e</utils.version>
+        <utils.version>c3166ac</utils.version>
     </properties>
 
     <build>
