@@ -7,6 +7,14 @@
 # Alguns placeholders podem ser removidos mas podem não funcionar corretamente.
 # Os placeholders do cooldown podem ser removidos com segurança.
 messages:
+  # Start up comments test
+  start-up:
+    using-language: "&7Using &aEnglish &7messages!"
+    new-version: "&cA new version of CitizensCMD is now available:"
+    # In between comment test
+    papi-available: "&7Using &aPlaceholderAPI&7!"
+    vault-available: "&7Using &aVault&7!"
+  # Command comments test
   commands:
     npc-add-command-added: "&aVocê adicionou um comando ao NPC com sucesso!"
     npc-add-command-failed: "&cFalha ao adicionar comando ao NPC!"

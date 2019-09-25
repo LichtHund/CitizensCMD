@@ -20,5 +20,4 @@ public class NPCListener implements Listener {
 
         plugin.getDataHandler().cloneData(event.getNPC().getId(), event.getClone().getId());
     }
-
 }

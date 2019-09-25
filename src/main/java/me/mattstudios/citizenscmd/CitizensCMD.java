@@ -19,36 +19,37 @@
 package me.mattstudios.citizenscmd;
 
 import me.mattstudios.citizenscmd.api.CitizensCMDAPI;
-import me.mattstudios.citizenscmd.commands.CMDAdd;
-import me.mattstudios.citizenscmd.commands.CMDCooldown;
-import me.mattstudios.citizenscmd.commands.CMDEdit;
-import me.mattstudios.citizenscmd.commands.CMDHelp;
-import me.mattstudios.citizenscmd.commands.CMDList;
-import me.mattstudios.citizenscmd.commands.CMDPermission;
-import me.mattstudios.citizenscmd.commands.CMDPrice;
-import me.mattstudios.citizenscmd.commands.CMDReload;
-import me.mattstudios.citizenscmd.commands.CMDRemove;
-import me.mattstudios.citizenscmd.commands.base.CommandHandler;
+import me.mattstudios.citizenscmd.commands.AddCommand;
+import me.mattstudios.citizenscmd.commands.CooldownCommand;
+import me.mattstudios.citizenscmd.commands.EditCommand;
+import me.mattstudios.citizenscmd.commands.HelpCommand;
+import me.mattstudios.citizenscmd.commands.ListCommand;
+import me.mattstudios.citizenscmd.commands.PermissionCommand;
+import me.mattstudios.citizenscmd.commands.PriceCommand;
+import me.mattstudios.citizenscmd.commands.ReloadCommand;
+import me.mattstudios.citizenscmd.commands.RemoveCommand;
 import me.mattstudios.citizenscmd.files.CooldownHandler;
 import me.mattstudios.citizenscmd.files.DataHandler;
 import me.mattstudios.citizenscmd.files.LangHandler;
 import me.mattstudios.citizenscmd.listeners.NPCClickListener;
 import me.mattstudios.citizenscmd.listeners.NPCListener;
 import me.mattstudios.citizenscmd.listeners.UpdateEvent;
-import me.mattstudios.citizenscmd.metrics.Metrics;
 import me.mattstudios.citizenscmd.permissions.PermissionsManager;
 import me.mattstudios.citizenscmd.schedulers.CooldownScheduler;
 import me.mattstudios.citizenscmd.schedulers.UpdateScheduler;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
 import me.mattstudios.citizenscmd.utility.paths.Path;
+import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.economy.Economy;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -65,13 +66,13 @@ public final class CitizensCMD extends JavaPlugin {
     private LangHandler lang;
     private DataHandler dataHandler;
     private CooldownHandler cooldownHandler;
-    private PermissionsManager permissionsManager ;
+    private PermissionsManager permissionsManager;
 
     private static CitizensCMDAPI api;
     private static Economy economy;
 
     private boolean papi = false;
-    private CommandHandler commandHandler;
+    private CommandManager commandManager;
 
     private boolean updateStatus = false;
     private boolean shift = false;
@@ -81,8 +82,8 @@ public final class CitizensCMD extends JavaPlugin {
 
     private HashMap<String, Boolean> waitingList;
 
+    @Override
     public void onEnable() {
-
         saveDefaultConfig();
         copyDefaults(getClassLoader().getResourceAsStream("config.yml"), new File(getDataFolder().getPath(), "config.yml"));
 
@@ -93,10 +94,36 @@ public final class CitizensCMD extends JavaPlugin {
             return;
         }
 
-        commandHandler = new CommandHandler(this);
-        commandHandler.enable();
+        commandManager = new CommandManager(this);
 
-        new Metrics(this);
+        Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.SimplePie("lang", () -> {
+            switch (Objects.requireNonNull(getConfig().getString("lang", "en")).toLowerCase()) {
+                case "en":
+                    return "English";
+
+                case "bg":
+                    return "Bulgarian";
+
+                case "fr":
+                    return "French";
+
+                case "no":
+                    return "Norwegian";
+
+                case "pt":
+                    return "Portuguese";
+
+                case "Ro":
+                    return "Romanian";
+
+                case "ch":
+                    return "Chinese";
+
+                default:
+                    return "Other";
+            }
+        }));
 
         info(color(TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
 
@@ -132,6 +159,7 @@ public final class CitizensCMD extends JavaPlugin {
                     break;
                 default:
                     displayFormat = DisplayFormat.MEDIUM;
+                    break;
             }
         } else {
             displayFormat = DisplayFormat.MEDIUM;
@@ -160,14 +188,6 @@ public final class CitizensCMD extends JavaPlugin {
         new CooldownScheduler(this).runTaskTimerAsynchronously(this, 36000L, 36000L);
     }
 
-    @Override
-    public void onDisable() {
-        if (commandHandler != null) {
-            commandHandler.disable();
-            cooldownHandler.saveToFile();
-        }
-    }
-
     private boolean hasCitizens() {
         return Bukkit.getPluginManager().isPluginEnabled("Citizens");
     }
@@ -185,18 +205,22 @@ public final class CitizensCMD extends JavaPlugin {
      * Registers all the commands to be used
      */
     private void registerCommands() {
-        Objects.requireNonNull(getCommand("npcmd")).setExecutor(commandHandler);
+        commandManager.getCompletionHandler().register("#permissions", input -> Arrays.asList("console", "player", "permission", "server", "message", "sound"));
+        commandManager.getCompletionHandler().register("#type", input -> Arrays.asList("cmd", "perm"));
+        commandManager.getCompletionHandler().register("#click", input -> Arrays.asList("left", "right"));
+        commandManager.getCompletionHandler().register("#set", input -> Arrays.asList("set", "remove"));
+
         Stream.of(
-                new CMDHelp(this),
-                new CMDAdd(this),
-                new CMDCooldown(this),
-                new CMDList(this),
-                new CMDReload(this),
-                new CMDRemove(this),
-                new CMDEdit(this),
-                new CMDPrice(this),
-                new CMDPermission(this)
-        ).forEach(commandHandler::register);
+                new AddCommand(this),
+                new HelpCommand(this),
+                new EditCommand(this),
+                new ListCommand(this),
+                new CooldownCommand(this),
+                new PermissionCommand(this),
+                new PriceCommand(this),
+                new ReloadCommand(this),
+                new RemoveCommand(this)
+        ).forEach(commandManager::register);
     }
 
     /**
@@ -374,7 +398,7 @@ public final class CitizensCMD extends JavaPlugin {
         this.displayFormat = displayFormat;
     }
 
-    public CitizensCMDAPI getApi() {
+    public static CitizensCMDAPI getApi() {
         return api;
     }
 

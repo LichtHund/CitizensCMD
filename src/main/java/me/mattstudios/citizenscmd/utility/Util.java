@@ -102,58 +102,6 @@ public class Util {
     }
 
     /**
-     * Gets arguments from each command for the tab completion
-     *
-     * @return Returns 2d string array with arguments for tab completion
-     */
-    public static String[][] getTabCompleteArgs(CitizensCMD plugin, String subCMD, Player player) {
-        String[][] argComplete = new String[5][];
-
-        switch (subCMD) {
-            case "add":
-                argComplete[0] = new String[]{"console", "none", "permission", "server", "message", "sound"};
-                argComplete[1] = getSoundsList();
-                argComplete[2] = new String[]{"1", "0.5"};
-                argComplete[3] = new String[]{"1", "0.5"};
-                break;
-
-            case "remove":
-                argComplete[0] = new String[]{"left", "right"};
-                argComplete[1] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
-                argComplete[2] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
-                break;
-
-            case "cooldown":
-                argComplete[0] = new String[]{"1", "2", "5", "10"};
-                break;
-
-            case "permission":
-                argComplete[0] = new String[]{"set", "remove"};
-                break;
-
-            case "edit":
-                argComplete[0] = new String[]{"perm", "cmd"};
-                argComplete[1] = new String[]{"left", "right"};
-                argComplete[2] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.LEFT);
-                argComplete[3] = plugin.getDataHandler().getCompleteCommandsNumbers(getSelectedNpcId(player), EnumTypes.ClickType.RIGHT);
-                argComplete[4] = new String[]{"console", "none", "permission", "server", "message"};
-                break;
-        }
-        return argComplete;
-    }
-
-    private static String[] getSoundsList() {
-        Sound[] sounds = Sound.values();
-        String[] soundString = new String[sounds.length];
-
-        for (int i = 0; i < sounds.length; i++) {
-            soundString[i] = sounds[i].name();
-        }
-
-        return soundString;
-    }
-
-    /**
      * Gets the difference in seconds between times
      *
      * @param storedTime the stored time to compare

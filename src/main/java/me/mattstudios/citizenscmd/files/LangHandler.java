@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import static me.mattstudios.utils.MessageUtils.color;
-import static me.mattstudios.utils.YamlUtils.copyPathDefaults;
+import static me.mattstudios.utils.YamlUtils.copyDefaults;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class LangHandler {
@@ -46,6 +46,8 @@ public class LangHandler {
 
         messages = new HashMap<>();
         cacheMessage();
+
+        System.out.println("Using " + lang);
     }
 
     /**
@@ -61,15 +63,15 @@ public class LangHandler {
             if (!langFile.exists()) {
                 if (langStream == null) {
                     langFile.createNewFile();
-                    copyPathDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile, "messages");
+                    copyDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
                 } else {
                     plugin.saveResource("lang/" + lang + ".yml", false);
                 }
             } else {
                 if (langStream == null) {
-                    copyPathDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile, "messages");
+                    copyDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
                 } else {
-                    copyPathDefaults(langStream, langFile, "messages");
+                    copyDefaults(langStream, langFile);
                 }
             }
 
