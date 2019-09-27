@@ -19,7 +19,7 @@
 package me.mattstudios.citizenscmd.schedulers;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.paths.Path;
+import me.mattstudios.citizenscmd.utility.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -41,7 +41,7 @@ public class ConfirmScheduler extends BukkitRunnable {
     @Override
     public void run() {
         if (plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
-            player.sendMessage(plugin.getLang().getMessage(Path.PAY_CANCELED));
+            player.sendMessage(plugin.getLang().getMessage(Messages.PAY_CANCELED));
             plugin.getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
         }
     }

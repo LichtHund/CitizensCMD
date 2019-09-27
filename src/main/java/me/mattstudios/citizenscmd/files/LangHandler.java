@@ -19,6 +19,7 @@
 package me.mattstudios.citizenscmd.files;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.utility.Messages;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -46,8 +47,6 @@ public class LangHandler {
 
         messages = new HashMap<>();
         cacheMessage();
-
-        System.out.println("Using " + lang);
     }
 
     /**
@@ -60,7 +59,10 @@ public class LangHandler {
 
             InputStream langStream = CitizensCMD.class.getClassLoader().getResourceAsStream("lang/" + lang + ".yml");
 
+            System.out.println("Stream: " + (langStream == null));
+
             if (!langFile.exists()) {
+                System.out.println("no exist");
                 if (langStream == null) {
                     langFile.createNewFile();
                     copyDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
@@ -68,9 +70,12 @@ public class LangHandler {
                     plugin.saveResource("lang/" + lang + ".yml", false);
                 }
             } else {
+                System.out.println("exist");
                 if (langStream == null) {
+                    System.out.println("nuru");
                     copyDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
                 } else {
+                    System.out.println("noto nuru");
                     copyDefaults(langStream, langFile);
                 }
             }
@@ -94,8 +99,8 @@ public class LangHandler {
      * @param path String with the path to the message
      * @return Returns String with colored message from file
      */
-    public String getMessage(String path) {
-        return color(messages.get(path));
+    public String getMessage(Messages path) {
+        return color(messages.get(path.getPath()));
     }
 
     /**
@@ -104,8 +109,8 @@ public class LangHandler {
      * @param path String with the path to the message
      * @return Returns String with message from file
      */
-    public String getUncoloredMessage(String path) {
-        return messages.get(path);
+    public String getUncoloredMessage(Messages path) {
+        return messages.get(path.getPath());
     }
 
     /**

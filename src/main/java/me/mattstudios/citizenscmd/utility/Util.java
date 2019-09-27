@@ -20,12 +20,13 @@ package me.mattstudios.citizenscmd.utility;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.paths.Path;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
@@ -33,6 +34,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,7 +61,7 @@ public class Util {
         if (CitizensAPI.getDefaultNPCSelector().getSelected(player) != null) return false;
 
         player.sendMessage(color(HEADER));
-        player.sendMessage(plugin.getLang().getMessage(Path.NO_NPC));
+        player.sendMessage(plugin.getLang().getMessage(Messages.NO_NPC));
         return true;
     }
 
@@ -83,13 +85,48 @@ public class Util {
         return CitizensAPI.getDefaultNPCSelector().getSelected(player).getId();
     }
 
-    /**
-     * Checks whether or not it should check for updates
-     *
-     * @return Returns true if CheckUpdates is true on the config and false if not
-     */
-    public static boolean upCheck(CitizensCMD plugin) {
-        return plugin.getConfig().getBoolean("check-updates");
+    public static void setUpMetrics(Metrics metrics, FileConfiguration config) {
+        System.out.println("here");
+        metrics.addCustomChart(new Metrics.SimplePie("lang", () -> {
+            switch (Objects.requireNonNull(config.getString("lang", "en")).toLowerCase()) {
+                case "en":
+                    return "English";
+
+                case "bg":
+                    return "Bulgarian";
+
+                case "fr":
+                    return "French";
+
+                case "no":
+                    return "Norwegian";
+
+                case "pt":
+                    return "Portuguese";
+
+                case "Ro":
+                    return "Romanian";
+
+                case "ch":
+                    return "Chinese";
+
+                default:
+                    return "Other";
+            }
+        }));
+
+        metrics.addCustomChart(new Metrics.SimplePie("cooldown_display", () -> {
+            switch (Objects.requireNonNull(config.getString("cooldown-time-display", "MEDIUM")).toLowerCase()) {
+                case "FULL":
+                    return "Full";
+
+                case "SMALL":
+                    return "Small";
+
+                default:
+                    return "Medium";
+            }
+        }));
     }
 
     /**
@@ -202,7 +239,7 @@ public class Util {
                     getScheduler().runTaskLater(plugin, () -> {
                         String finalMessage;
                         if (commands.get(finalI).contains("{display}")) {
-                            String tmpStr = commands.get(finalI).replace("{display}", plugin.getLang().getMessage(Path.MESSAGE_DISPLAY));
+                            String tmpStr = commands.get(finalI).replace("{display}", plugin.getLang().getMessage(Messages.MESSAGE_DISPLAY));
                             finalMessage = tmpStr.replace("{name}", npc.getFullName());
                         } else
                             finalMessage = commands.get(finalI);
@@ -229,6 +266,166 @@ public class Util {
                     break;
             }
         }
+    }
+
+    /**
+     * Gets formatted time from seconds
+     *
+     * @param seconds The time in seconds to be converted
+     * @return String with the time like "2d 2h 2m 2s"
+     */
+
+    public static String getFormattedTime(CitizensCMD plugin, long seconds, DisplayFormat format) {
+
+        String dayPlural = "";
+        String hourPlural = "";
+        String minutePlural = "";
+        String secondPlural = "";
+
+        TimeUtil timeUtil = new TimeUtil(seconds);
+
+        String[] messagesString = new String[4];
+        messagesString[0] = plugin.getLang().getMessage(Messages.SECONDS);
+        messagesString[1] = plugin.getLang().getMessage(Messages.MINUTES);
+        messagesString[2] = plugin.getLang().getMessage(Messages.HOURS);
+        messagesString[3] = plugin.getLang().getMessage(Messages.DAYS);
+
+        String[] shorts = new String[4];
+        String[] mediums = new String[4];
+        String[] fulls = new String[4];
+
+        Pattern pattern = Pattern.compile("\\[([^]]*)], \\[([^]]*)], \\[([^]]*)]");
+        for (int i = 0; i < messagesString.length; i++) {
+            Matcher matcher = pattern.matcher(messagesString[i]);
+            if (matcher.find()) {
+                shorts[i] = matcher.group(1);
+                mediums[i] = matcher.group(2);
+                fulls[i] = matcher.group(3);
+            }
+        }
+
+        String dayFormat;
+        String hourFormat;
+        String minuteFormat;
+        String secondFormat;
+
+        switch (format) {
+            case MEDIUM:
+                String[] mediumsAfter = new String[4];
+                String[] mediumsPlurals = new String[4];
+                Pattern patternMediums = Pattern.compile("([^]]*)\\(([^]]*)\\)");
+
+                for (int i = 0; i < mediums.length; i++) {
+                    if (mediums[i].contains("(") && mediums[i].contains(")")) {
+                        Matcher matcher = patternMediums.matcher(mediums[i]);
+                        if (matcher.find()) {
+                            mediumsAfter[i] = matcher.group(1);
+                            mediumsPlurals[i] = matcher.group(2);
+                        }
+                    } else {
+                        mediumsAfter[i] = mediums[i];
+                        mediumsPlurals[i] = "";
+                    }
+                }
+
+                dayFormat = " " + mediumsAfter[3];
+                dayPlural = mediumsPlurals[3];
+                hourFormat = " " + mediumsAfter[2];
+                hourPlural = mediumsPlurals[2];
+                minuteFormat = " " + mediumsAfter[1];
+                minutePlural = mediumsPlurals[1];
+                secondFormat = " " + mediumsAfter[0];
+                secondPlural = mediumsPlurals[0];
+                break;
+
+            case FULL:
+                String[] fullsAfter = new String[4];
+                String[] fullsPlurals = new String[4];
+                Pattern patternFulls = Pattern.compile("([^]]*)\\(([^]]*)\\)");
+
+                for (int i = 0; i < fulls.length; i++) {
+                    if (fulls[i].contains("(") && fulls[i].contains(")")) {
+                        Matcher matcher = patternFulls.matcher(fulls[i]);
+                        if (matcher.find()) {
+                            fullsAfter[i] = matcher.group(1);
+                            fullsPlurals[i] = matcher.group(2);
+                        }
+                    } else {
+                        fullsAfter[i] = fulls[i];
+                        fullsPlurals[i] = "";
+                    }
+                }
+
+                dayFormat = " " + fullsAfter[3];
+                dayPlural = fullsPlurals[3];
+                hourFormat = " " + fullsAfter[2];
+                hourPlural = fullsPlurals[2];
+                minuteFormat = " " + fullsAfter[1];
+                minutePlural = fullsPlurals[1];
+                secondFormat = " " + fullsAfter[0];
+                secondPlural = fullsPlurals[0];
+                break;
+
+            default:
+                dayFormat = shorts[3];
+                hourFormat = shorts[2];
+                minuteFormat = shorts[1];
+                secondFormat = shorts[0];
+                break;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (timeUtil.getDays() != 0) {
+            if (format != DisplayFormat.SHORT) {
+                if (timeUtil.getDays() == 1) {
+                    stringBuilder.append(timeUtil.getDays()).append(dayFormat).append(" ");
+                } else {
+                    stringBuilder.append(timeUtil.getDays()).append(dayFormat).append(dayPlural).append(" ");
+                }
+            } else {
+                stringBuilder.append(timeUtil.getDays()).append(dayFormat).append(" ");
+            }
+        }
+
+        if (timeUtil.getHours() != 0 || timeUtil.getDays() != 0) {
+            if (format != DisplayFormat.SHORT) {
+                if (timeUtil.getHours() == 1) {
+                    stringBuilder.append(timeUtil.getHours()).append(hourFormat).append(" ");
+                } else {
+                    stringBuilder.append(timeUtil.getHours()).append(hourFormat).append(hourPlural).append(" ");
+                }
+            } else {
+                stringBuilder.append(timeUtil.getHours()).append(hourFormat).append(" ");
+            }
+        }
+
+        if (timeUtil.getMinutes() != 0 || timeUtil.getHours() != 0) {
+            if (format != DisplayFormat.SHORT) {
+                if (timeUtil.getMinutes() == 1) {
+                    stringBuilder.append(timeUtil.getMinutes()).append(minuteFormat).append(" ");
+                } else {
+                    stringBuilder.append(timeUtil.getMinutes()).append(minuteFormat).append(minutePlural).append(" ");
+                }
+            } else {
+                stringBuilder.append(timeUtil.getMinutes()).append(minuteFormat).append(" ");
+            }
+        }
+
+        if (timeUtil.getSeconds() != 0 || timeUtil.getMinutes() != 0) {
+            if (format != DisplayFormat.SHORT) {
+                if (timeUtil.getSeconds() == 1) {
+                    stringBuilder.append(timeUtil.getSeconds()).append(secondFormat);
+                } else {
+                    stringBuilder.append(timeUtil.getSeconds()).append(secondFormat).append(secondPlural);
+                }
+            } else {
+                stringBuilder.append(timeUtil.getSeconds()).append(secondFormat);
+            }
+        }
+
+        return stringBuilder.toString();
+
     }
 
     private static boolean soundExists(String soundName) {

@@ -1,7 +1,7 @@
 package me.mattstudios.citizenscmd.commands;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.paths.Path;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Permission;
@@ -40,7 +40,7 @@ public class PermissionCommand extends CommandBase {
 
             default:
                 player.sendMessage(color(HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.WRONG_USAGE));
+                player.sendMessage(plugin.getLang().getMessage(Messages.WRONG_USAGE));
         }
     }
 

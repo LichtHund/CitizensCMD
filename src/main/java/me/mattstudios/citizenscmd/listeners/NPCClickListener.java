@@ -21,9 +21,8 @@ package me.mattstudios.citizenscmd.listeners;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.schedulers.ConfirmScheduler;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
-import me.mattstudios.citizenscmd.utility.TimeUtil;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.citizenscmd.utility.Util;
-import me.mattstudios.citizenscmd.utility.paths.Path;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRemoveEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -33,6 +32,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import static me.mattstudios.citizenscmd.utility.Util.getFormattedTime;
 
 public class NPCClickListener implements Listener {
 
@@ -59,10 +60,10 @@ public class NPCClickListener implements Listener {
                 if (plugin.getCooldownHandler().onCooldown(npc.getId(), player.getUniqueId().toString())) {
                     String cooldownMessage;
                     if (plugin.getDataHandler().getNPCCooldown(npc.getId()) == -1)
-                        cooldownMessage = plugin.getLang().getMessage(Path.ONE_TIME_CLICK);
+                        cooldownMessage = plugin.getLang().getMessage(Messages.ONE_TIME_CLICK);
                     else
-                        cooldownMessage = plugin.getLang().getMessage(Path.ON_COOLDOWN);
-                    player.sendMessage(cooldownMessage.replace("{time}", TimeUtil.getFormattedTime(plugin, plugin.getCooldownHandler().getTimeLeft(npc.getId(), player.getUniqueId().toString()), plugin.getDisplayFormat())));
+                        cooldownMessage = plugin.getLang().getMessage(Messages.ON_COOLDOWN);
+                    player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(plugin, plugin.getCooldownHandler().getTimeLeft(npc.getId(), player.getUniqueId().toString()), plugin.getDisplayFormat())));
                     return;
                 }
             }
@@ -76,7 +77,7 @@ public class NPCClickListener implements Listener {
             if (CitizensCMD.getEconomy() != null) {
 
                 if (!plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc.getId())) {
-                    String messageConfirm = plugin.getLang().getMessage(Path.PAY_CONFIRM);
+                    String messageConfirm = plugin.getLang().getMessage(Messages.PAY_CONFIRM);
                     if (!plugin.isShift())
                         messageConfirm = messageConfirm.replace("{shift}", "");
                     else
@@ -93,13 +94,13 @@ public class NPCClickListener implements Listener {
                 }
 
                 if (CitizensCMD.getEconomy().getBalance(player) < price) {
-                    player.sendMessage(plugin.getLang().getMessage(Path.PAY_NO_MONEY));
+                    player.sendMessage(plugin.getLang().getMessage(Messages.PAY_NO_MONEY));
                     return;
                 }
 
                 plugin.getWaitingList().remove(player.getUniqueId().toString() + "." + npc.getId());
                 CitizensCMD.getEconomy().withdrawPlayer(player, price);
-                player.sendMessage(plugin.getLang().getMessage(Path.PAY_COMPLETED).replace("{price}", String.valueOf(price)));
+                player.sendMessage(plugin.getLang().getMessage(Messages.PAY_COMPLETED).replace("{price}", String.valueOf(price)));
 
             }
         }
@@ -128,10 +129,10 @@ public class NPCClickListener implements Listener {
                 if (plugin.getCooldownHandler().onCooldown(npc.getId(), player.getUniqueId().toString())) {
                     String cooldownMessage;
                     if (plugin.getDataHandler().getNPCCooldown(npc.getId()) == -1)
-                        cooldownMessage = plugin.getLang().getMessage(Path.ONE_TIME_CLICK);
+                        cooldownMessage = plugin.getLang().getMessage(Messages.ONE_TIME_CLICK);
                     else
-                        cooldownMessage = plugin.getLang().getMessage(Path.ON_COOLDOWN);
-                    player.sendMessage(cooldownMessage.replace("{time}", TimeUtil.getFormattedTime(plugin, plugin.getCooldownHandler().getTimeLeft(npc.getId(), player.getUniqueId().toString()), plugin.getDisplayFormat())));
+                        cooldownMessage = plugin.getLang().getMessage(Messages.ON_COOLDOWN);
+                    player.sendMessage(cooldownMessage.replace("{time}", getFormattedTime(plugin, plugin.getCooldownHandler().getTimeLeft(npc.getId(), player.getUniqueId().toString()), plugin.getDisplayFormat())));
                     return;
                 }
             }
@@ -145,7 +146,7 @@ public class NPCClickListener implements Listener {
             if (CitizensCMD.getEconomy() != null) {
 
                 if (!plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc.getId())) {
-                    String messageConfirm = plugin.getLang().getMessage(Path.PAY_CONFIRM);
+                    String messageConfirm = plugin.getLang().getMessage(Messages.PAY_CONFIRM);
                     if (!plugin.isShift())
                         messageConfirm = messageConfirm.replace("{shift}", "");
                     else
@@ -160,7 +161,7 @@ public class NPCClickListener implements Listener {
                 if (plugin.isShift() && !player.isSneaking()) return;
 
                 plugin.getWaitingList().remove(player.getUniqueId().toString() + "." + npc.getId());
-                player.sendMessage(plugin.getLang().getMessage(Path.PAY_CANCELED));
+                player.sendMessage(plugin.getLang().getMessage(Messages.PAY_CANCELED));
 
             }
         }

@@ -2,7 +2,7 @@ package me.mattstudios.citizenscmd.commands;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
-import me.mattstudios.citizenscmd.utility.paths.Path;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
@@ -53,7 +53,7 @@ public class ReloadCommand extends CommandBase {
         plugin.getCooldownHandler().reload();
 
         player.sendMessage(color(HEADER));
-        player.sendMessage(plugin.getLang().getMessage(Path.RELOAD));
+        player.sendMessage(plugin.getLang().getMessage(Messages.RELOAD));
     }
 
 }

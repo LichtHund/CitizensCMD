@@ -19,8 +19,8 @@
 package me.mattstudios.citizenscmd.listeners;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.citizenscmd.utility.Util;
-import me.mattstudios.citizenscmd.utility.paths.Path;
 import me.rayzr522.jsonmessage.JSONMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,8 +41,8 @@ public class UpdateEvent implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (plugin.isUpdateStatus() && event.getPlayer().hasPermission("citizenscmd.update")) {
             JSONMessage.create(color(Util.HEADER)).send(event.getPlayer());
-            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.NEW_VERSION) + plugin.getNewVersion())).send(event.getPlayer());
-            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Path.DOWNLOAD_AT) + " spigotmc.org/resources/citizens-CMD.30224/")).openURL("https://spigotmc.org/resources/citizens-CMD.30224/").send(event.getPlayer());
+            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Messages.NEW_VERSION) + plugin.getNewVersion())).send(event.getPlayer());
+            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Messages.DOWNLOAD_AT) + " spigotmc.org/resources/citizens-CMD.30224/")).openURL("https://spigotmc.org/resources/citizens-CMD.30224/").send(event.getPlayer());
         }
     }
 

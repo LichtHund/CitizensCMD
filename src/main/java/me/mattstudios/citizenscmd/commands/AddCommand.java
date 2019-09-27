@@ -1,7 +1,7 @@
 package me.mattstudios.citizenscmd.commands;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.citizenscmd.utility.paths.Path;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Permission;
@@ -81,7 +81,7 @@ public class AddCommand extends CommandBase {
 
         if (hasDelayError) {
             player.sendMessage(color(HEADER));
-            player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADD_DELAY_FAIL));
+            player.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_DELAY_FAIL));
             return;
         }
 

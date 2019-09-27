@@ -20,8 +20,8 @@ package me.mattstudios.citizenscmd.files;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.citizenscmd.utility.Util;
-import me.mattstudios.citizenscmd.utility.paths.Path;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -169,12 +169,12 @@ public class DataHandler {
                 }
 
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADDED));
+                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADDED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.NPC_ADD_FAIL));
+                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_FAIL));
             }
         }).start();
     }
@@ -245,12 +245,12 @@ public class DataHandler {
                 data.replace("npc-data.npc-" + npc + ".cooldown", cooldown);
 
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.NPC_COOLDOWN_SET));
+                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.NPC_COOLDOWN_SET_ERROR));
+                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET_ERROR));
             }
         }).start();
     }
@@ -273,7 +273,7 @@ public class DataHandler {
                 data.replace("npc-data.npc-" + npc + ".price", price);
 
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.NPC_PRICE_SET));
+                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_PRICE_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -300,7 +300,7 @@ public class DataHandler {
                 data.replace("npc-data.npc-" + npc + ".permission", permission);
 
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.PERMISSION_SET));
+                player.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -327,7 +327,7 @@ public class DataHandler {
                 data.remove("npc-data.npc-" + npc + ".permission");
 
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.PERMISSION_REMOVED));
+                player.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_REMOVED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -441,7 +441,7 @@ public class DataHandler {
                 dataConfigurator.set(key, commands);
 
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.REMOVED_COMMAND));
+                player.sendMessage(plugin.getLang().getMessage(Messages.REMOVED_COMMAND));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
@@ -490,7 +490,7 @@ public class DataHandler {
                 dataConfigurator.set(key, commandsData);
 
                 player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.EDITED_COMMAND).replace("{type}", typeText));
+                player.sendMessage(plugin.getLang().getMessage(Messages.EDITED_COMMAND).replace("{type}", typeText));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {

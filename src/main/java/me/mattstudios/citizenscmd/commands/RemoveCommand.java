@@ -2,7 +2,7 @@ package me.mattstudios.citizenscmd.commands;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
-import me.mattstudios.citizenscmd.utility.paths.Path;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Permission;
@@ -40,13 +40,13 @@ public class RemoveCommand extends CommandBase {
 
                 if (leftCommandSize == 0) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Path.NO_COMMANDS));
+                    player.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
                     return;
                 }
 
                 if (id < 1 || id > leftCommandSize) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ID_NUMBER));
+                    player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
                     return;
                 }
 
@@ -58,13 +58,13 @@ public class RemoveCommand extends CommandBase {
 
                 if (rightCommandSize == 0) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Path.NO_COMMANDS));
+                    player.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
                     return;
                 }
 
                 if (id < 0 || id > rightCommandSize) {
                     player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Path.INVALID_ID_NUMBER));
+                    player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
                     return;
                 }
 
@@ -73,7 +73,7 @@ public class RemoveCommand extends CommandBase {
 
             default:
                 player.sendMessage(color(HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Path.INVALID_CLICK_TYPE));
+                player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_CLICK_TYPE));
                 return;
         }
 

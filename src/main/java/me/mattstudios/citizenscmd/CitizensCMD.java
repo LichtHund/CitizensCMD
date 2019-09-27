@@ -39,7 +39,7 @@ import me.mattstudios.citizenscmd.schedulers.CooldownScheduler;
 import me.mattstudios.citizenscmd.schedulers.UpdateScheduler;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
-import me.mattstudios.citizenscmd.utility.paths.Path;
+import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
@@ -54,9 +54,10 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.TAG;
 import static me.mattstudios.citizenscmd.utility.Util.disablePlugin;
-import static me.mattstudios.citizenscmd.utility.Util.upCheck;
+import static me.mattstudios.citizenscmd.utility.Util.setUpMetrics;
 import static me.mattstudios.utils.MessageUtils.color;
 import static me.mattstudios.utils.MessageUtils.info;
 import static me.mattstudios.utils.YamlUtils.copyDefaults;
@@ -97,33 +98,7 @@ public final class CitizensCMD extends JavaPlugin {
         commandManager = new CommandManager(this);
 
         Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("lang", () -> {
-            switch (Objects.requireNonNull(getConfig().getString("lang", "en")).toLowerCase()) {
-                case "en":
-                    return "English";
-
-                case "bg":
-                    return "Bulgarian";
-
-                case "fr":
-                    return "French";
-
-                case "no":
-                    return "Norwegian";
-
-                case "pt":
-                    return "Portuguese";
-
-                case "Ro":
-                    return "Romanian";
-
-                case "ch":
-                    return "Chinese";
-
-                default:
-                    return "Other";
-            }
-        }));
+        setUpMetrics(metrics, getConfig());
 
         info(color(TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
 
@@ -138,13 +113,15 @@ public final class CitizensCMD extends JavaPlugin {
         registerCommands();
         registerEvents();
 
+        info(color(TAG + lang.getMessage(Messages.USING_LANGUAGE)));
+
         if (hasPAPI()) {
-            info(color(TAG + lang.getMessage(Path.PAPI_AVAILABLE)));
+            info(color(TAG + lang.getMessage(Messages.PAPI_AVAILABLE)));
             papi = true;
         }
 
         if (setupEconomy()) {
-            info(color(TAG + lang.getUncoloredMessage(Path.VAULT_AVAILABLE)));
+            info(color(TAG + lang.getUncoloredMessage(Messages.VAULT_AVAILABLE)));
         }
 
         waitingList = new HashMap<>();
@@ -154,9 +131,11 @@ public final class CitizensCMD extends JavaPlugin {
                 case "short":
                     displayFormat = DisplayFormat.SHORT;
                     break;
+
                 case "full":
                     displayFormat = DisplayFormat.FULL;
                     break;
+
                 default:
                     displayFormat = DisplayFormat.MEDIUM;
                     break;
@@ -165,7 +144,7 @@ public final class CitizensCMD extends JavaPlugin {
             displayFormat = DisplayFormat.MEDIUM;
         }
 
-        if (upCheck(this)) {
+        if (getConfig().getBoolean("check-updates")) {
             SpigotUpdater updater = new SpigotUpdater(this, 30224);
             try {
                 // If there's an update, tell the user that they can update
@@ -177,8 +156,7 @@ public final class CitizensCMD extends JavaPlugin {
                 }
             } catch (Exception e) {
                 // If it can't check for an update, tell the user and throw an error.
-                info("Could not check for updates! Stacktrace:");
-                e.printStackTrace();
+                info("Could not check for updates!");
             }
         }
 
@@ -209,6 +187,27 @@ public final class CitizensCMD extends JavaPlugin {
         commandManager.getCompletionHandler().register("#type", input -> Arrays.asList("cmd", "perm"));
         commandManager.getCompletionHandler().register("#click", input -> Arrays.asList("left", "right"));
         commandManager.getCompletionHandler().register("#set", input -> Arrays.asList("set", "remove"));
+
+        commandManager.getMessageHandler().register("cmd.no.permission", (sender, arg) -> {
+            sender.sendMessage(color(HEADER));
+            sender.sendMessage(lang.getMessage(Messages.NO_PERMISSION));
+        });
+        commandManager.getMessageHandler().register("cmd.no.console", (sender, arg) -> {
+            sender.sendMessage(color(HEADER));
+            sender.sendMessage(lang.getMessage(Messages.CONSOLE_NOT_ALLOWED));
+        });
+        commandManager.getMessageHandler().register("cmd.no.exists", (sender, arg) -> {
+            sender.sendMessage(color(HEADER));
+            sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
+        });
+        commandManager.getMessageHandler().register("cmd.wrong.usage", (sender, arg) -> {
+            sender.sendMessage(color(HEADER));
+            sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
+        });
+        commandManager.getMessageHandler().register("arg.must.be.number", (sender, arg) -> {
+            sender.sendMessage(color(HEADER));
+            sender.sendMessage(lang.getMessage(Messages.INVALID_NUMBER));
+        });
 
         Stream.of(
                 new AddCommand(this),

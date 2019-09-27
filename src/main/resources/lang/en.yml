@@ -31,8 +31,7 @@ messages:
     remove-permission: "&aPermission removed successfully!"
   warnings:
     no-npc-selected: "&cYou must have an NPC selected to execute that command!"
-    invalid-cooldown: "&cThe cooldown must be a number!"
-    invalid-price: "&cThe price must be a number!"
+    invalid-number: "&cThe value entered is not a number!"
     invalid-id: "&cPlease introduce a valid command ID!"
     invalid-click-type: "&cYou must select either left or right!"
     no-commands: "&cThere is no more commands in this NPC!"
@@ -62,7 +61,7 @@ messages:
     description-edit: "&7Edits a specific command or permission."
     description-remove: "&7Removes a command from the NPC."
     description-reload: "&7Reloads all the files."
-    description-sound: "&7Adds a sound to an NPC."
+
 # IMPORTANT!!
 # DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE, O "()" contém os PLURALS
   time-format:
