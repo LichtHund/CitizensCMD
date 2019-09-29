@@ -86,7 +86,6 @@ public class Util {
     }
 
     public static void setUpMetrics(Metrics metrics, FileConfiguration config) {
-        System.out.println("here");
         metrics.addCustomChart(new Metrics.SimplePie("lang", () -> {
             switch (Objects.requireNonNull(config.getString("lang", "en")).toLowerCase()) {
                 case "en":

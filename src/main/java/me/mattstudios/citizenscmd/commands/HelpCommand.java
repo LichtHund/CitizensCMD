@@ -2,7 +2,6 @@ package me.mattstudios.citizenscmd.commands;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
-import me.mattstudios.mf.annotations.Alias;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Default;
 import me.mattstudios.mf.annotations.Permission;
@@ -23,7 +22,6 @@ public class HelpCommand extends CommandBase {
     }
 
     @Default
-    @Alias("help")
     @Permission("citizenscmd.npcmd")
     public void help(Player player) {
         JSONMessage.create(color(HEADER)).send(player);

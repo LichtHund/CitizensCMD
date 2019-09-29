@@ -14,8 +14,6 @@ api-version: 1.13
 commands:
   npcmd add:
     description: Adds command to the NPC.
-  npcmd help:
-    description: Displays help
   npcmd cooldown:
     description: Sets the cooldown for the NPC
   npcmd price:

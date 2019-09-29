@@ -24,8 +24,7 @@ public class SpigotUpdater {
         this.project = projectID;
         try {
             this.checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
-        } catch (MalformedURLException e) {
-            System.out.println("Could not check for plugin update.");
+        } catch (MalformedURLException ignored) {
         }
     }
 
