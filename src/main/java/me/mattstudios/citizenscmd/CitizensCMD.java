@@ -151,7 +151,7 @@ public final class CitizensCMD extends JavaPlugin {
                 if (updater.checkForUpdates()) {
                     updateStatus = true;
                     newVersion = updater.getLatestVersion();
-
+                    info(color(TAG + "&b&o" + lang.getUncoloredMessage(Messages.STARTUP_NEW_VERSION)));
                     info(color(TAG + "&b&o" + updater.getResourceURL()));
                 }
             } catch (Exception e) {

@@ -2,11 +2,16 @@
 # @LichtHund
 # Version ${project.version}
 #
-# Change as much as you need.
-# Remove placeholders with caution!
-# Some placeholders can be removed but might not work correctly
-# Cooldown placeholder is safe to be deleted
+# Endre så mye du trenger.
+# Fjern plassholderne med forsiktighet!
+# Noen plassholdere kan fjernes, men fungerer kanskje ikke riktig
+# Cooldown plassholder er trygt å bli slettet
 messages:
+  start-up:
+    using-language: "&7Bruker &aNorske &7meldinger!"
+    new-version: "&cEn ny versjon av CitizensCMD er nå tilgjengelig:"
+    papi-available: "&7Bruker &aPlaceholderAPI&7!"
+    vault-available: "&7Bruker &aVault&7!"
   commands:
     npc-add-command-added: "&aDu har lagt til kommandoen til NPCen!"
     npc-add-command-failed: "&cKunne ikke legge til kommandoen!"
@@ -26,8 +31,7 @@ messages:
     remove-permission: "&aTillatelse fjernet vellykket!"
   warnings:
     no-npc-selected: "&cDu må velge en NPC for å utføre denne kommandoen!"
-    invalid-cooldown: "&cNedtellingen må være et tall!"
-    invalid-price: "&cPrisen må være et tall!"
+    invalid-number: "&cVerdien som er lagt inn er ikke et tall!"
     invalid-id: "&cBruk et gyldig ID"
     invalid-click-type: "&cDu må enten velge left eller right"
     no-commands: "&cDet er ingen flere kommandoer i denne NPCen"
@@ -57,9 +61,9 @@ messages:
     description-edit: "&7Endre en kommando eller permission"
     description-remove: "&7Fjerne en kommando fra NPCen"
     description-reload: "&7reloade alle filene"
-    description-sound: "&7Legger til en lyd til en NPC."
-# IMPORTANT!!
-# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE
+
+# VIKTIG!!
+# ENDRE IKKE MØNSTRE, BEHOLD "[]," ENDRE KUN TEKSTEN INNE, "()" HAR FLERE
   time-format:
     seconds: "[s], [sek], [sekund(er)]"
     minutes: "[m], [min], [minutt(er)]"

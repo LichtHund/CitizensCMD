@@ -7,6 +7,11 @@
 # Unele placeholdere pot fi indepartate, dar este posibil ca acestea sa nu functioneze corect
 # Placeholder-ul pentru cooldown poate fi indepartat
 messages:
+  start-up:
+    using-language: "&7Utilizarea mesajelor în &aRomână&7!"
+    new-version: "&cO nouă versiune a CitizensCMD este acum disponibilă:"
+    papi-available: "&7Utilizarea &aPlaceholderAPI&7!"
+    vault-available: "&7Utilizarea &aVault&7!"
   commands:
     npc-add-command-added: "&aAti adaugat cu succes o comanda acestui NPC!"
     npc-add-command-failed: "&cAdaugarea comenzi acestui NPC a esuat!"
@@ -26,8 +31,7 @@ messages:
     remove-permission: "&aPermisiunea a fost eliminată cu succes!"
   warnings:
     no-npc-selected: "&cTrebuie sa ai un NPC selectat pentru a executa aceasta comanda!"
-    invalid-cooldown: "&cCooldown-ul trebuie sa fie un numar!"
-    invalid-price: "&cPretul trebuie sa fie un numar!"
+    invalid-number: "&cValoarea introdusă nu este un număr!"
     invalid-id: "&cVa rugam introduceti un ID valid!"
     invalid-click-type: "&cTrebuie sa selectatie fie stanga, fie dreapta!"
     no-commands: "&cNu exista comenzi pentru NPC!"
@@ -57,7 +61,7 @@ messages:
     description-edit: "&7Editati o anumita comands sau permisiune."
     description-remove: "&7Stergeti o comanda a NPC-ului."
     description-reload: "&7Reincarcati toate fisierele."
-    description-sound: "&7Adaugă un sunet unui NPC."
+
 # IMPORTANT!!
 # NU MODIFICATI ACEST MODEL, PASTRATI "[]," SI MODIFICATI DOAR TEXTUL DIN INTERIOR
   time-format:

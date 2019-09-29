@@ -2,11 +2,16 @@
 # @LichtHund
 # Version ${project.version}
 #
-# Change as much as you need.
-# Remove placeholders with caution!
-# Some placeholders can be removed but might not work correctly
-# Cooldown placeholder is safe to be deleted
+# 根据需要进行更改.
+# 小心删除占位符!
+# 某些占位符可以删除，但可能无法正常工作
+# 冷却占位符可以安全删除
 messages:
+  start-up:
+    using-language: "&7运用 &a中文 &7消息!"
+    new-version: "&c现在有新版本的CitizensCMD:"
+    papi-available: "&7运用 &aPlaceholderAPI&7!"
+    vault-available: "&7运用 &aVault&7!"
   commands:
     npc-add-command-added: "&a你已經成功新增指令到這個npc!"
     npc-add-command-failed: "&c新增指令到這個npc失敗!"
@@ -26,8 +31,7 @@ messages:
     remove-permission: "&a权限已成功删除!"
   warnings:
     no-npc-selected: "&c你一定要選擇NPC來執行那個指令!"
-    invalid-cooldown: "&c冷卻時間並不是數字!"
-    invalid-price: "&c價格並不是數字!"
+    invalid-number: "&c输入的值不是数字!"
     invalid-id: "&c請用一個正確的指令ID!"
     invalid-click-type: "&c你一定要選擇左邊或右邊!"
     no-commands: "&c這個NPC已經沒有更多指令!"
@@ -57,9 +61,9 @@ messages:
     description-edit: "&7編輯特定的指令或權限."
     description-remove: "&7從一個NPC移除一個指令."
     description-reload: "&7重新載入所有檔案."
-    description-sound: "&7向NPC添加声音."
-# IMPORTANT!!
-# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE
+
+# 重要!!
+# 请勿更改此模式，请保留 “[]”，仅更改内部文字
   time-format:
     seconds: "[s], [秒], [秒]"
     minutes: "[m], [分钟], [分钟]"

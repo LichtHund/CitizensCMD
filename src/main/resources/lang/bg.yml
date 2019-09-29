@@ -7,6 +7,11 @@
 # Някой Placeholder-и могат да не работят при премахване
 # Cooldown placeholder-а може да бъде премахнат, без последствия
 messages:
+  start-up:
+    using-language: "&7Използване на &aбългарски &7съобщения!"
+    new-version: "&cВече е налична нова версия на CitizensCMD:"
+    papi-available: "&7Използване &aPlaceholderAPI&7!"
+    vault-available: "&7Използване &aVault&7!"
   commands:
     npc-add-command-added: "&aУспешно добавихте команда към NPC-то!"
     npc-add-command-failed: "&cДобавянето на команда не бе успешно!"
@@ -26,8 +31,7 @@ messages:
     remove-permission: "&aРазрешението бе премахнато успешно!"
   warnings:
     no-npc-selected: "&cИзбери NPC първо!"
-    invalid-cooldown: "&cВремето за изчакване трябва да бъде число!"
-    invalid-price: "&cЦената трябва да бъде число!"
+    invalid-number: "&cВъведената стойност не е число!"
     invalid-id: "&cМоля, задайте валидо ID на команда!"
     invalid-click-type: "&cТрябва да избереш ляв или десен!"
     no-commands: "&cНяма команди в това NPC!"
@@ -57,7 +61,7 @@ messages:
     description-edit: "&7Променя команда или права."
     description-remove: "&7Премахва команда от NPC."
     description-reload: "&7Презарежда всички файлове."
-    description-sound: "&7Добавя звук към NPC."
+
 # ВАЖНО!!
 # НЕ ПРОМЕНЯЙТЕ МОДЕЛА, ОСТАВЕТЕ СКОБИТЕ "[]," ПРОМЕНЕТЕ САМО ТЕКСТА В ТЯХ
   time-format:

@@ -63,7 +63,7 @@ messages:
     description-reload: "&7Reloads all the files."
 
 # IMPORTANT!!
-# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE, O "()" contém os PLURALS
+# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE, THE "()" HAS THE PLURALS
   time-format:
     seconds: "[s], [sec(s)], [second(s)]"
     minutes: "[m], [min(s)], [minute(s)]"

@@ -7,14 +7,11 @@
 # Alguns placeholders podem ser removidos mas podem não funcionar corretamente.
 # Os placeholders do cooldown podem ser removidos com segurança.
 messages:
-  # Start up comments test
   start-up:
-    using-language: "&7Using &aEnglish &7messages!"
-    new-version: "&cA new version of CitizensCMD is now available:"
-    # In between comment test
-    papi-available: "&7Using &aPlaceholderAPI&7!"
-    vault-available: "&7Using &aVault&7!"
-  # Command comments test
+    using-language: "&7Usando mensagens em &aPortuguês&7!"
+    new-version: "&cUma nova versão de CitizensCMD já está disponível:"
+    papi-available: "&7Usando &aPlaceholderAPI&7!"
+    vault-available: "&7Usando &aVault&7!"
   commands:
     npc-add-command-added: "&aVocê adicionou um comando ao NPC com sucesso!"
     npc-add-command-failed: "&cFalha ao adicionar comando ao NPC!"
@@ -34,8 +31,7 @@ messages:
     remove-permission: "&aPermissão removida com sucesso!"
   warnings:
     no-npc-selected: "&cVocê deve ter um NPC selecionado para executar esse comando!"
-    invalid-cooldown: "&cO cooldown deve ser um número!"
-    invalid-price: "&cO preço deve ser um número!"
+    invalid-number: "&cO valor digitado não é um número!"
     invalid-id: "&cPor favor, introduza um ID de comando válido!"
     invalid-click-type: "&cVocê deve selecionar esquerda ou direita!"
     no-commands: "&cNão há mais comandos neste NPC!"
@@ -65,9 +61,9 @@ messages:
     description-edit: "&7Edita um comando ou permissão específica."
     description-remove: "&7Remove um comando do NPC."
     description-reload: "&7Recarrega todos os arquivos."
-    description-sound: "&7Adiciona um som a um NPC."
-# IMPORTANT!!
-# NÃO MUDE ESTE PADRÃO, MANTENHA O "[]," MUDE APENAS O TEXTO DENTRO
+
+# IMPORTANTE!!
+# NÃO MUDE ESTE PADRÃO, MANTENHA O "[]," MUDE APENAS O TEXTO DENTRO, O "()" CONTEM OS PLURAIS
   time-format:
     seconds: "[s], [seg(s)], [secondo(s)]"
     minutes: "[m], [min(s)], [minuto(s)]"
