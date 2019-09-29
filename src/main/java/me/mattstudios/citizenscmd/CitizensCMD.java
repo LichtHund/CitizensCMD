@@ -126,6 +126,8 @@ public final class CitizensCMD extends JavaPlugin {
 
         waitingList = new HashMap<>();
 
+        setShift(getConfig().getBoolean("shift-confirm"));
+
         if (getConfig().contains("cooldown-time-display")) {
             switch (Objects.requireNonNull(getConfig().getString("cooldown-time-display")).toLowerCase()) {
                 case "short":
@@ -154,9 +156,7 @@ public final class CitizensCMD extends JavaPlugin {
                     info(color(TAG + "&b&o" + lang.getUncoloredMessage(Messages.STARTUP_NEW_VERSION)));
                     info(color(TAG + "&b&o" + updater.getResourceURL()));
                 }
-            } catch (Exception e) {
-                // If it can't check for an update, tell the user and throw an error.
-                info("Could not check for updates!");
+            } catch (Exception ignored) {
             }
         }
 
@@ -281,15 +281,6 @@ public final class CitizensCMD extends JavaPlugin {
     }
 
     /**
-     * Gets if or not should alert player of new update on join
-     *
-     * @return Returns update status
-     */
-    public boolean getUpdateStatus() {
-        return updateStatus;
-    }
-
-    /**
      * Sets new update status from scheduler
      *
      * @param newUpdateStatus New boolean with the update status;
@@ -362,15 +353,6 @@ public final class CitizensCMD extends JavaPlugin {
     }
 
     /**
-     * Checks if player needs to shift or not to confirm payment
-     *
-     * @return Returns the boolean of whether or not players should shift
-     */
-    public boolean shouldShift() {
-        return shift;
-    }
-
-    /**
      * Sets the new shifting rule
      *
      * @param shift The new shifting rule
@@ -401,10 +383,20 @@ public final class CitizensCMD extends JavaPlugin {
         return api;
     }
 
+    /**
+     * Checks if player needs to shift or not to confirm payment
+     *
+     * @return Returns the boolean of whether or not players should shift
+     */
     public boolean isShift() {
         return shift;
     }
 
+    /**
+     * Gets if or not should alert player of new update on join
+     *
+     * @return Returns update status
+     */
     public boolean isUpdateStatus() {
         return updateStatus;
     }
