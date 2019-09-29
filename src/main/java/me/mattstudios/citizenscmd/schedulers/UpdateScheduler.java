@@ -35,6 +35,8 @@ public class UpdateScheduler extends BukkitRunnable {
      */
     @Override
     public void run() {
+        if (plugin.getConfig().getBoolean("check-updates")) return;
+
         SpigotUpdater updater = new SpigotUpdater(plugin, 30224);
         try {
             if (updater.checkForUpdates()) {

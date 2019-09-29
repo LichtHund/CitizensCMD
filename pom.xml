@@ -19,7 +19,7 @@
         <papi.version>2.10.2</papi.version>
         <vault.version>da407c0059</vault.version>
         <jsonmsg.version>1.0.0</jsonmsg.version>
-        <utils.version>8dd15fc8cd</utils.version>
+        <utils.version>341169d6e9</utils.version>
     </properties>
 
     <build>
@@ -47,6 +47,10 @@
                         <relocation>
                             <pattern>me.mattstudios.mf</pattern>
                             <shadedPattern>me.mattstudios.citizenscmd.mf</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.mattstudios.utils</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.utility</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

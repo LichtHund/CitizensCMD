@@ -20,18 +20,20 @@ package me.mattstudios.citizenscmd.files;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 
 import static me.mattstudios.utils.MessageUtils.color;
-import static me.mattstudios.utils.YamlUtils.copyDefaults;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class LangHandler {
@@ -59,24 +61,18 @@ public class LangHandler {
 
             InputStream langStream = CitizensCMD.class.getClassLoader().getResourceAsStream("lang/" + lang + ".yml");
 
-            System.out.println("Stream: " + (langStream == null));
-
             if (!langFile.exists()) {
-                System.out.println("no exist");
                 if (langStream == null) {
                     langFile.createNewFile();
-                    copyDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
+                    saveDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
                 } else {
                     plugin.saveResource("lang/" + lang + ".yml", false);
                 }
             } else {
-                System.out.println("exist");
                 if (langStream == null) {
-                    System.out.println("nuru");
-                    copyDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
+                    saveDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
                 } else {
-                    System.out.println("noto nuru");
-                    copyDefaults(langStream, langFile);
+                    saveDefaults(langStream, langFile);
                 }
             }
 
@@ -120,6 +116,57 @@ public class LangHandler {
      */
     public String getLanguage() {
         return lang;
+    }
+
+    /**
+     * Gets file from resources and copies the changes to the main one, preserving comments.
+     * Used for my messages.
+     *
+     * @param inputFile  The file from resources.
+     * @param outputFile The output file.
+     */
+    private static void saveDefaults(InputStream inputFile, File outputFile) {
+        try {
+            if (inputFile == null) return;
+
+            File tempFile = File.createTempFile("npcmdCfg" + gen(), "yml");
+            FileUtils.copyInputStreamToFile(inputFile, tempFile);
+
+            inputFile.close();
+
+            YamlFile resourceYaml = new YamlFile(tempFile);
+            YamlFile savedYaml = new YamlFile(outputFile);
+
+            resourceYaml.load();
+            savedYaml.load();
+
+            boolean edited = false;
+
+            for (String parent : resourceYaml.getConfigurationSection("messages").getKeys(false)) {
+                for (String child : resourceYaml.getConfigurationSection("messages." + parent).getKeys(false)) {
+                    String key = "messages." + parent + "." + child;
+
+                    if (!savedYaml.contains(key)) continue;
+
+                    edited = true;
+                    resourceYaml.set(key, savedYaml.get(key));
+                }
+            }
+
+            if (edited) resourceYaml.saveWithComments();
+
+
+            FileUtils.copyFile(tempFile, outputFile);
+            tempFile.delete();
+
+        } catch (IOException | org.simpleyaml.exceptions.InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static int gen() {
+        Random r = new Random(System.currentTimeMillis());
+        return 10000 + r.nextInt(20000);
     }
 
 }
