@@ -1,0 +1,71 @@
+# Citizens CMD Plugin by Mateus Moreira
+# @LichtHund
+# Version ${project.version}
+#
+# Měňte dle potřeby.
+# Placeholdery odstraňujte opatrně.
+# Některé placeholdery lze odstranit, jiné můžou plugin rozbít.
+# Placeholder pro cooldown je možné bezpečně odstranit.
+messages:
+  start-up:
+    using-language: "&7Používám &aČeské &7zprávy!"
+    new-version: "&cNová verze CitizensCMD je dostupná:"
+    papi-available: "&7Používám &aPlaceholderAPI&7!"
+    vault-available: "&7Používám &aVault&7!"
+  commands:
+    npc-add-command-added: "&aPříkaz pro NPC úspěšně zadán!"
+    npc-add-command-failed: "&cPříkaz pro NPC se nepodařilo zadat!"
+    npc-add-command-delay-failed: "&cProdleva &d-d &cmusí být číslo!"
+    npc-cooldown-set: "&aCooldown úspěšně nastaven!"
+    npc-cooldown-error: "&cChyba: Cooldown se nepodařilo nastavit!"
+    npc-price-set: "&aCena byla úspěšně nastavena!"
+    list-commands-counter-right: "&c&o{count} &7&o- Příkazy na pravém tlačítku:"
+    list-commands-counter-left: "&c&o{count} &7&o- Příkazy na levém tlačítku:"
+    list-cooldown: "&7Cooldown: &c"
+    list-price: "&7Cena: &c"
+    list-tooltip: "&7Klikni pro úpravy!"
+    reload-command: "&aVšechny soubory byly úspěšně přenačteny!"
+    removed-command: "&aPříkaz byl úspěšně odebrán!"
+    edit-command: "&a{type} byl úspěšně upraven!"
+    set-permission: "&aPermission úspěšně nastaveno!"
+    remove-permission: "&aPermission úspěšně odebráno!"
+  warnings:
+    no-npc-selected: "&cPro vykonání příkazu musíte nejprve vybrat NPC!"
+    invalid-number: "&cZadaná hodnota není číslo!"
+    invalid-id: "&cProsím zadejte validní ID příkazu!"
+    invalid-click-type: "&cZvolte prosím mezi levým a pravým tlačítkem!"
+    no-commands: "&cToto NPC nemá žádné další příkazy!"
+    invalid-arguments: "&cZvolte prosím hodnotu mezi CMD a PERM!"
+    invalid-permission: "&cPermissions nemohou obsahovat mezeru!"
+    console-not-allowed: "&cTento příkaz je možné zadat pouze ve hře, ne v konzoli!"
+    no-permission: "&cNemáte oprávnění provést tento příkaz!"
+    wrong-usage: "&cŠpatné použití příkazu! Použijte jen &7/npcmd &cpro více informací!"
+    new-version: "&7Nová verze je dostupná: &cv"
+    download-at: "&7Stáhněte z"
+  npc:
+    on-cooldown: "&7Prosím počkejte &c{time} &7před tím než použijete NPC znovu!"
+    one-time-click: "&7Toto NPC umožňuje pouze jedno použití!"
+    pay-confirm: "&7Za použití tohoto NPC musíte zaplatit &a{price}$&7!\n&a{shift}Potvrďte pravým tlačítkem &7nebo &c{shift}levým tlačítkem zrušte.\n&8Tato operace bude zrušena za &c15 &8sekund!"
+    pay-canceled: "&cPlatba zrušena!"
+    pay-no-money: "&cNemáte dost peněz k provedení této akce!"
+    pay-completed: "&a{price}$ bylo odčteno z vašeho účtu!"
+    message-display: "{name}:&r"
+  help:
+    version: "&7&oVerze:"
+    info: "&7Najeďte myší na příkaz pro více informací a příklad!"
+    example: "&8Příklad:"
+    description-add: "&7Přidá příkaz na NPC."
+    description-cooldown: "&7Nastaví NPC cooldown na kliknutí - v sekundách."
+    description-price: "&7Nastaví NPC cenu použití."
+    description-list: "&7Zobrazí seznam příkazů u vybraného NPC."
+    description-edit: "&7Upraví konkrétní příkaz nebo permission."
+    description-remove: "&7Odstraní příkaz z NPC."
+    description-reload: "&7Přenačte všechny soubory."
+
+# IMPORTANT!!
+# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE, THE "()" HAS THE PLURALS
+  time-format:
+    seconds: "[s], [sekund(y)], [sekund(y)]"
+    minutes: "[m], [minut(y)], [minut(y)]"
+    hours: "[h], [hodin(y)], [hodin(y)]"
+    days: "[d], [dn(í)], [dn(í)]"
