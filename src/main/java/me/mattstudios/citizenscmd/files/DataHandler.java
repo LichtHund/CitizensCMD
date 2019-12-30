@@ -297,7 +297,10 @@ public class DataHandler {
 
                 dataConfigurator.set("npc-data.npc-" + npc + ".permission", permission);
 
-                data.replace("npc-data.npc-" + npc + ".permission", permission);
+                if (data.get("npc-data.npc-" + npc + ".permission") == null)
+                    data.put("npc-data.npc-" + npc + ".permission", permission);
+                else
+                    data.replace("npc-data.npc-" + npc + ".permission", permission);
 
                 player.sendMessage(color(Util.HEADER));
                 player.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_SET));

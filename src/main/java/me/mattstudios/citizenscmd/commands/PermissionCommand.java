@@ -4,6 +4,7 @@ import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.mf.annotations.Command;
 import me.mattstudios.mf.annotations.Completion;
+import me.mattstudios.mf.annotations.Optional;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
@@ -25,12 +26,18 @@ public class PermissionCommand extends CommandBase {
 
     @SubCommand("permission")
     @Permission("citizenscmd.permission")
-    public void permission(Player player, @Completion("#set") String set, String permission) {
+    public void permission(Player player, @Completion("#set") String set, @Optional String permission) {
 
         if (npcNotSelected(plugin, player)) return;
 
         switch (set.toLowerCase()) {
             case "set":
+                if (permission == null) {
+                    player.sendMessage(color(HEADER));
+                    player.sendMessage(plugin.getLang().getMessage(Messages.WRONG_USAGE));
+                    return;
+                }
+
                 plugin.getDataHandler().setCustomPermission(getSelectedNpcId(player), permission, player);
                 break;
 

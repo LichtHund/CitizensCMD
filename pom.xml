@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>1.14.4-R0.1-SNAPSHOT</spigot.version>
         <citizens.version>2.0.25-SNAPSHOT</citizens.version>
-        <papi.version>2.10.2</papi.version>
+        <papi.version>2.10.4</papi.version>
         <vault.version>da407c0059</vault.version>
         <jsonmsg.version>1.0.0</jsonmsg.version>
         <utils.version>341169d6e9</utils.version>
@@ -40,6 +40,10 @@
                 <version>3.1.0</version>
                 <configuration>
                     <relocations>
+                        <relocation>
+                            <pattern>org.apache.commons.io</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.commons</shadedPattern>
+                        </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>me.mattstudios.citizenscmd.metrics</shadedPattern>
@@ -152,7 +156,7 @@
         <dependency>
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matts-framework</artifactId>
-            <version>1.0.8-BETA</version>
+            <version>1.0.2</version>
             <scope>compile</scope>
         </dependency>
 

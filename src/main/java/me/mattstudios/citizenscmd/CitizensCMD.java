@@ -188,23 +188,23 @@ public final class CitizensCMD extends JavaPlugin {
         commandManager.getCompletionHandler().register("#click", input -> Arrays.asList("left", "right"));
         commandManager.getCompletionHandler().register("#set", input -> Arrays.asList("set", "remove"));
 
-        commandManager.getMessageHandler().register("cmd.no.permission", (sender, arg) -> {
+        commandManager.getMessageHandler().register("cmd.no.permission", sender -> {
             sender.sendMessage(color(HEADER));
             sender.sendMessage(lang.getMessage(Messages.NO_PERMISSION));
         });
-        commandManager.getMessageHandler().register("cmd.no.console", (sender, arg) -> {
+        commandManager.getMessageHandler().register("cmd.no.console", sender -> {
             sender.sendMessage(color(HEADER));
             sender.sendMessage(lang.getMessage(Messages.CONSOLE_NOT_ALLOWED));
         });
-        commandManager.getMessageHandler().register("cmd.no.exists", (sender, arg) -> {
+        commandManager.getMessageHandler().register("cmd.no.exists", sender -> {
             sender.sendMessage(color(HEADER));
             sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
         });
-        commandManager.getMessageHandler().register("cmd.wrong.usage", (sender, arg) -> {
+        commandManager.getMessageHandler().register("cmd.wrong.usage", sender -> {
             sender.sendMessage(color(HEADER));
             sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
         });
-        commandManager.getMessageHandler().register("arg.must.be.number", (sender, arg) -> {
+        commandManager.getMessageHandler().register("arg.must.be.number", sender -> {
             sender.sendMessage(color(HEADER));
             sender.sendMessage(lang.getMessage(Messages.INVALID_NUMBER));
         });
