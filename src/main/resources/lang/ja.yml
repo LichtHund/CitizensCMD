@@ -1,0 +1,71 @@
+# Citizens CMD Plugin by Mateus Moreira
+# @LichtHund
+# Version ${project.version}
+#
+# Change as much as you need.
+# Remove placeholders with caution!
+# Some placeholders can be removed but might not work correctly
+# Cooldown placeholder is safe to be deleted
+messages:
+  start-up:
+    using-language: "&a日本語 &7メッセージを使用！"
+    new-version: "&cCitizensCMDの新しいバージョンが利用可能:"
+    papi-available: "&aPlaceholderAPI&7を使用！"
+    vault-available: "&aVault&7を使用！"
+  commands:
+    npc-add-command-added: "&aNPCにコマンドが正常に追加されました！"
+    npc-add-command-failed: "&cNPCにコマンドを追加できませんでした！"
+    npc-add-command-delay-failed: "&d-d&cを追加する場合、遅延は数値でなければなりません！"
+    npc-cooldown-set: "&aクールダウンが正常に設定されました！"
+    npc-cooldown-error: "&cクールダウンの設定中にエラーが発生しました！"
+    npc-price-set: "&a価格を設定しました！"
+    list-commands-counter-right: "&c&o{count} &7&o- 右クリック コマンド:"
+    list-commands-counter-left: "&c&o{count} &7&o- 左クリック コマンド:"
+    list-cooldown: "&7クールダウン: &c"
+    list-price: "&7価格: &c"
+    list-tooltip: "&7クリックして編集！"
+    reload-command: "&aすべてのファイルが正常にリロードされました！"
+    removed-command: "&aコマンドは正常に削除されました！"
+    edit-command: "&a{type}は正常に編集されました！"
+    set-permission: "&aパーミッションが正常に設定されました！"
+    remove-permission: "&aパーミッションが正常に削除されました！"
+  warnings:
+    no-npc-selected: "&cそのコマンドを実行するには、NPCを選択する必要があります！"
+    invalid-number: "&c入力した値は数値ではありません！"
+    invalid-id: "&c有効なコマンドIDを入力してください！"
+    invalid-click-type: "&cleftまたはrightを選択する必要があります！"
+    no-commands: "&cこのNPCにはこれ以上コマンドはありません！"
+    invalid-arguments: "&cCMDまたはPERMを選択する必要があります！"
+    invalid-permission: "&cパーミッションにスペースを含めることはできません！"
+    console-not-allowed: "&cこのコマンドはコンソールから実行できず、ゲーム内でのみ実行できます！"
+    no-permission: "&cこのコマンドを実行する権限がありません！"
+    wrong-usage: "&cコマンドの間違った使用方法！&7/npcmd &cでヘルプ！"
+    new-version: "&7新しいバージョンが利用可能: &cv"
+    download-at: "&7ダウンロード "
+  npc:
+    on-cooldown: "&7このNPCを再び使用する前に {time} お待ちください！"
+    one-time-click: "&7このNPCは1回しか使用できません！"
+    pay-confirm: "&7このNPCを使用するには&a{price}$&7を支払う必要があります！\n&a{shift}右クリックして確認するか、&7or &c{shift}左クリックしてキャンセルします\n&8この操作は &c15 &8秒後にキャンセルされます！"
+    pay-canceled: "&c支払いがキャンセルされました！"
+    pay-no-money: "&c十分なお金がありません！"
+    pay-completed: "&a{price}$ がアカウントから引き落とされました！"
+    message-display: "{name}:&r"
+  help:
+    version: "&7&oバージョン:"
+    info: "&7詳細と例については、コマンドにカーソルを合わせてください！"
+    example: "&8例:"
+    description-add: "&7NPCにコマンドを追加します。"
+    description-cooldown: "&7NPCにクリッククールダウンを秒単位で設定します。"
+    description-price: "&7NPCを使用する価格を設定します。"
+    description-list: "&7現在のNPCのコマンドのリストを表示します。"
+    description-edit: "&7特定のコマンドまたはパーミッションを編集します。"
+    description-remove: "&7NPCからコマンドを削除します。"
+    description-reload: "&7すべてのファイルをリロードします。"
+
+# IMPORTANT!!
+# DO NOT CHANGE THIS PATTERN, KEEP THE "[]," CHANGE ONLY THE TEXT INSIDE, THE "()" HAS THE PLURALS
+  time-format:
+    seconds: "[s], [秒], [秒]"
+    minutes: "[m], [分], [分]"
+    hours: "[h], [時間], [時間]"
+    days: "[d], [日], [日]"
