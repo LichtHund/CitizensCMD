@@ -8,7 +8,7 @@ import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
@@ -27,11 +27,11 @@ public class EditCommand extends CommandBase {
     @SubCommand("edit")
     @Permission("citizenscmd.edit")
     @Completion({"#type", "#click"})
-    public void edit(Player player, String typeString, String clickString, int id, String[] arguments) {
+    public void edit(CommandSender sender, String typeString, String clickString, Integer id, String[] arguments) {
 
-        if (npcNotSelected(plugin, player)) return;
+        if (npcNotSelected(plugin, sender)) return;
 
-        int npc = getSelectedNpcId(player);
+        int npc = getSelectedNpcId(sender);
 
         EnumTypes.ClickType click;
         EnumTypes.EditType type;
@@ -43,8 +43,8 @@ public class EditCommand extends CommandBase {
 
             case "perm":
                 if (arguments.length > 1) {
-                    player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_PERMISSION));
+                    sender.sendMessage(color(HEADER));
+                    sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_PERMISSION));
                     return;
                 }
 
@@ -52,8 +52,8 @@ public class EditCommand extends CommandBase {
                 break;
 
             default:
-                player.sendMessage(color(HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ARGUMENTS));
+                sender.sendMessage(color(HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ARGUMENTS));
                 return;
         }
 
@@ -62,14 +62,14 @@ public class EditCommand extends CommandBase {
                 int leftCommandSize = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT).size();
 
                 if (leftCommandSize == 0) {
-                    player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
+                    sender.sendMessage(color(HEADER));
+                    sender.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
                     return;
                 }
 
                 if (id < 1 || id > leftCommandSize) {
-                    player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
+                    sender.sendMessage(color(HEADER));
+                    sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
                     return;
                 }
 
@@ -80,22 +80,22 @@ public class EditCommand extends CommandBase {
                 int rightCommandSize = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT).size();
 
                 if (rightCommandSize == 0) {
-                    player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
+                    sender.sendMessage(color(HEADER));
+                    sender.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
                     return;
                 }
 
                 if (id < 1 || id > rightCommandSize) {
-                    player.sendMessage(color(HEADER));
-                    player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
+                    sender.sendMessage(color(HEADER));
+                    sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
                     return;
                 }
                 click = EnumTypes.ClickType.RIGHT;
                 break;
 
             default:
-                player.sendMessage(color(HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.INVALID_CLICK_TYPE));
+                sender.sendMessage(color(HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_CLICK_TYPE));
                 return;
         }
 
@@ -107,7 +107,7 @@ public class EditCommand extends CommandBase {
             else stringBuilder.append(arguments[i]).append(" ");
         }
 
-        plugin.getDataHandler().edit(npc, id, click, type, stringBuilder.toString().trim(), player);
+        plugin.getDataHandler().edit(npc, id, click, type, stringBuilder.toString().trim(), sender);
     }
 
 }

@@ -6,7 +6,7 @@
 
     <groupId>me.mattstudios.plugins</groupId>
     <artifactId>citizens-cmd</artifactId>
-    <version>2.5</version>
+    <version>2.5.1</version>
     <packaging>jar</packaging>
 
     <name>CitizensCMD</name>
@@ -21,60 +21,6 @@
         <jsonmsg.version>1.2.1</jsonmsg.version>
         <utils.version>341169d6e9</utils.version>
     </properties>
-
-    <build>
-        <defaultGoal>clean package</defaultGoal>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>org.bstats</pattern>
-                            <shadedPattern>me.mattstudios.citizenscmd.metrics</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>me.mattstudios.mf</pattern>
-                            <shadedPattern>me.mattstudios.citizenscmd.mf</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>me.mattstudios.utils</pattern>
-                            <shadedPattern>me.mattstudios.citizenscmd.utility</shadedPattern>
-                        </relocation>
-                    </relocations>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
-    </build>
 
     <repositories>
         <repository>
@@ -100,6 +46,10 @@
         <repository>
             <id>CodeMC</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
 
@@ -130,16 +80,16 @@
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>${vault.version}</version>
+            <version>1.7</version>
             <scope>provided</scope>
         </dependency>
 
         <!-- Compile -->
         <!-- Json message repo -->
         <dependency>
-            <groupId>me.rayzr522</groupId>
-            <artifactId>jsonmessage</artifactId>
-            <version>${jsonmsg.version}</version>
+            <groupId>com.github.ipsk</groupId>
+            <artifactId>JSONMessage</artifactId>
+            <version>213d8c0c6c</version>
         </dependency>
         <!-- My utils -->
         <dependency>
@@ -151,8 +101,8 @@
 
         <dependency>
             <groupId>me.mattstudios.utils</groupId>
-            <artifactId>matts-framework</artifactId>
-            <version>1.0.8-BETA</version>
+            <artifactId>matt-framework</artifactId>
+            <version>1.4.3</version>
             <scope>compile</scope>
         </dependency>
 
@@ -163,4 +113,66 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <defaultGoal>clean package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.metrics</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.mattstudios.mf</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.mf</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.mattstudios.utils</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.utility</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.rayzr522.jsonmessage</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.json</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.io</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.io</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+    </build>
 </project>

@@ -7,7 +7,7 @@ import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
@@ -18,7 +18,7 @@ import static me.mattstudios.utils.NumbersUtils.isDouble;
 @Command("npcmd")
 public class AddCommand extends CommandBase {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
 
     public AddCommand(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -27,15 +27,15 @@ public class AddCommand extends CommandBase {
     /**
      * Adds a command to an NPC via ingame command
      *
-     * @param player     Gets the player to check for which NPC is selected and send messages.
+     * @param sender     Gets the sender to check for which NPC is selected and send messages.
      * @param permission The permission node or other to add.
      * @param arguments  Gets the command to be added to the NPC.
      */
     @SubCommand("add")
     @Permission("citizenscmd.add")
-    public void addCommand(Player player, @Completion("#permissions") String permission, String[] arguments) {
+    public void addCommand(final CommandSender sender, @Completion("#permissions") String permission, String[] arguments) {
 
-        if (npcNotSelected(plugin, player)) return;
+        if (npcNotSelected(plugin, sender)) return;
 
         StringBuilder permissionBuilder = new StringBuilder(permission);
         boolean left = false;
@@ -43,7 +43,7 @@ public class AddCommand extends CommandBase {
         boolean hasDelayError = false;
 
         StringBuilder stringBuilder = new StringBuilder();
-        arguments[0] = arguments[0].replace("/", "");
+        if (arguments[0].startsWith("/")) arguments[0] = arguments[0].substring(1);
 
         for (int i = 0; i < arguments.length; i++) {
 
@@ -80,8 +80,8 @@ public class AddCommand extends CommandBase {
         }
 
         if (hasDelayError) {
-            player.sendMessage(color(HEADER));
-            player.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_DELAY_FAIL));
+            sender.sendMessage(color(HEADER));
+            sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_DELAY_FAIL));
             return;
         }
 
@@ -103,7 +103,7 @@ public class AddCommand extends CommandBase {
             }
         }
 
-        plugin.getDataHandler().addCommand(getSelectedNpcId(player), permissionBuilder.toString(), finalString, player, left);
+        plugin.getDataHandler().addCommand(getSelectedNpcId(sender), permissionBuilder.toString(), finalString, sender, left);
     }
 
 }

@@ -7,7 +7,7 @@ import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
@@ -25,22 +25,22 @@ public class PermissionCommand extends CommandBase {
 
     @SubCommand("permission")
     @Permission("citizenscmd.permission")
-    public void permission(Player player, @Completion("#set") String set, String permission) {
+    public void permission(CommandSender sender, @Completion("#set") String set, String permission) {
 
-        if (npcNotSelected(plugin, player)) return;
+        if (npcNotSelected(plugin, sender)) return;
 
         switch (set.toLowerCase()) {
             case "set":
-                plugin.getDataHandler().setCustomPermission(getSelectedNpcId(player), permission, player);
+                plugin.getDataHandler().setCustomPermission(getSelectedNpcId(sender), permission, sender);
                 break;
 
             case "remove":
-                plugin.getDataHandler().removeCustomPermission(getSelectedNpcId(player), player);
+                plugin.getDataHandler().removeCustomPermission(getSelectedNpcId(sender), sender);
                 break;
 
             default:
-                player.sendMessage(color(HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.WRONG_USAGE));
+                sender.sendMessage(color(HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.WRONG_USAGE));
         }
     }
 

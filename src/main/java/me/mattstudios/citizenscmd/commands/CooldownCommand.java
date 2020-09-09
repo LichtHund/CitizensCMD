@@ -6,7 +6,7 @@ import me.mattstudios.mf.annotations.Completion;
 import me.mattstudios.mf.annotations.Permission;
 import me.mattstudios.mf.annotations.SubCommand;
 import me.mattstudios.mf.base.CommandBase;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
 import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
@@ -22,11 +22,10 @@ public class CooldownCommand extends CommandBase {
 
     @SubCommand("cooldown")
     @Permission("citizenscmd.cooldown")
-    public void cooldown(Player player, @Completion("#range:9") int cooldown) {
+    public void cooldown(CommandSender sender, @Completion("#range:9") Integer cooldown) {
+        if (npcNotSelected(plugin, sender)) return;
 
-        if (npcNotSelected(plugin, player)) return;
-
-        plugin.getDataHandler().setCooldown(getSelectedNpcId(player), cooldown, player);
+        plugin.getDataHandler().setCooldown(getSelectedNpcId(sender), cooldown, sender);
     }
 
 }

@@ -27,6 +27,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static me.mattstudios.utils.MessageUtils.color;
@@ -40,7 +41,7 @@ public class CooldownHandler {
 
     private FileConfiguration cooldownsConfigurator;
 
-    private HashMap<String, Long> cooldownData;
+    private Map<String, Long> cooldownData;
 
     public CooldownHandler(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -87,7 +88,7 @@ public class CooldownHandler {
 
             if (!cooldownsConfigurator.contains("cooldown-data")) return;
 
-            HashMap<String, Integer> cachedDataFromSaves = plugin.getDataHandler().getCachedCooldownByID();
+            Map<String, Integer> cachedDataFromSaves = plugin.getDataHandler().getCachedCooldownByID();
 
             for (String parent : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data")).getKeys(false)) {
                 for (String child : Objects.requireNonNull(cooldownsConfigurator.getConfigurationSection("cooldown-data." + parent)).getKeys(false)) {

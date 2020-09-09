@@ -40,6 +40,7 @@ import me.mattstudios.citizenscmd.schedulers.UpdateScheduler;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
 import me.mattstudios.citizenscmd.utility.Messages;
+import me.mattstudios.citizenscmd.utility.Util;
 import me.mattstudios.mf.base.CommandManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
@@ -51,13 +52,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static me.mattstudios.citizenscmd.utility.Util.HEADER;
-import static me.mattstudios.citizenscmd.utility.Util.TAG;
 import static me.mattstudios.citizenscmd.utility.Util.disablePlugin;
-import static me.mattstudios.citizenscmd.utility.Util.setUpMetrics;
 import static me.mattstudios.utils.MessageUtils.color;
 import static me.mattstudios.utils.MessageUtils.info;
 import static me.mattstudios.utils.YamlUtils.copyDefaults;
@@ -81,13 +80,13 @@ public final class CitizensCMD extends JavaPlugin {
     private String newVersion;
     private DisplayFormat displayFormat;
 
-    private HashMap<String, Boolean> waitingList;
+    private Map<String, Boolean> waitingList;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         copyDefaults(getClassLoader().getResourceAsStream("config.yml"), new File(getDataFolder().getPath(), "config.yml"));
-
+        
         setLang(Objects.requireNonNull(getConfig().getString("lang")));
 
         if (!hasCitizens() && getConfig().getBoolean("citizens-check")) {
@@ -95,12 +94,12 @@ public final class CitizensCMD extends JavaPlugin {
             return;
         }
 
-        commandManager = new CommandManager(this);
+        commandManager = new CommandManager(this, true);
 
         Metrics metrics = new Metrics(this);
-        setUpMetrics(metrics, getConfig());
+        Util.setUpMetrics(metrics, getConfig());
 
-        info(color(TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
+        info(color(Util.TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
 
         permissionsManager = new PermissionsManager(this);
 
@@ -113,15 +112,15 @@ public final class CitizensCMD extends JavaPlugin {
         registerCommands();
         registerEvents();
 
-        info(color(TAG + lang.getMessage(Messages.USING_LANGUAGE)));
+        info(color(Util.TAG + lang.getMessage(Messages.USING_LANGUAGE)));
 
         if (hasPAPI()) {
-            info(color(TAG + lang.getMessage(Messages.PAPI_AVAILABLE)));
+            info(color(Util.TAG + lang.getMessage(Messages.PAPI_AVAILABLE)));
             papi = true;
         }
 
         if (setupEconomy()) {
-            info(color(TAG + lang.getUncoloredMessage(Messages.VAULT_AVAILABLE)));
+            info(color(Util.TAG + lang.getUncoloredMessage(Messages.VAULT_AVAILABLE)));
         }
 
         waitingList = new HashMap<>();
@@ -153,8 +152,8 @@ public final class CitizensCMD extends JavaPlugin {
                 if (updater.checkForUpdates()) {
                     updateStatus = true;
                     newVersion = updater.getLatestVersion();
-                    info(color(TAG + "&b&o" + lang.getUncoloredMessage(Messages.STARTUP_NEW_VERSION)));
-                    info(color(TAG + "&b&o" + updater.getResourceURL()));
+                    info(color(Util.TAG + "&b&o" + lang.getUncoloredMessage(Messages.STARTUP_NEW_VERSION)));
+                    info(color(Util.TAG + "&b&o" + updater.getResourceURL()));
                 }
             } catch (Exception ignored) {
             }
@@ -188,24 +187,24 @@ public final class CitizensCMD extends JavaPlugin {
         commandManager.getCompletionHandler().register("#click", input -> Arrays.asList("left", "right"));
         commandManager.getCompletionHandler().register("#set", input -> Arrays.asList("set", "remove"));
 
-        commandManager.getMessageHandler().register("cmd.no.permission", (sender, arg) -> {
-            sender.sendMessage(color(HEADER));
+        commandManager.getMessageHandler().register("cmd.no.permission", sender -> {
+            sender.sendMessage(color(Util.HEADER));
             sender.sendMessage(lang.getMessage(Messages.NO_PERMISSION));
         });
-        commandManager.getMessageHandler().register("cmd.no.console", (sender, arg) -> {
-            sender.sendMessage(color(HEADER));
+        commandManager.getMessageHandler().register("cmd.no.console", sender -> {
+            sender.sendMessage(color(Util.HEADER));
             sender.sendMessage(lang.getMessage(Messages.CONSOLE_NOT_ALLOWED));
         });
-        commandManager.getMessageHandler().register("cmd.no.exists", (sender, arg) -> {
-            sender.sendMessage(color(HEADER));
+        commandManager.getMessageHandler().register("cmd.no.exists", sender -> {
+            sender.sendMessage(color(Util.HEADER));
             sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
         });
-        commandManager.getMessageHandler().register("cmd.wrong.usage", (sender, arg) -> {
-            sender.sendMessage(color(HEADER));
+        commandManager.getMessageHandler().register("cmd.wrong.usage", sender -> {
+            sender.sendMessage(color(Util.HEADER));
             sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
         });
-        commandManager.getMessageHandler().register("arg.must.be.number", (sender, arg) -> {
-            sender.sendMessage(color(HEADER));
+        commandManager.getMessageHandler().register("arg.must.be.number", sender -> {
+            sender.sendMessage(color(Util.HEADER));
             sender.sendMessage(lang.getMessage(Messages.INVALID_NUMBER));
         });
 
@@ -348,7 +347,7 @@ public final class CitizensCMD extends JavaPlugin {
      *
      * @return returns the list of players
      */
-    public HashMap<String, Boolean> getWaitingList() {
+    public Map<String, Boolean> getWaitingList() {
         return waitingList;
     }
 

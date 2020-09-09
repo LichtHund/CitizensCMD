@@ -12,22 +12,8 @@ softdepend: [Citizens, PlaceholderAPI, Vault]
 api-version: 1.13
 
 commands:
-  npcmd add:
-    description: Adds command to the NPC.
-  npcmd cooldown:
-    description: Sets the cooldown for the NPC
-  npcmd price:
-    description: Sets the price for the NPC
-  npcmd permission:
-    description: Sets the permission for the NPC
-  npcmd list:
-    description: Gets the list of commands
-  npcmd reload:
-    description: Reloads config, saves and cooldown
-  npcmd remove:
-    description: Removes command
-  npcmd edit:
-    description: Edits a command or permission
+  npcmd:
+    description: Main command for help
 
 permissions:
   citizenscmd.use:

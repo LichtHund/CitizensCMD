@@ -58,7 +58,6 @@ public class LangHandler {
         try {
             File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
             FileConfiguration langConf = new YamlConfiguration();
-
             InputStream langStream = CitizensCMD.class.getClassLoader().getResourceAsStream("lang/" + lang + ".yml");
 
             if (!langFile.exists()) {
@@ -70,9 +69,9 @@ public class LangHandler {
                 }
             } else {
                 if (langStream == null) {
-                    saveDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
+                    //saveDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
                 } else {
-                    saveDefaults(langStream, langFile);
+                    //saveDefaults(langStream, langFile);
                 }
             }
 

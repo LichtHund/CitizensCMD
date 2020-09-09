@@ -22,16 +22,18 @@ import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.citizenscmd.utility.Util;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static me.mattstudios.utils.MessageUtils.color;
@@ -46,7 +48,7 @@ public class DataHandler {
 
     private static FileConfiguration dataConfigurator;
 
-    private HashMap<String, Object> data;
+    private Map<String, Object> data;
 
     public DataHandler(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -87,7 +89,7 @@ public class DataHandler {
      * Caches the data from the file
      */
     private void cacheData() {
-        new Thread(() -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 
             try {
                 dataConfigurator.load(savesFile);
@@ -122,7 +124,7 @@ public class DataHandler {
                 e.printStackTrace();
             }
 
-        }).start();
+        });
     }
 
     /**
@@ -131,11 +133,11 @@ public class DataHandler {
      * @param npc        The NPC id
      * @param permission The permission to access the command
      * @param command    The command
-     * @param player     The player who run the command
+     * @param sender     The player who run the command
      * @param left       If the command should be added to the left or right click
      */
-    public void addCommand(int npc, String permission, String command, Player player, boolean left) {
-        new Thread(() -> {
+    public void addCommand(int npc, String permission, String command, CommandSender sender, boolean left) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -168,15 +170,15 @@ public class DataHandler {
                     dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
                 }
 
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADDED));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADDED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_FAIL));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_FAIL));
             }
-        }).start();
+        });
     }
 
     /**
@@ -188,7 +190,7 @@ public class DataHandler {
      * @param left       If the command should be added to the left or right click
      */
     public void addCommand(int npc, String permission, String command, boolean left) {
-        new Thread(() -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -224,7 +226,7 @@ public class DataHandler {
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException ignored) {
             }
-        }).start();
+        });
     }
 
     /**
@@ -232,10 +234,10 @@ public class DataHandler {
      *
      * @param npc      The NPC id
      * @param cooldown The cooldown in seconds to be added
-     * @param player   The player who run the command
+     * @param sender   The player who run the command
      */
-    public void setCooldown(int npc, int cooldown, Player player) {
-        new Thread(() -> {
+    public void setCooldown(int npc, int cooldown, CommandSender sender) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -244,15 +246,15 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".cooldown", cooldown);
 
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET_ERROR));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET_ERROR));
             }
-        }).start();
+        });
     }
 
     /**
@@ -260,10 +262,10 @@ public class DataHandler {
      *
      * @param npc    The NPC id
      * @param price  The price in seconds to be added
-     * @param player The player who run the command
+     * @param sender The player who run the command
      */
-    public void setPrice(int npc, double price, Player player) {
-        new Thread(() -> {
+    public void setPrice(int npc, double price, CommandSender sender) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -272,14 +274,14 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".price", price);
 
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.NPC_PRICE_SET));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_PRICE_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
@@ -287,10 +289,10 @@ public class DataHandler {
      *
      * @param npc        The NPC id
      * @param permission The permission to be added
-     * @param player     The player who run the command
+     * @param sender     The player who run the command
      */
-    public void setCustomPermission(int npc, String permission, Player player) {
-        new Thread(() -> {
+    public void setCustomPermission(int npc, String permission, CommandSender sender) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -299,24 +301,24 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".permission", permission);
 
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_SET));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
      * Remove the permission of the NPC
      *
      * @param npc    The NPC id
-     * @param player The player who run the command
+     * @param sender The player who run the command
      */
-    public void removeCustomPermission(int npc, Player player) {
-        new Thread(() -> {
+    public void removeCustomPermission(int npc, CommandSender sender) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -326,14 +328,14 @@ public class DataHandler {
 
                 data.remove("npc-data.npc-" + npc + ".permission");
 
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_REMOVED));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_REMOVED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     public String getCustomPermission(int npc) {
@@ -424,10 +426,10 @@ public class DataHandler {
      * @param npc       The NPC id
      * @param commandID The command id
      * @param click     The click type, either left or right
-     * @param player    The player to send the message to
+     * @param sender    The player to send the message to
      */
-    public void removeCommand(int npc, int commandID, EnumTypes.ClickType click, Player player) {
-        new Thread(() -> {
+    public void removeCommand(int npc, int commandID, EnumTypes.ClickType click, CommandSender sender) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -440,14 +442,14 @@ public class DataHandler {
                 data.replace(key, commands);
                 dataConfigurator.set(key, commands);
 
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.REMOVED_COMMAND));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.REMOVED_COMMAND));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
@@ -458,10 +460,10 @@ public class DataHandler {
      * @param click     The click type either, left or right
      * @param type      The type to edit, either CMD or PERM
      * @param newValue  the new value for either the command or the permission
-     * @param player    The player to send messages
+     * @param sender    The player to send messages
      */
-    public void edit(int npc, int commandID, EnumTypes.ClickType click, EnumTypes.EditType type, String newValue, Player player) {
-        new Thread(() -> {
+    public void edit(int npc, int commandID, EnumTypes.ClickType click, EnumTypes.EditType type, String newValue, CommandSender sender) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -489,14 +491,14 @@ public class DataHandler {
                 data.replace(key, commandsData);
                 dataConfigurator.set(key, commandsData);
 
-                player.sendMessage(color(Util.HEADER));
-                player.sendMessage(plugin.getLang().getMessage(Messages.EDITED_COMMAND).replace("{type}", typeText));
+                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(plugin.getLang().getMessage(Messages.EDITED_COMMAND).replace("{type}", typeText));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
@@ -505,7 +507,7 @@ public class DataHandler {
      * @param npc the NPC id
      */
     public void removeNPCData(int npc) {
-        new Thread(() -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
@@ -518,7 +520,7 @@ public class DataHandler {
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
@@ -528,12 +530,12 @@ public class DataHandler {
      * @param npcClone The ID of the new NPC.
      */
     public void cloneData(int npc, int npcClone) {
-        new Thread(() -> {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
                 dataConfigurator.load(savesFile);
 
-                HashMap<String, Object> newNpcData = new HashMap<>();
+                Map<String, Object> newNpcData = new HashMap<>();
 
                 for (String key : data.keySet()) {
                     if (key.contains("npc-" + npc)) {
@@ -548,7 +550,7 @@ public class DataHandler {
             } catch (IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
     }
 
     /**
@@ -556,8 +558,8 @@ public class DataHandler {
      *
      * @return The cached cooldowns
      */
-    HashMap<String, Integer> getCachedCooldownByID() {
-        HashMap<String, Integer> cachedData = new HashMap<>();
+    Map<String, Integer> getCachedCooldownByID() {
+        Map<String, Integer> cachedData = new HashMap<>();
 
         for (String key : data.keySet()) {
             String[] components = key.split("\\.");

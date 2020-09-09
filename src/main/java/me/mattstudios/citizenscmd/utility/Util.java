@@ -18,22 +18,18 @@
 
 package me.mattstudios.citizenscmd.utility;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -41,9 +37,10 @@ import java.util.regex.Pattern;
 
 import static me.mattstudios.utils.MessageUtils.color;
 import static me.mattstudios.utils.MessageUtils.info;
-import static org.bukkit.Bukkit.getScheduler;
 
 public class Util {
+
+    private Util() {}
 
     /**
      * String with CitizensCMD default header and tag
@@ -54,14 +51,14 @@ public class Util {
     /**
      * Checks if player has or not selected an NPC
      *
-     * @param player The player to check if it has any NPC selected or not
+     * @param sender The player to check if it has any NPC selected or not
      * @return Returns true if has an NPC selected and false if not
      */
-    public static boolean npcNotSelected(CitizensCMD plugin, Player player) {
-        if (CitizensAPI.getDefaultNPCSelector().getSelected(player) != null) return false;
+    public static boolean npcNotSelected(final CitizensCMD plugin, final CommandSender sender) {
+        if (CitizensAPI.getDefaultNPCSelector().getSelected(sender) != null) return false;
 
-        player.sendMessage(color(HEADER));
-        player.sendMessage(plugin.getLang().getMessage(Messages.NO_NPC));
+        sender.sendMessage(color(HEADER));
+        sender.sendMessage(plugin.getLang().getMessage(Messages.NO_NPC));
         return true;
     }
 
@@ -78,11 +75,11 @@ public class Util {
     /**
      * Gets the NPC id
      *
-     * @param player To get the id of the NPC the player has selected
+     * @param sender To get the id of the NPC the player has selected
      * @return Returns the id of the NPC
      */
-    public static int getSelectedNpcId(Player player) {
-        return CitizensAPI.getDefaultNPCSelector().getSelected(player).getId();
+    public static int getSelectedNpcId(final CommandSender sender) {
+        return CitizensAPI.getDefaultNPCSelector().getSelected(sender).getId();
     }
 
     public static void setUpMetrics(Metrics metrics, FileConfiguration config) {
@@ -165,7 +162,7 @@ public class Util {
      * @param player The player to be sent to the server
      * @param server the server name
      */
-    private static void changeServer(CitizensCMD plugin, Player player, String server) {
+    public static void changeServer(CitizensCMD plugin, Player player, String server) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
         try {
@@ -175,96 +172,6 @@ public class Util {
             e.printStackTrace();
         }
         player.sendPluginMessage(plugin, "BungeeCord", byteArrayOutputStream.toByteArray());
-    }
-
-    /**
-     * Does the main commands for both left and right clicks.
-     *
-     * @param plugin    The CitizensCMD plugin.
-     * @param npc       The NPC to get ID.
-     * @param player    The player using the NPC.
-     * @param clickType The type of click, either left or right.
-     */
-    public static void doCommands(CitizensCMD plugin, NPC npc, Player player, EnumTypes.ClickType clickType) {
-        List<String> permissions = new ArrayList<>();
-        List<String> commands = new ArrayList<>();
-
-        for (String list : plugin.getDataHandler().getClickCommandsData(npc.getId(), clickType)) {
-            Pattern pattern = Pattern.compile("\\[([^]]*)] (.*)");
-            Matcher matcher = pattern.matcher(list);
-            if (matcher.find()) {
-                permissions.add(matcher.group(1));
-                String command = matcher.group(2);
-                if (command.contains("%p%")) command = command.replace("%p%", player.getName());
-                if (command.contains("%player%")) command = command.replace("%player%", player.getName());
-                if (plugin.papiEnabled())
-                    commands.add(PlaceholderAPI.setPlaceholders((OfflinePlayer) player, command));
-                else commands.add(command);
-
-            }
-        }
-
-        if (permissions.size() != commands.size()) return;
-
-        for (int i = 0; i < permissions.size(); i++) {
-
-            double delay = 0;
-
-            if (permissions.get(i).contains("(")) {
-                Pattern pattern = Pattern.compile("(.*)\\(([^]]*)\\)");
-                Matcher matcher = pattern.matcher(permissions.get(i));
-                if (matcher.find()) {
-                    delay = Double.parseDouble(matcher.group(2));
-                    String permission = matcher.group(1);
-                    permissions.set(i, permission);
-                }
-            }
-
-            int finalI = i;
-            switch (permissions.get(i).toLowerCase()) {
-                case "console":
-                    getScheduler().runTaskLater(plugin, () -> plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), commands.get(finalI)), (int) delay * 20);
-                    break;
-
-                case "none":
-                    getScheduler().runTaskLater(plugin, () -> player.chat("/" + commands.get(finalI)), (int) delay * 20);
-                    break;
-
-                case "server":
-                    getScheduler().runTaskLater(plugin, () -> changeServer(plugin, player, commands.get(finalI)), (int) delay * 20);
-                    break;
-
-                case "message":
-                    getScheduler().runTaskLater(plugin, () -> {
-                        String finalMessage;
-                        if (commands.get(finalI).contains("{display}")) {
-                            String tmpStr = commands.get(finalI).replace("{display}", plugin.getLang().getMessage(Messages.MESSAGE_DISPLAY));
-                            finalMessage = tmpStr.replace("{name}", npc.getFullName());
-                        } else
-                            finalMessage = commands.get(finalI);
-                        player.sendMessage(color(finalMessage));
-                    }, (int) delay * 20);
-                    break;
-
-                case "sound":
-                    getScheduler().runTaskLater(plugin, () -> {
-                        Pattern pattern = Pattern.compile("(\\w+)\\s([\\d.]+)\\s([\\d.]+)");
-                        Matcher matcher = pattern.matcher(commands.get(finalI));
-                        if (matcher.find() && soundExists(matcher.group(1))) {
-                            player.playSound(player.getLocation(), Sound.valueOf(matcher.group(1)), Float.parseFloat(matcher.group(2)), Float.parseFloat(matcher.group(3)));
-                        }
-                    }, (int) delay * 20);
-                    break;
-
-                default:
-                    getScheduler().runTaskLater(plugin, () -> {
-                        plugin.getPermissionsManager().setPermission(player, permissions.get(finalI));
-                        player.chat("/" + commands.get(finalI));
-                        plugin.getPermissionsManager().unsetPermission(player, permissions.get(finalI));
-                    }, (int) delay * 20);
-                    break;
-            }
-        }
     }
 
     /**
@@ -427,7 +334,7 @@ public class Util {
 
     }
 
-    private static boolean soundExists(String soundName) {
+    public static boolean soundExists(String soundName) {
         for (Sound sound : Sound.values()) {
             if (sound.name().equalsIgnoreCase(soundName)) return true;
         }
