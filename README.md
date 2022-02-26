@@ -1,5 +1,5 @@
 ![CitizensCMD Logo](https://i.imgur.com/nZjxytv.jpg)
-[![Spigot Project](https://img.shields.io/badge/Spigot-CitizensCMD-blue.svg?longCache=true&style=flat-square)](https://www.spigotmc.org/resources/citizens-cmd.30224/)
+[![Spigot Project](https://img.shields.io/badge/Spigot-CitizensCMD-blue.svg?longCache=true&style=flat-square)](https://www.spigotmc.org/resources/30224/)
 [![GitHub issues](https://img.shields.io/github/issues/HexedHero/CitizensCMD.svg?longCache=true&style=flat-square)](https://github.com/HexedHero/CitizensCMD/issues)
 ![GitHub issues](https://img.shields.io/github/last-commit/HexedHero/CitizensCMD.svg?longCache=true&style=flat-square)
 [![GitHub issues](https://img.shields.io/badge/Guide-Wiki-blue.svg?longCache=true&style=flat-square)](https://github.com/HexedHero/CitizensCMD/wiki)
