@@ -24,32 +24,32 @@
 
     <repositories>
         <repository>
-            <id>everything</id>
+            <id>Citizens-Repo</id>
             <url>https://repo.citizensnpcs.co/</url>
         </repository>
         <repository>
-            <id>spigotmc-repo</id>
+            <id>SpigotMC-Repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>rayzr-repo</id>
+            <id>Rayzr-Repo</id>
             <url>https://rayzr.dev/repo/</url>
         </repository>
         <repository>
-            <id>placeholderapi</id>
+            <id>ExtendedClip-Repo</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
+            <id>JitPack-Repo</id>
+            <url>https://jitpack.io/</url>
         </repository>
         <repository>
-            <id>CodeMC</id>
-            <url>https://repo.codemc.org/repository/maven-public</url>
+            <id>CodeMC-Repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>Sonatype-Repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
