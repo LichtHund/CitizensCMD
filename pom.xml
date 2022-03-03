@@ -17,7 +17,7 @@
         <spigot.version>1.18.2-R0.1-SNAPSHOT</spigot.version>
         <citizens.version>2.0.29-SNAPSHOT</citizens.version>
         <papi.version>2.11.1</papi.version>
-        <vault.version>da407c0059</vault.version>
+        <vault.version>1.7</vault.version>
         <jsonmsg.version>1.3.1-SNAPSHOT</jsonmsg.version>
         <utils.version>341169d6e9</utils.version>
     </properties>
@@ -80,33 +80,33 @@
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
+            <version>${vault.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <!-- Compile -->
-        <!-- Json message repo -->
+        <!-- JSON Message -->
         <dependency>
             <groupId>me.rayzr522</groupId>
             <artifactId>jsonmessage</artifactId>
             <version>${jsonmsg.version}</version>
             <scope>compile</scope>
         </dependency>
-        <!-- My utils -->
+        <!-- Matt's utils -->
         <dependency>
             <groupId>com.github.ipsk</groupId>
             <artifactId>MattUtils</artifactId>
             <version>${utils.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        <!-- Matt's Framework -->
         <dependency>
             <groupId>me.mattstudios.utils</groupId>
             <artifactId>matt-framework</artifactId>
             <version>1.4.3</version>
             <scope>compile</scope>
         </dependency>
-
+        <!-- bStats -->
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
