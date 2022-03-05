@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "startsWith(github.event.head_commit.message, '[CI-BUILD]')"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 17 (Java 17)
+      uses: actions/setup-java@v2
+      with:
+        java-version: 17
+        distribution: 'temurin'
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+    - name: Upload artifacts (Jars)
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ github.event.repository.name }}
+        path: target/*.jar

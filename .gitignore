@@ -1,8 +1,11 @@
-
 \.idea/
-
 dependency-reduced-pom\.xml
-
 citizens-cmd\.iml
 
+# Maven 
 target/
+
+# Eclipse
+.settings/
+.classpath
+.project
