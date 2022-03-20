@@ -13,10 +13,10 @@ import java.net.URLConnection;
  */
 public class SpigotUpdater {
 
-    private int project;
+    private final int project;
     private URL checkURL;
     private String newVersion;
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
 
     public SpigotUpdater(JavaPlugin plugin, int projectID) {
         this.plugin = plugin;
@@ -24,8 +24,7 @@ public class SpigotUpdater {
         this.project = projectID;
         try {
             this.checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
-        } catch (MalformedURLException ignored) {
-        }
+        } catch (MalformedURLException ignored) {}
     }
 
     public JavaPlugin getPlugin() {

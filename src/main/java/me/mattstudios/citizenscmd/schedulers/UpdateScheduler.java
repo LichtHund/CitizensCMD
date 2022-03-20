@@ -19,6 +19,7 @@
 package me.mattstudios.citizenscmd.schedulers;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.Settings;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -35,7 +36,7 @@ public class UpdateScheduler extends BukkitRunnable {
      */
     @Override
     public void run() {
-        if (plugin.getConfig().getBoolean("check-updates")) return;
+        if (plugin.getSettings().getProperty(Settings.CHECK_UPDATES)) return;
 
         SpigotUpdater updater = new SpigotUpdater(plugin, 30224);
         try {

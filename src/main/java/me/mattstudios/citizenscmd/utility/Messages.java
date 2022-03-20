@@ -85,7 +85,7 @@ public enum Messages {
     HOURS("messages.time-format.hours"),
     DAYS("messages.time-format.days");
 
-    private String path;
+    private final String path;
 
     Messages(String path) {
         this.path = path;

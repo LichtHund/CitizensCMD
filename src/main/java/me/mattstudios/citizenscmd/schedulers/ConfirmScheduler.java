@@ -20,17 +20,20 @@ package me.mattstudios.citizenscmd.schedulers;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ConfirmScheduler extends BukkitRunnable {
 
-    private Player player;
-    private int npc;
-    private CitizensCMD plugin;
+    private final Player player;
+    private final Audience audience;
+    private final int npc;
+    private final CitizensCMD plugin;
 
     public ConfirmScheduler(CitizensCMD plugin, Player player, int npc) {
         this.player = player;
+        this.audience = plugin.getAudiences().player(player);
         this.npc = npc;
         this.plugin = plugin;
     }
@@ -40,10 +43,9 @@ public class ConfirmScheduler extends BukkitRunnable {
      */
     @Override
     public void run() {
-        if (plugin.getWaitingList().containsKey(player.getUniqueId().toString() + "." + npc)) {
-            player.sendMessage(plugin.getLang().getMessage(Messages.PAY_CANCELED));
-            plugin.getWaitingList().remove(player.getUniqueId().toString() + "." + npc);
+        if (plugin.getWaitingList().containsKey(player.getUniqueId() + "." + npc)) {
+            audience.sendMessage(plugin.getLang().getMessage(Messages.PAY_CANCELED));
+            plugin.getWaitingList().remove(player.getUniqueId() + "." + npc);
         }
     }
-
 }

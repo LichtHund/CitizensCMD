@@ -20,30 +20,47 @@ package me.mattstudios.citizenscmd.listeners;
 
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
-import me.mattstudios.citizenscmd.utility.Util;
-import me.rayzr522.jsonmessage.JSONMessage;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.text;
 
 public class UpdateEvent implements Listener {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
 
     public UpdateEvent(CitizensCMD plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler (priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (plugin.isUpdateStatus() && event.getPlayer().hasPermission("citizenscmd.update")) {
-            JSONMessage.create(color(Util.HEADER)).send(event.getPlayer());
-            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Messages.NEW_VERSION) + plugin.getNewVersion())).send(event.getPlayer());
-            JSONMessage.create(color(plugin.getLang().getUncoloredMessage(Messages.DOWNLOAD_AT) + " spigotmc.org/resources/citizens-CMD.30224/")).openURL("https://spigotmc.org/resources/citizens-CMD.30224/").send(event.getPlayer());
-        }
+        if (!plugin.isUpdateStatus() || !event.getPlayer().hasPermission("citizenscmd.update")) return;
+
+        final Audience audience = plugin.getAudiences().player(event.getPlayer());
+
+        final TextComponent.Builder builder = Component.text();
+        builder.append(HEADER).append(newline());
+        builder.append(plugin.getLang().getMessage(Messages.NEW_VERSION));
+        builder.append(text(plugin.getNewVersion()));
+        builder.append(newline());
+        builder.append(
+                Component.text()
+                        .append(plugin.getLang().getMessage(Messages.DOWNLOAD_AT))
+                        .append(text(" spigotmc.org/resources/citizens-CMD.30224/"))
+                        .clickEvent(ClickEvent.openUrl("https://spigotmc.org/resources/citizens-CMD.30224/"))
+                        .build()
+        );
+
+        audience.sendMessage(builder.build());
     }
 
 }

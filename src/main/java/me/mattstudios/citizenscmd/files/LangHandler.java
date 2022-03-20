@@ -18,36 +18,39 @@
 
 package me.mattstudios.citizenscmd.files;
 
+import ch.jalu.configme.SettingsManager;
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.Settings;
 import me.mattstudios.citizenscmd.utility.Messages;
-import org.apache.commons.io.FileUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.simpleyaml.configuration.file.YamlFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 
-import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
+import static me.mattstudios.citizenscmd.utility.Util.MINI;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class LangHandler {
 
-    private CitizensCMD plugin;
-    private String lang;
+    private final CitizensCMD plugin;
+    private final SettingsManager settings;
+    private final String lang;
 
-    private HashMap<String, String> messages;
+    private final Map<String, String> messages = new HashMap<>();
 
-    public LangHandler(CitizensCMD plugin, String lang) {
+    public LangHandler(final CitizensCMD plugin, final String lang) {
         this.plugin = plugin;
-        this.lang = lang;
-
-        messages = new HashMap<>();
+        this.settings = plugin.getSettings();
+        this.lang = lang.toLowerCase(Locale.ROOT);
         cacheMessage();
     }
 
@@ -58,21 +61,10 @@ public class LangHandler {
         try {
             File langFile = new File(plugin.getDataFolder(), "lang/" + lang + ".yml");
             FileConfiguration langConf = new YamlConfiguration();
-            InputStream langStream = CitizensCMD.class.getClassLoader().getResourceAsStream("lang/" + lang + ".yml");
+            // InputStream langStream = CitizensCMD.class.getClassLoader().getResourceAsStream("lang/" + lang + ".yml");
 
             if (!langFile.exists()) {
-                if (langStream == null) {
-                    langFile.createNewFile();
-                    saveDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
-                } else {
-                    plugin.saveResource("lang/" + lang + ".yml", false);
-                }
-            } else {
-                if (langStream == null) {
-                    //saveDefaults(CitizensCMD.class.getClassLoader().getResourceAsStream("lang/en.yml"), langFile);
-                } else {
-                    //saveDefaults(langStream, langFile);
-                }
+                plugin.saveResource("lang/" + lang + ".yml", false);
             }
 
             langConf.load(langFile);
@@ -82,7 +74,6 @@ public class LangHandler {
                     messages.put("messages." + parent + "." + child, langConf.getString("messages." + parent + "." + child));
                 }
             }
-
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
@@ -94,8 +85,22 @@ public class LangHandler {
      * @param path String with the path to the message
      * @return Returns String with colored message from file
      */
-    public String getMessage(Messages path) {
-        return color(messages.get(path.getPath()));
+    public Component getMessage(Messages path) {
+        return getMessage(path, "", "");
+    }
+
+    public Component getMessage(Messages path, String match, String replace) {
+        return getMessage(path, Collections.singletonMap(match, replace));
+    }
+
+    public Component getMessage(Messages path, Map<String, String> replacements) {
+        String value = messages.get(path.getPath());
+        for (final Map.Entry<String, String> entry : replacements.entrySet()) {
+            value = value.replace(entry.getKey(), entry.getValue());
+        }
+
+        if (settings.getProperty(Settings.MINI_MESSAGE_LANG)) return MINI.deserialize(value);
+        return LEGACY.deserialize(value);
     }
 
     /**
@@ -116,56 +121,4 @@ public class LangHandler {
     public String getLanguage() {
         return lang;
     }
-
-    /**
-     * Gets file from resources and copies the changes to the main one, preserving comments.
-     * Used for my messages.
-     *
-     * @param inputFile  The file from resources.
-     * @param outputFile The output file.
-     */
-    private static void saveDefaults(InputStream inputFile, File outputFile) {
-        try {
-            if (inputFile == null) return;
-
-            File tempFile = File.createTempFile("npcmdCfg" + gen(), "yml");
-            FileUtils.copyInputStreamToFile(inputFile, tempFile);
-
-            inputFile.close();
-
-            YamlFile resourceYaml = new YamlFile(tempFile);
-            YamlFile savedYaml = new YamlFile(outputFile);
-
-            resourceYaml.load();
-            savedYaml.load();
-
-            boolean edited = false;
-
-            for (String parent : resourceYaml.getConfigurationSection("messages").getKeys(false)) {
-                for (String child : resourceYaml.getConfigurationSection("messages." + parent).getKeys(false)) {
-                    String key = "messages." + parent + "." + child;
-
-                    if (!savedYaml.contains(key)) continue;
-
-                    edited = true;
-                    resourceYaml.set(key, savedYaml.get(key));
-                }
-            }
-
-            if (edited) resourceYaml.saveWithComments();
-
-
-            FileUtils.copyFile(tempFile, outputFile);
-            tempFile.delete();
-
-        } catch (IOException | org.simpleyaml.exceptions.InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static int gen() {
-        Random r = new Random(System.currentTimeMillis());
-        return 10000 + r.nextInt(20000);
-    }
-
 }

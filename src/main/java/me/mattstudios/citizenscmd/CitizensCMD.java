@@ -18,6 +18,12 @@
 
 package me.mattstudios.citizenscmd;
 
+import ch.jalu.configme.SettingsManager;
+import ch.jalu.configme.SettingsManagerBuilder;
+import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
+import dev.triumphteam.cmd.core.message.MessageKey;
+import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import me.mattstudios.citizenscmd.api.CitizensCMDAPI;
 import me.mattstudios.citizenscmd.commands.AddCommand;
 import me.mattstudios.citizenscmd.commands.CooldownCommand;
@@ -40,26 +46,33 @@ import me.mattstudios.citizenscmd.schedulers.UpdateScheduler;
 import me.mattstudios.citizenscmd.updater.SpigotUpdater;
 import me.mattstudios.citizenscmd.utility.DisplayFormat;
 import me.mattstudios.citizenscmd.utility.Messages;
-import me.mattstudios.citizenscmd.utility.Util;
-import me.mattstudios.mf.base.CommandManager;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.milkbowl.vault.economy.Economy;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.LEGACY;
+import static me.mattstudios.citizenscmd.utility.Util.TAG;
+import static me.mattstudios.citizenscmd.utility.Util.color;
 import static me.mattstudios.citizenscmd.utility.Util.disablePlugin;
-import static me.mattstudios.utils.MessageUtils.color;
-import static me.mattstudios.utils.MessageUtils.info;
-import static me.mattstudios.utils.YamlUtils.copyDefaults;
+import static me.mattstudios.citizenscmd.utility.Util.info;
 
 public final class CitizensCMD extends JavaPlugin {
 
@@ -68,11 +81,14 @@ public final class CitizensCMD extends JavaPlugin {
     private CooldownHandler cooldownHandler;
     private PermissionsManager permissionsManager;
 
+    private BukkitAudiences audiences;
+
     private static CitizensCMDAPI api;
     private static Economy economy;
 
     private boolean papi = false;
-    private CommandManager commandManager;
+    private BukkitCommandManager<CommandSender> commandManager;
+    private SettingsManager settings;
 
     private boolean updateStatus = false;
     private boolean shift = false;
@@ -84,22 +100,28 @@ public final class CitizensCMD extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        copyDefaults(getClassLoader().getResourceAsStream("config.yml"), new File(getDataFolder().getPath(), "config.yml"));
-        
-        setLang(Objects.requireNonNull(getConfig().getString("lang")));
+        settings = SettingsManagerBuilder
+                .withYamlFile(Paths.get(getDataFolder().getPath(), "config.yml"))
+                .configurationData(Settings.class)
+                .useDefaultMigrationService()
+                .create();
 
-        if (!hasCitizens() && getConfig().getBoolean("citizens-check")) {
+        audiences = BukkitAudiences.create(this);
+
+        setLang(settings.getProperty(Settings.LANG));
+
+        if (!hasCitizens() && settings.getProperty(Settings.CITIZENS_CHECK)) {
             disablePlugin(this);
             return;
         }
 
-        commandManager = new CommandManager(this, true);
+        commandManager = BukkitCommandManager.create(this);
 
-        Metrics metrics = new Metrics(this);
-        Util.setUpMetrics(metrics, getConfig());
+        //Metrics metrics = new Metrics(this);
+        //Util.setUpMetrics(metrics, settings);
 
-        info(color(Util.TAG + "&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund"));
+        final Audience console = audiences.console();
+        console.sendMessage(TAG.append(LEGACY.deserialize("&3Citizens&cCMD &8&o" + getDescription().getVersion() + " &8By &3Mateus Moreira &c@LichtHund")));
 
         permissionsManager = new PermissionsManager(this);
 
@@ -112,48 +134,44 @@ public final class CitizensCMD extends JavaPlugin {
         registerCommands();
         registerEvents();
 
-        info(color(Util.TAG + lang.getMessage(Messages.USING_LANGUAGE)));
+        console.sendMessage(TAG.append(lang.getMessage(Messages.USING_LANGUAGE)));
 
         if (hasPAPI()) {
-            info(color(Util.TAG + lang.getMessage(Messages.PAPI_AVAILABLE)));
+            console.sendMessage(TAG.append(lang.getMessage(Messages.PAPI_AVAILABLE)));
             papi = true;
         }
 
         if (setupEconomy()) {
-            info(color(Util.TAG + lang.getUncoloredMessage(Messages.VAULT_AVAILABLE)));
+            console.sendMessage(TAG.append(lang.getMessage(Messages.VAULT_AVAILABLE)));
         }
 
         waitingList = new HashMap<>();
 
-        setShift(getConfig().getBoolean("shift-confirm"));
+        setShift(settings.getProperty(Settings.SHIT_CONFIRM));
 
-        if (getConfig().contains("cooldown-time-display")) {
-            switch (Objects.requireNonNull(getConfig().getString("cooldown-time-display")).toLowerCase()) {
-                case "short":
-                    displayFormat = DisplayFormat.SHORT;
-                    break;
+        switch (settings.getProperty(Settings.TIME_DISPLAY).toLowerCase()) {
+            case "short":
+                displayFormat = DisplayFormat.SHORT;
+                break;
 
-                case "full":
-                    displayFormat = DisplayFormat.FULL;
-                    break;
+            case "full":
+                displayFormat = DisplayFormat.FULL;
+                break;
 
-                default:
-                    displayFormat = DisplayFormat.MEDIUM;
-                    break;
-            }
-        } else {
-            displayFormat = DisplayFormat.MEDIUM;
+            default:
+                displayFormat = DisplayFormat.MEDIUM;
+                break;
         }
 
-        if (getConfig().getBoolean("check-updates")) {
+        if (settings.getProperty(Settings.CHECK_UPDATES)) {
             SpigotUpdater updater = new SpigotUpdater(this, 30224);
             try {
                 // If there's an update, tell the user that they can update
                 if (updater.checkForUpdates()) {
                     updateStatus = true;
                     newVersion = updater.getLatestVersion();
-                    info(color(Util.TAG + "&b&o" + lang.getUncoloredMessage(Messages.STARTUP_NEW_VERSION)));
-                    info(color(Util.TAG + "&b&o" + updater.getResourceURL()));
+                    console.sendMessage(TAG.append(lang.getMessage(Messages.STARTUP_NEW_VERSION).style(Style.style(NamedTextColor.AQUA, TextDecoration.ITALIC))));
+                    console.sendMessage(TAG.append(Component.text(updater.getResourceURL()).style(Style.style(NamedTextColor.AQUA, TextDecoration.ITALIC))));
                 }
             } catch (Exception ignored) {
             }
@@ -182,30 +200,41 @@ public final class CitizensCMD extends JavaPlugin {
      * Registers all the commands to be used
      */
     private void registerCommands() {
-        commandManager.getCompletionHandler().register("#permissions", input -> Arrays.asList("console", "player", "permission", "server", "message", "sound"));
-        commandManager.getCompletionHandler().register("#type", input -> Arrays.asList("cmd", "perm"));
-        commandManager.getCompletionHandler().register("#click", input -> Arrays.asList("left", "right"));
-        commandManager.getCompletionHandler().register("#set", input -> Arrays.asList("set", "remove"));
+        commandManager.registerSuggestion(SuggestionKey.of("permissions"), (sender, context) -> Arrays.asList("console", "player", "permission", "server", "message", "sound"));
+        commandManager.registerSuggestion(SuggestionKey.of("type"), (sender, context) -> Arrays.asList("cmd", "perm"));
+        commandManager.registerSuggestion(SuggestionKey.of("click"), (sender, context) -> Arrays.asList("left", "right"));
+        commandManager.registerSuggestion(SuggestionKey.of("set"), (sender, context) -> Arrays.asList("set", "remove"));
+        commandManager.registerSuggestion(SuggestionKey.of("range"), (sender, context) -> IntStream.rangeClosed(1, 9).mapToObj(String::valueOf).collect(Collectors.toList()));
 
-        commandManager.getMessageHandler().register("cmd.no.permission", sender -> {
-            sender.sendMessage(color(Util.HEADER));
-            sender.sendMessage(lang.getMessage(Messages.NO_PERMISSION));
+        commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> {
+            final Audience audience = audiences.sender(sender);
+            audience.sendMessage(HEADER);
+            audience.sendMessage(lang.getMessage(Messages.NO_PERMISSION));
         });
-        commandManager.getMessageHandler().register("cmd.no.console", sender -> {
-            sender.sendMessage(color(Util.HEADER));
-            sender.sendMessage(lang.getMessage(Messages.CONSOLE_NOT_ALLOWED));
+        commandManager.registerMessage(BukkitMessageKey.PLAYER_ONLY, (sender, context) -> {
+            final Audience audience = audiences.sender(sender);
+            audience.sendMessage(HEADER);
+            audience.sendMessage(lang.getMessage(Messages.CONSOLE_NOT_ALLOWED));
         });
-        commandManager.getMessageHandler().register("cmd.no.exists", sender -> {
-            sender.sendMessage(color(Util.HEADER));
-            sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
+        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> {
+            final Audience audience = audiences.sender(sender);
+            audience.sendMessage(HEADER);
+            audience.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
         });
-        commandManager.getMessageHandler().register("cmd.wrong.usage", sender -> {
-            sender.sendMessage(color(Util.HEADER));
-            sender.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
+        commandManager.registerMessage(MessageKey.INVALID_ARGUMENT, (sender, context) -> {
+            final Audience audience = audiences.sender(sender);
+            audience.sendMessage(HEADER);
+            audience.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
         });
-        commandManager.getMessageHandler().register("arg.must.be.number", sender -> {
-            sender.sendMessage(color(Util.HEADER));
-            sender.sendMessage(lang.getMessage(Messages.INVALID_NUMBER));
+        commandManager.registerMessage(MessageKey.TOO_MANY_ARGUMENTS, (sender, context) -> {
+            final Audience audience = audiences.sender(sender);
+            audience.sendMessage(HEADER);
+            audience.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
+        });
+        commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) -> {
+            final Audience audience = audiences.sender(sender);
+            audience.sendMessage(HEADER);
+            audience.sendMessage(lang.getMessage(Messages.WRONG_USAGE));
         });
 
         Stream.of(
@@ -218,7 +247,7 @@ public final class CitizensCMD extends JavaPlugin {
                 new PriceCommand(this),
                 new ReloadCommand(this),
                 new RemoveCommand(this)
-        ).forEach(commandManager::register);
+        ).forEach(commandManager::registerCommand);
     }
 
     /**
@@ -250,8 +279,26 @@ public final class CitizensCMD extends JavaPlugin {
             return false;
         }
         economy = registeredServiceProvider.getProvider();
-        shift = getConfig().getBoolean("shift-confirm");
+        shift = settings.getProperty(Settings.SHIT_CONFIRM);
         return economy != null;
+    }
+
+    /**
+     * Settings manager, should use this instead of default config.
+     *
+     * @return The settings manager.
+     */
+    public SettingsManager getSettings() {
+        return settings;
+    }
+
+    /**
+     * Gets adventure's audiences for JSON messages.
+     *
+     * @return The BukkitAudiences.
+     */
+    public BukkitAudiences getAudiences() {
+        return audiences;
     }
 
     /**

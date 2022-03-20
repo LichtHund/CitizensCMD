@@ -18,48 +18,59 @@
 
 package me.mattstudios.citizenscmd.utility;
 
+import ch.jalu.configme.SettingsManager;
 import me.mattstudios.citizenscmd.CitizensCMD;
+import me.mattstudios.citizenscmd.Settings;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Objects;
+import java.util.List;
+import java.util.OptionalInt;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static me.mattstudios.utils.MessageUtils.color;
-import static me.mattstudios.utils.MessageUtils.info;
+import java.util.stream.Collectors;
 
 public class Util {
 
     private Util() {}
 
+    public static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
+    public static final MiniMessage MINI = MiniMessage.miniMessage();
+
     /**
      * String with CitizensCMD default header and tag
      */
-    public static final String HEADER = "&c&m-&6&m-&e&m-&a&m-&b&m-&3&l CitizensCMD &b&m-&a&m-&e&m-&6&m-&c&m-";
-    public static final String TAG = "&f[&3Citizens&cCMD&f]&r ";
+    public static final Component HEADER = LEGACY.deserialize("&c&m-&6&m-&e&m-&a&m-&b&m-&3&l CitizensCMD &b&m-&a&m-&e&m-&6&m-&c&m-");
+    public static final Component TAG = LEGACY.deserialize("&f[&3Citizens&cCMD&f]&r ");
 
-    /**
-     * Checks if player has or not selected an NPC
-     *
-     * @param sender The player to check if it has any NPC selected or not
-     * @return Returns true if has an NPC selected and false if not
-     */
-    public static boolean npcNotSelected(final CitizensCMD plugin, final CommandSender sender) {
-        if (CitizensAPI.getDefaultNPCSelector().getSelected(sender) != null) return false;
+    public static String color(String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
 
-        sender.sendMessage(color(HEADER));
-        sender.sendMessage(plugin.getLang().getMessage(Messages.NO_NPC));
-        return true;
+    public static void info(String message) {
+        Bukkit.getConsoleSender().sendMessage(message);
+    }
+
+    public static List<String> color(final List<String> messages) {
+        return messages.stream()
+                .map((message) -> ChatColor.translateAlternateColorCodes('&', message))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -72,19 +83,26 @@ public class Util {
         return CitizensAPI.getDefaultNPCSelector().getSelected(player) == null;
     }
 
+    public static void sendNotSelectedMessage(final CitizensCMD plugin, final Audience audience) {
+        audience.sendMessage(HEADER);
+        audience.sendMessage(plugin.getLang().getMessage(Messages.NO_NPC));
+    }
+
     /**
      * Gets the NPC id
      *
      * @param sender To get the id of the NPC the player has selected
      * @return Returns the id of the NPC
      */
-    public static int getSelectedNpcId(final CommandSender sender) {
-        return CitizensAPI.getDefaultNPCSelector().getSelected(sender).getId();
+    public static OptionalInt getSelectedNpcId(final CommandSender sender) {
+        final NPC npc = CitizensAPI.getDefaultNPCSelector().getSelected(sender);
+        if (npc == null) return OptionalInt.empty();
+        return OptionalInt.of(npc.getId());
     }
 
-    public static void setUpMetrics(Metrics metrics, FileConfiguration config) {
-        metrics.addCustomChart(new Metrics.SimplePie("lang", () -> {
-            switch (Objects.requireNonNull(config.getString("lang", "en")).toLowerCase()) {
+    public static void setUpMetrics(Metrics metrics, SettingsManager settings) {
+        metrics.addCustomChart(new SimplePie("lang", () -> {
+            switch (settings.getProperty(Settings.LANG).toLowerCase()) {
                 case "en":
                     return "English";
 
@@ -111,12 +129,12 @@ public class Util {
             }
         }));
 
-        metrics.addCustomChart(new Metrics.SimplePie("cooldown_display", () -> {
-            switch (Objects.requireNonNull(config.getString("cooldown-time-display", "MEDIUM")).toLowerCase()) {
-                case "FULL":
+        metrics.addCustomChart(new SimplePie("cooldown_display", () -> {
+            switch (settings.getProperty(Settings.TIME_DISPLAY).toLowerCase()) {
+                case "full":
                     return "Full";
 
-                case "SMALL":
+                case "small":
                     return "Small";
 
                 default:
@@ -131,7 +149,7 @@ public class Util {
      * @return returns the seconds from the config
      */
     public static int getDefaultCooldown(CitizensCMD plugin) {
-        return plugin.getConfig().getInt("default-cooldown");
+        return plugin.getSettings().getProperty(Settings.DEFAULT_COOLDOWN);
     }
 
     /**
@@ -150,9 +168,10 @@ public class Util {
      * @param plugin The plugin to disable.
      */
     public static void disablePlugin(CitizensCMD plugin) {
-        info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
-        info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
-        info(color(TAG + "&cDisabling CitizensCMD..."));
+        final Logger logger = plugin.getLogger();
+        logger.info(color(TAG + "&cCitizens &7is needed for this plugin to work!"));
+        logger.info(color(TAG + "&cCitizens.jar &7is not installed on the server!"));
+        logger.info(color(TAG + "&cDisabling CitizensCMD..."));
         Bukkit.getServer().getPluginManager().disablePlugin(plugin);
     }
 
@@ -191,10 +210,10 @@ public class Util {
         TimeUtil timeUtil = new TimeUtil(seconds);
 
         String[] messagesString = new String[4];
-        messagesString[0] = plugin.getLang().getMessage(Messages.SECONDS);
-        messagesString[1] = plugin.getLang().getMessage(Messages.MINUTES);
-        messagesString[2] = plugin.getLang().getMessage(Messages.HOURS);
-        messagesString[3] = plugin.getLang().getMessage(Messages.DAYS);
+        messagesString[0] = plugin.getLang().getUncoloredMessage(Messages.SECONDS);
+        messagesString[1] = plugin.getLang().getUncoloredMessage(Messages.MINUTES);
+        messagesString[2] = plugin.getLang().getUncoloredMessage(Messages.HOURS);
+        messagesString[3] = plugin.getLang().getUncoloredMessage(Messages.DAYS);
 
         String[] shorts = new String[4];
         String[] mediums = new String[4];
@@ -331,7 +350,6 @@ public class Util {
         }
 
         return stringBuilder.toString();
-
     }
 
     public static boolean soundExists(String soundName) {

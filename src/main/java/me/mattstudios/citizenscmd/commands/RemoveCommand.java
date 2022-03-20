@@ -1,52 +1,55 @@
 package me.mattstudios.citizenscmd.commands;
 
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
+import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Messages;
-import me.mattstudios.mf.annotations.Command;
-import me.mattstudios.mf.annotations.Completion;
-import me.mattstudios.mf.annotations.Permission;
-import me.mattstudios.mf.annotations.SubCommand;
-import me.mattstudios.mf.base.CommandBase;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
+
+import java.util.OptionalInt;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
-import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
 
-@Command("npcmd")
-public class RemoveCommand extends CommandBase {
+public class RemoveCommand extends Npcmd {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
 
-    public RemoveCommand(CitizensCMD plugin) {
+    public RemoveCommand(final CitizensCMD plugin) {
         this.plugin = plugin;
     }
 
     @SubCommand("remove")
     @Permission("citizenscmd.remove")
-    @Completion("#click")
-    public void remove(CommandSender sender, String clickString, Integer id) {
+    public void remove(final CommandSender sender, @Suggestion("click") final String clickString, final int id) {
+        final OptionalInt selectedNpc = getSelectedNpcId(sender);
 
-        if (npcNotSelected(plugin, sender)) return;
+        final Audience audience = plugin.getAudiences().sender(sender);
 
-        int npc = getSelectedNpcId(sender);
+        if (!selectedNpc.isPresent()) {
+            sendNotSelectedMessage(plugin, audience);
+            return;
+        }
+
         EnumTypes.ClickType click;
 
         switch (clickString.toLowerCase()) {
             case "left":
-                int leftCommandSize = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.LEFT).size();
+                int leftCommandSize = plugin.getDataHandler().getClickCommandsData(selectedNpc.getAsInt(), EnumTypes.ClickType.LEFT).size();
 
                 if (leftCommandSize == 0) {
-                    sender.sendMessage(color(HEADER));
-                    sender.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
+                    audience.sendMessage(HEADER);
+                    audience.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
                     return;
                 }
 
                 if (id < 1 || id > leftCommandSize) {
-                    sender.sendMessage(color(HEADER));
-                    sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
+                    audience.sendMessage(HEADER);
+                    audience.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
                     return;
                 }
 
@@ -54,17 +57,17 @@ public class RemoveCommand extends CommandBase {
                 break;
 
             case "right":
-                int rightCommandSize = plugin.getDataHandler().getClickCommandsData(npc, EnumTypes.ClickType.RIGHT).size();
+                int rightCommandSize = plugin.getDataHandler().getClickCommandsData(selectedNpc.getAsInt(), EnumTypes.ClickType.RIGHT).size();
 
                 if (rightCommandSize == 0) {
-                    sender.sendMessage(color(HEADER));
-                    sender.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
+                    audience.sendMessage(HEADER);
+                    audience.sendMessage(plugin.getLang().getMessage(Messages.NO_COMMANDS));
                     return;
                 }
 
                 if (id < 0 || id > rightCommandSize) {
-                    sender.sendMessage(color(HEADER));
-                    sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
+                    audience.sendMessage(HEADER);
+                    audience.sendMessage(plugin.getLang().getMessage(Messages.INVALID_ID_NUMBER));
                     return;
                 }
 
@@ -72,13 +75,11 @@ public class RemoveCommand extends CommandBase {
                 break;
 
             default:
-                sender.sendMessage(color(HEADER));
-                sender.sendMessage(plugin.getLang().getMessage(Messages.INVALID_CLICK_TYPE));
+                audience.sendMessage(HEADER);
+                audience.sendMessage(plugin.getLang().getMessage(Messages.INVALID_CLICK_TYPE));
                 return;
         }
 
-        plugin.getDataHandler().removeCommand(npc, id, click, sender);
-
+        plugin.getDataHandler().removeCommand(selectedNpc.getAsInt(), id, click, audience);
     }
-
 }

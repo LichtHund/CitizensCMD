@@ -26,12 +26,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static me.mattstudios.utils.MessageUtils.color;
-import static me.mattstudios.utils.MessageUtils.info;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.info;
 
 public class CooldownHandler {
 
@@ -41,7 +41,7 @@ public class CooldownHandler {
 
     private FileConfiguration cooldownsConfigurator;
 
-    private Map<String, Long> cooldownData;
+    private final Map<String, Long> cooldownData = new ConcurrentHashMap<>();
 
     public CooldownHandler(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -55,8 +55,6 @@ public class CooldownHandler {
         dir = new File(pluginFolder + "/data");
         cooldownsFile = new File(dir.getPath(), "cooldowns.yml");
         cooldownsConfigurator = new YamlConfiguration();
-
-        cooldownData = new HashMap<>();
 
         createBasics();
         cacheData();

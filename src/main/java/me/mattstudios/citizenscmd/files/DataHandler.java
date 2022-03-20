@@ -22,8 +22,8 @@ import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.EnumTypes;
 import me.mattstudios.citizenscmd.utility.Messages;
 import me.mattstudios.citizenscmd.utility.Util;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -35,20 +35,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static me.mattstudios.utils.MessageUtils.color;
-import static me.mattstudios.utils.MessageUtils.info;
+import static me.mattstudios.citizenscmd.utility.Util.HEADER;
+import static me.mattstudios.citizenscmd.utility.Util.color;
+import static me.mattstudios.citizenscmd.utility.Util.info;
 
 @SuppressWarnings("unchecked")
 public class DataHandler {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
     private static File savesFile;
     private static File dir;
 
     private static FileConfiguration dataConfigurator;
 
-    private Map<String, Object> data;
+    private final Map<String, Object> data = new ConcurrentHashMap<>();
 
     public DataHandler(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -62,8 +64,6 @@ public class DataHandler {
         dir = new File(pluginFolder + "/data");
         savesFile = new File(dir.getPath(), "saves.yml");
         dataConfigurator = new YamlConfiguration();
-
-        data = new HashMap<>();
 
         createBasics();
         cacheData();
@@ -90,7 +90,6 @@ public class DataHandler {
      */
     private void cacheData() {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-
             try {
                 dataConfigurator.load(savesFile);
 
@@ -136,7 +135,7 @@ public class DataHandler {
      * @param sender     The player who run the command
      * @param left       If the command should be added to the left or right click
      */
-    public void addCommand(int npc, String permission, String command, CommandSender sender, boolean left) {
+    public void addCommand(int npc, String permission, String command, Audience sender, boolean left) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
@@ -170,12 +169,12 @@ public class DataHandler {
                     dataConfigurator.set("npc-data.npc-" + npc + ".price", 0);
                 }
 
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADDED));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_FAIL));
             }
         });
@@ -236,7 +235,7 @@ public class DataHandler {
      * @param cooldown The cooldown in seconds to be added
      * @param sender   The player who run the command
      */
-    public void setCooldown(int npc, int cooldown, CommandSender sender) {
+    public void setCooldown(int npc, int cooldown, Audience sender) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
@@ -246,12 +245,12 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".cooldown", cooldown);
 
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_COOLDOWN_SET_ERROR));
             }
         });
@@ -264,7 +263,7 @@ public class DataHandler {
      * @param price  The price in seconds to be added
      * @param sender The player who run the command
      */
-    public void setPrice(int npc, double price, CommandSender sender) {
+    public void setPrice(int npc, double price, Audience sender) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
@@ -274,7 +273,7 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".price", price);
 
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_PRICE_SET));
 
                 dataConfigurator.save(savesFile);
@@ -291,7 +290,7 @@ public class DataHandler {
      * @param permission The permission to be added
      * @param sender     The player who run the command
      */
-    public void setCustomPermission(int npc, String permission, CommandSender sender) {
+    public void setCustomPermission(int npc, String permission, Audience sender) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
@@ -301,7 +300,7 @@ public class DataHandler {
 
                 data.replace("npc-data.npc-" + npc + ".permission", permission);
 
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_SET));
 
                 dataConfigurator.save(savesFile);
@@ -317,7 +316,7 @@ public class DataHandler {
      * @param npc    The NPC id
      * @param sender The player who run the command
      */
-    public void removeCustomPermission(int npc, CommandSender sender) {
+    public void removeCustomPermission(int npc, Audience sender) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
@@ -328,7 +327,7 @@ public class DataHandler {
 
                 data.remove("npc-data.npc-" + npc + ".permission");
 
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.PERMISSION_REMOVED));
 
                 dataConfigurator.save(savesFile);
@@ -428,7 +427,7 @@ public class DataHandler {
      * @param click     The click type, either left or right
      * @param sender    The player to send the message to
      */
-    public void removeCommand(int npc, int commandID, EnumTypes.ClickType click, CommandSender sender) {
+    public void removeCommand(int npc, int commandID, EnumTypes.ClickType click, Audience sender) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
@@ -442,7 +441,7 @@ public class DataHandler {
                 data.replace(key, commands);
                 dataConfigurator.set(key, commands);
 
-                sender.sendMessage(color(Util.HEADER));
+                sender.sendMessage(HEADER);
                 sender.sendMessage(plugin.getLang().getMessage(Messages.REMOVED_COMMAND));
 
                 dataConfigurator.save(savesFile);
@@ -462,7 +461,7 @@ public class DataHandler {
      * @param newValue  the new value for either the command or the permission
      * @param sender    The player to send messages
      */
-    public void edit(int npc, int commandID, EnumTypes.ClickType click, EnumTypes.EditType type, String newValue, CommandSender sender) {
+    public void edit(int npc, int commandID, EnumTypes.ClickType click, EnumTypes.EditType type, String newValue, Audience sender) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 createBasics();
@@ -470,8 +469,7 @@ public class DataHandler {
 
                 List<String> commandsData = getClickCommandsData(npc, click);
 
-                String typeText = "";
-
+                final String typeText;
                 switch (type) {
                     case CMD:
                         String tempCommand = commandsData.get(commandID - 1);
@@ -485,14 +483,16 @@ public class DataHandler {
                         commandsData.set(commandID - 1, tempPerm);
                         typeText = "PERM";
                         break;
+                    default:
+                        typeText = "";
                 }
 
                 String key = "npc-data.npc-" + npc + "." + click.toString().toLowerCase() + "-click-commands";
                 data.replace(key, commandsData);
                 dataConfigurator.set(key, commandsData);
 
-                sender.sendMessage(color(Util.HEADER));
-                sender.sendMessage(plugin.getLang().getMessage(Messages.EDITED_COMMAND).replace("{type}", typeText));
+                sender.sendMessage(HEADER);
+                sender.sendMessage(plugin.getLang().getMessage(Messages.EDITED_COMMAND, "{type}", typeText));
 
                 dataConfigurator.save(savesFile);
             } catch (IOException | InvalidConfigurationException e) {

@@ -1,109 +1,76 @@
 package me.mattstudios.citizenscmd.commands;
 
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
+import dev.triumphteam.cmd.core.annotation.CommandFlags;
+import dev.triumphteam.cmd.core.annotation.Flag;
+import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
+import dev.triumphteam.cmd.core.flag.Flags;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
-import me.mattstudios.mf.annotations.Command;
-import me.mattstudios.mf.annotations.Completion;
-import me.mattstudios.mf.annotations.Permission;
-import me.mattstudios.mf.annotations.SubCommand;
-import me.mattstudios.mf.base.CommandBase;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
+
+import java.util.Optional;
+import java.util.OptionalInt;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
-import static me.mattstudios.utils.MessageUtils.color;
-import static me.mattstudios.utils.NumbersUtils.isDouble;
+import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
 
-@Command("npcmd")
-public class AddCommand extends CommandBase {
+public class AddCommand extends Npcmd {
 
     private final CitizensCMD plugin;
 
-    public AddCommand(CitizensCMD plugin) {
+    public AddCommand(final CitizensCMD plugin) {
         this.plugin = plugin;
     }
 
-    /**
-     * Adds a command to an NPC via ingame command
-     *
-     * @param sender     Gets the sender to check for which NPC is selected and send messages.
-     * @param permission The permission node or other to add.
-     * @param arguments  Gets the command to be added to the NPC.
-     */
     @SubCommand("add")
     @Permission("citizenscmd.add")
-    public void addCommand(final CommandSender sender, @Completion("#permissions") String permission, String[] arguments) {
+    @CommandFlags({
+            @Flag(flag = "n"),
+            @Flag(flag = "l"),
+            @Flag(flag = "d", argument = double.class)
+    })
+    public void addCommand(
+            final CommandSender sender,
+            @Suggestion("permissions") final String permission,
+            final Flags flags
+    ) {
+        final OptionalInt selectedNpc = getSelectedNpcId(sender);
 
-        if (npcNotSelected(plugin, sender)) return;
+        final Audience audience = plugin.getAudiences().sender(sender);
 
-        StringBuilder permissionBuilder = new StringBuilder(permission);
-        boolean left = false;
-        boolean displayName = false;
-        boolean hasDelayError = false;
-
-        StringBuilder stringBuilder = new StringBuilder();
-        if (arguments[0].startsWith("/")) arguments[0] = arguments[0].substring(1);
-
-        for (int i = 0; i < arguments.length; i++) {
-
-            if (arguments[i].equalsIgnoreCase("")) continue;
-
-            if (arguments[i].equalsIgnoreCase("-n")) {
-                displayName = true;
-                continue;
-            }
-
-            if (arguments[i].equalsIgnoreCase("-l")) {
-                left = true;
-                continue;
-            }
-
-            if (arguments[i].equalsIgnoreCase("-d")) {
-                if (i + 1 >= arguments.length) {
-                    hasDelayError = true;
-                    continue;
-                }
-
-                if (!isDouble(arguments[i + 1])) {
-                    hasDelayError = true;
-                    continue;
-                }
-
-                permissionBuilder.append("(").append(arguments[i + 1]).append(")");
-                arguments[i + 1] = "";
-                continue;
-            }
-
-            if (i == arguments.length - 1) stringBuilder.append(arguments[i]);
-            else stringBuilder.append(arguments[i]).append(" ");
-        }
-
-        if (hasDelayError) {
-            sender.sendMessage(color(HEADER));
-            sender.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_DELAY_FAIL));
+        if (!selectedNpc.isPresent()) {
+            sendNotSelectedMessage(plugin, audience);
             return;
         }
 
-        String finalString;
-
-        if (displayName) {
-            finalString = "{display} " + stringBuilder.toString().trim();
-        } else {
-            finalString = stringBuilder.toString().trim();
-        }
-
-        if (permissionBuilder.toString().equalsIgnoreCase("sound")) {
-            if (arguments.length < 2) {
-                finalString += " 1 1";
-            } else {
-                if (arguments.length < 3) {
-                    finalString += " 1";
-                }
+        final StringBuilder permissionBuilder = new StringBuilder(permission);
+        if (flags.hasFlag("d")) {
+            final Optional<Double> delay = flags.getValue("d", Double.TYPE);
+            if (!delay.isPresent()) {
+                audience.sendMessage(HEADER);
+                audience.sendMessage(plugin.getLang().getMessage(Messages.NPC_ADD_DELAY_FAIL));
+                return;
             }
+            permissionBuilder.append("(").append(delay.get()).append(")");
         }
 
-        plugin.getDataHandler().addCommand(getSelectedNpcId(sender), permissionBuilder.toString(), finalString, sender, left);
+        final String command = flags.getText();
+
+        if (command.isEmpty()) {
+            audience.sendMessage(HEADER);
+            audience.sendMessage(plugin.getLang().getMessage(Messages.WRONG_USAGE));
+            return;
+        }
+
+        final String finalString = (flags.hasFlag("n") ? "{display} " + command : command).trim();
+
+        plugin
+                .getDataHandler()
+                .addCommand(selectedNpc.getAsInt(), permissionBuilder.toString(), finalString, audience, flags.hasFlag("l"));
     }
 
 }

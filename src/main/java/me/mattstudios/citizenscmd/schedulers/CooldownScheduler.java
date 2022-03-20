@@ -23,7 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class CooldownScheduler extends BukkitRunnable {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
 
     public CooldownScheduler(CitizensCMD plugin) {
         this.plugin = plugin;

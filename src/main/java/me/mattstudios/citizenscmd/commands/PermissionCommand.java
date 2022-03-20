@@ -1,23 +1,22 @@
 package me.mattstudios.citizenscmd.commands;
 
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
+import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import me.mattstudios.citizenscmd.CitizensCMD;
 import me.mattstudios.citizenscmd.utility.Messages;
-import me.mattstudios.mf.annotations.Command;
-import me.mattstudios.mf.annotations.Completion;
-import me.mattstudios.mf.annotations.Permission;
-import me.mattstudios.mf.annotations.SubCommand;
-import me.mattstudios.mf.base.CommandBase;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
+
+import java.util.OptionalInt;
 
 import static me.mattstudios.citizenscmd.utility.Util.HEADER;
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
-import static me.mattstudios.utils.MessageUtils.color;
+import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
 
-@Command("npcmd")
-public class PermissionCommand extends CommandBase {
+public class PermissionCommand extends Npcmd {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
 
     public PermissionCommand(CitizensCMD plugin) {
         this.plugin = plugin;
@@ -25,22 +24,32 @@ public class PermissionCommand extends CommandBase {
 
     @SubCommand("permission")
     @Permission("citizenscmd.permission")
-    public void permission(CommandSender sender, @Completion("#set") String set, String permission) {
+    public void permission(
+            final CommandSender sender,
+            @Suggestion("set") final String set,
+            final String permission
+    ) {
+        final OptionalInt selectedNpc = getSelectedNpcId(sender);
 
-        if (npcNotSelected(plugin, sender)) return;
+        final Audience audience = plugin.getAudiences().sender(sender);
+
+        if (!selectedNpc.isPresent()) {
+            sendNotSelectedMessage(plugin, audience);
+            return;
+        }
 
         switch (set.toLowerCase()) {
             case "set":
-                plugin.getDataHandler().setCustomPermission(getSelectedNpcId(sender), permission, sender);
+                plugin.getDataHandler().setCustomPermission(selectedNpc.getAsInt(), permission, audience);
                 break;
 
             case "remove":
-                plugin.getDataHandler().removeCustomPermission(getSelectedNpcId(sender), sender);
+                plugin.getDataHandler().removeCustomPermission(selectedNpc.getAsInt(), audience);
                 break;
 
             default:
-                sender.sendMessage(color(HEADER));
-                sender.sendMessage(plugin.getLang().getMessage(Messages.WRONG_USAGE));
+                audience.sendMessage(HEADER);
+                audience.sendMessage(plugin.getLang().getMessage(Messages.WRONG_USAGE));
         }
     }
 

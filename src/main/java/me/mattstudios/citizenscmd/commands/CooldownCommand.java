@@ -1,31 +1,38 @@
 package me.mattstudios.citizenscmd.commands;
 
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
+import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.triumphteam.cmd.core.annotation.Suggestion;
 import me.mattstudios.citizenscmd.CitizensCMD;
-import me.mattstudios.mf.annotations.Command;
-import me.mattstudios.mf.annotations.Completion;
-import me.mattstudios.mf.annotations.Permission;
-import me.mattstudios.mf.annotations.SubCommand;
-import me.mattstudios.mf.base.CommandBase;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.command.CommandSender;
 
+import java.util.OptionalInt;
+
 import static me.mattstudios.citizenscmd.utility.Util.getSelectedNpcId;
-import static me.mattstudios.citizenscmd.utility.Util.npcNotSelected;
+import static me.mattstudios.citizenscmd.utility.Util.sendNotSelectedMessage;
 
-@Command("npcmd")
-public class CooldownCommand extends CommandBase {
+public class CooldownCommand extends Npcmd {
 
-    private CitizensCMD plugin;
+    private final CitizensCMD plugin;
 
-    public CooldownCommand(CitizensCMD plugin) {
+    public CooldownCommand(final CitizensCMD plugin) {
         this.plugin = plugin;
     }
 
     @SubCommand("cooldown")
     @Permission("citizenscmd.cooldown")
-    public void cooldown(CommandSender sender, @Completion("#range:9") Integer cooldown) {
-        if (npcNotSelected(plugin, sender)) return;
+    public void cooldown(final CommandSender sender, @Suggestion("range") final int cooldown) {
+        final OptionalInt selectedNpc = getSelectedNpcId(sender);
 
-        plugin.getDataHandler().setCooldown(getSelectedNpcId(sender), cooldown, sender);
+        final Audience audience = plugin.getAudiences().sender(sender);
+
+        if (!selectedNpc.isPresent()) {
+            sendNotSelectedMessage(plugin, audience);
+            return;
+        }
+
+        plugin.getDataHandler().setCooldown(selectedNpc.getAsInt(), cooldown, audience);
     }
 
 }
