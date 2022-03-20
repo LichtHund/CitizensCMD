@@ -145,16 +145,16 @@
                             <shadedPattern>me.mattstudios.citizenscmd.metrics</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>me.mattstudios.mf</pattern>
-                            <shadedPattern>me.mattstudios.citizenscmd.mf</shadedPattern>
+                            <pattern>dev.triumphteam</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.cmds</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>me.mattstudios.utils</pattern>
                             <shadedPattern>me.mattstudios.citizenscmd.utility</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>me.rayzr522.jsonmessage</pattern>
-                            <shadedPattern>me.mattstudios.citizenscmd.json</shadedPattern>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>me.mattstudios.citizenscmd.kyori</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>org.apache.commons.io</pattern>
